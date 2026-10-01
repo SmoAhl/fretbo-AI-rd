@@ -8,11 +8,21 @@ This document separates accepted architectural boundaries, implementation facts,
 
 ## Current implementation
 
-At the documentation bootstrap, the repository contains a minimal README and the four working documents: `AGENTS.md`, `.agent/PLANS.md`, `docs/ARCHITECTURE.md`, and `docs/DECISIONS.md`.
+The repository currently contains a minimal README and the four working documents: `AGENTS.md`, `.agent/PLANS.md`, `docs/ARCHITECTURE.md`, and `docs/DECISIONS.md`.
 
-There is no application implementation, selected application stack, dependency manifest, test runner, configured build or lint command, executable domain interface, UI, or AI integration. There is no actual ExecPlan and no `plans/` directory. The components below describe accepted responsibilities, not existing modules or a selected directory structure.
+The technology foundation below is accepted, but none of it has been scaffolded or installed. There is no dependency manifest, lockfile, configured type-check, test, build, or lint command, source directory, domain module, or test file. There are no React or SVG components, Next.js routes or APIs, UI controls, styles, or AI integration. There is no actual ExecPlan and no `plans/` directory. The components below describe accepted responsibilities, not existing code or a selected source-directory structure.
 
 Update this section against the repository as implementation is introduced. Describe actual entry points, modules, interfaces, tests, and integrations only after they exist; distinguish them from remaining intended capabilities.
+
+## Accepted technology foundation
+
+Next.js is the selected full-stack application framework, React is the UI library, and TypeScript 7.x is the implementation language. The intended generic UI stack is shadcn/ui with Base UI primitives where applicable and Tailwind CSS for styling. The custom fretboard visualization uses React and SVG. These choices support the existing domain-first architecture; they do not change its construction order.
+
+The development, tooling, and test baseline is Node.js 24 LTS with native ESM conventions and NodeNext semantics. TypeScript checking is strict, including `strict`, `noUncheckedIndexedAccess`, and `exactOptionalPropertyTypes`. npm manages dependencies. Vitest 5.x runs behavioral tests in a Node environment, separately from TypeScript checking. Any Vite dependency required by Vitest serves test tooling; Next.js owns the application-framework role. No particular Vite version is an architectural decision.
+
+The initial organization is one repository and one private Next.js application package containing framework-independent domain modules. No monorepo, separate backend service, or placeholder package boundaries are needed. Exact configuration, source layout, and compatible dependency releases will be verified during authorized setup. Choosing this stack does not select a hosting environment or require server capabilities before they are needed.
+
+The accepted decisions and rationale are recorded in [DECISIONS.md](DECISIONS.md#d009-typescript-and-strict-contract-checking). The implementation status above remains authoritative for what actually exists.
 
 ## Components and boundaries
 
@@ -22,12 +32,27 @@ Update this section against the repository as implementation is introduced. Desc
 | Music Theory Engine | Deterministic note, interval, scale, degree, and chord calculations. | Natural-language interpretation, fretboard rendering, or hand ergonomics. |
 | Fretboard Engine | Mapping between tuning, strings, frets, pitches, and available locations or regions. | Redefining music theory or treating a location map as proof of a playable fingering. |
 | Playability capabilities | Physical constraint checks and fingering feasibility; later, comparison of fingerings and configurable ergonomic assessments. | Musical taste, universal claims about every player's anatomy, or silently replacing the requested musical object. |
-| Application interaction | Connecting ordinary controls and direct fretboard interaction to supported domain operations and their results. | A second implementation of musical calculations. State ownership and coordination structure remain open. |
-| UI and renderer boundary | Displaying results, capturing interaction, and translating data to a renderer's representation when an adapter is needed. | Defining domain truth or silently repairing musical results. No renderer is selected. |
+| Application boundary (Next.js) | Full-stack application capabilities and connecting application operations to the deterministic domain; trusted server-side execution when later integrations need it. | Musical or physical truth. Routes, Server Components, Route Handlers, and server actions must not become prerequisites for domain use or testing. |
+| UI and interaction (React) | Guitar controls, selection and display interaction, composition-workbench interaction, and later AI-assisted interaction over shared application/domain operations. | A second implementation of music-theory, fretboard, or playability rules. State ownership and coordination structure remain open. |
+| Generic controls and styling (shadcn/ui, Base UI, Tailwind CSS) | Reusable application controls, accessible generic interaction primitives, and presentation. | Musical semantics, domain calculations, or ownership of the custom fretboard visualization. |
+| Custom fretboard visualization (React + SVG) | Rendering domain results as strings, frets, markers, labels, highlights, and regions; capturing interaction for application operations. | Defining musical truth, independently calculating note locations, or establishing playability. Component hierarchy, rendering data, algorithms, and geometry remain undecided. |
 | Later agent and tool integration | Interpreting intent, supplying relevant context, invoking the same domain capabilities, and explaining grounded results. | Serving as the authoritative calculator of notes, fret positions, or physical feasibility. |
 | Later audio and evaluation | Making results audible; measuring behavior and supporting human review respectively. | Replacing domain validation or treating an evaluation score as proof of musical usefulness. |
 
-These are logical responsibilities. They do not mandate separate services, packages, or classes. In particular, the exact division of voicing candidate generation between Fretboard and Playability has not been decided.
+These are logical responsibilities within the initial single application package. They do not mandate separate services, packages, or classes. In particular, the exact division of voicing candidate generation between Fretboard and Playability has not been decided.
+
+shadcn/ui supplies customizable generic controls, using Base UI for accessible interaction behavior where applicable. Tailwind CSS styles the application. These technologies support the product's own visual identity without defining its musical concepts. Add reusable visual tokens or further design-system abstractions only when concrete repetition justifies them.
+
+The fretboard is a custom product interaction, not a generic shadcn/ui or Base UI control. Its presentation flow is:
+
+```text
+Deterministic domain
+-> application state / operations
+-> React fretboard visualization
+-> SVG strings, frets, and note markers
+```
+
+For example, selecting D and minor initiates an application/domain operation: Music Theory determines the musical content, Fretboard determines its locations, and React + SVG renders those results. Clicking an SVG marker can initiate another application operation; the SVG element does not decide the note's musical meaning. Responsive geometry and pointer handling belong to presentation, while musical mapping remains in the domain.
 
 ## Runtime paths
 
@@ -53,7 +78,9 @@ These diagrams show logical runtime interactions, not implementation order or de
 
 ## Dependency direction and domain truth
 
-UI-facing and agent-facing integrations consume the deterministic domain capabilities. Domain calculations and validations must remain usable without an LLM or a renderer. Renderer and provider details belong at their integration boundaries rather than defining musical semantics.
+Application, UI-facing, and agent-facing integrations consume the deterministic domain capabilities. Domain calculations and validations must remain usable and testable independently of React, Next.js, UI component libraries, CSS, routing, Server Components, Route Handlers, server actions, AI providers, renderers, and deployment infrastructure. Framework and presentation details belong at their integration boundaries rather than defining musical semantics.
+
+Node-specific APIs should remain outside portable domain calculations unless a concrete domain requirement justifies them. Running domain tests under Node does not justify coupling the domain to filesystem, process, or network APIs. The domain remains independently testable both before and after connection to the Next.js application.
 
 Music Theory determines musical content; Fretboard relates that content to the instrument; Playability assesses applicable physical realizations. This describes responsibility and data flow, not a requirement that every engine call the next engine internally. Their exact callable interfaces and execution placement remain undecided.
 
@@ -65,7 +92,9 @@ Distinguish musical validity, physical feasibility, ergonomics, and subjective u
 
 Supported capabilities should expose clear, verified contracts that the next layer can depend on. These contracts may evolve deliberately as capabilities grow. They do not need to be permanently or comprehensively finalized before UI development begins.
 
-Structural validation of an input or tool request does not establish musical correctness. Domain rules perform the relevant musical and physical calculations and checks. Presentation converts valid results for display without becoming an alternative source of those rules.
+TypeScript makes contracts explicit and reviewable; its types do not replace deterministic musical tests or required runtime validation. Structural validation of an input or tool request does not establish musical correctness. Domain rules perform the relevant musical and physical calculations and checks. Presentation converts valid results for display without becoming an alternative source of those rules.
+
+TypeScript checking and Vitest behavioral testing use separate commands once configured. Determinism comes from explicit inputs, controlled state, domain rules, and meaningful assertions, not from the runner itself.
 
 Verify early deterministic capabilities through ordinary tests and, when useful, a small debug or CLI harness. Later agent and product evaluation can measure interpretation and complete outcomes. It does not replace deterministic tests. Visual and human assessment may reveal practical limitations that automated checks do not yet capture.
 
@@ -75,9 +104,22 @@ The accepted construction strategy is domain-first: establish minimal domain con
 
 Root, scale, and chord controls and direct fretboard interaction illustrate the intended conventional experience; exact controls and initial supported musical scope are not fixed. The application should eventually support both exploration and continued development of the user's musical ideas.
 
-One agent and structured JSON communication are the current initial AI direction, not permanent architectural commitments. A reusable fretboard renderer or evaluation service may be considered, but no framework, library, renderer, or vendor is selected by this document.
+Selecting React, Next.js, and the presentation stack does not start UI or server implementation. The first non-AI interface may primarily use client-side interaction over the deterministic domain. Introduce server functionality only when its capabilities are needed.
+
+One agent and structured JSON communication are the current initial AI direction, not permanent architectural commitments. AI providers, agent tooling, and evaluation platforms remain undecided.
 
 Audio, broader evaluation, richer fingering and ergonomics, patterns, harmonization, voice leading, and idea development remain later capabilities as justified. RAG, web search, visual agent feedback, multiple agents, MIDI, and tablature are future possibilities, not implementation prerequisites or a committed backlog.
+
+## Deferred technology choices
+
+The following remain undecided until concrete requirements justify a choice:
+
+- Database, ORM, persistence model, and authentication solution.
+- Hosting/deployment provider and analytics/observability platform.
+- AI model/provider, AI SDK or agent framework, evaluation platform, and RAG/vector database.
+- State-management library and audio implementation.
+
+Selecting Next.js does not implicitly select any of these. Custom React + SVG is the accepted fretboard visualization direction; no dedicated fretboard library is selected. A specialized visualization library may be evaluated later for a concrete difficult problem if it preserves domain ownership.
 
 ## Open architectural questions
 
@@ -85,7 +127,8 @@ Audio, broader evaluation, richer fingering and ergonomics, patterns, harmonizat
 - Representations for pitch class, register, note spelling, musical identity, voicing, and fingering.
 - Ownership of voicing candidate generation, initial realization selection, and the minimum playability guarantee.
 - Application-state ownership, coordination between interaction paths, and placement of domain execution.
-- Concrete interfaces, technology choices, and the timing and scope of later capabilities.
+- Concrete interfaces, the deferred technology choices above, and the timing and scope of later capabilities.
+- React component hierarchy, SVG rendering data structures and algorithms, fretboard geometry, and state-management architecture.
 
 These questions are not accepted designs. Resolve them explicitly when relevant to an authorized effort, and record persistent decisions with their reasons in [DECISIONS.md](DECISIONS.md).
 

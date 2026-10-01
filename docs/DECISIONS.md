@@ -4,7 +4,9 @@
 
 This document records significant accepted project decisions and their rationale. Open questions, recommendations, and temporary implementation possibilities do not belong here as accepted decisions. Unresolved architecture questions are listed separately in [ARCHITECTURE.md](ARCHITECTURE.md#open-architectural-questions).
 
-Use stable decision IDs. Each record identifies its status, decision, rationale, consequences, and recording date and authority. The bootstrap records below are recorded on 2026-10-01; that date does not claim when every idea was first discussed.
+Use stable decision IDs. Each record identifies its status, decision, rationale, consequences, and recording date and authority. Bootstrap records D001-D008 and the subsequent approved technology foundation D009-D018 are recorded on 2026-10-01; that date does not claim when every idea was first discussed.
+
+Accepted technology choices describe what the project will use, not what has been installed or implemented. See [current implementation](ARCHITECTURE.md#current-implementation) for the verified repository state. This documentation update does not scaffold tooling or authorize implementation.
 
 When a decision changes, preserve its historical record, mark it superseded, and link the replacement. Only accepted, non-superseded records are currently in force. Record actual decisions rather than keeping a queue of proposals in this file.
 
@@ -78,7 +80,7 @@ Decision: Renderer, framework, library, and vendor choices are not permanent arc
 
 Rationale: Preserve the distinction between architectural responsibilities and possible implementations of them.
 
-Consequences: No application technology is selected by this bootstrap. One agent and structured communication can remain an initial direction without becoming permanent constraints. Record consequential technology choices when they are actually made within an authorized effort.
+Consequences: No application technology was selected during the documentation bootstrap. The subsequent explicit technology choices in [D009-D018](#d009-typescript-and-strict-contract-checking) now apply without superseding this decision's requirement for explicit choices. One agent and structured communication can remain an initial direction without becoming permanent constraints. Record consequential technology choices when they are actually made within an authorized effort.
 
 Recorded: 2026-10-01. Authority: User-accepted shared project understanding and bootstrap approval.
 
@@ -105,3 +107,123 @@ Rationale: Significant efforts need durable, self-contained execution context. K
 Consequences: Create `plans/` only when the first real ExecPlan is needed. File count alone does not determine whether a plan is required. The documentation bootstrap creates neither that directory nor an actual ExecPlan. Each future plan follows the protocol and maintains its living sections.
 
 Recorded: 2026-10-01. Authority: User's final bootstrap approval, including the accepted threshold and correction to the actual ExecPlan location.
+
+## D009: TypeScript and strict contract checking
+
+Status: Accepted.
+
+Decision: Use TypeScript 7.x as the implementation language with `strict`, `noUncheckedIndexedAccess`, and `exactOptionalPropertyTypes` enabled.
+
+Rationale: Explicit, reviewable contracts and careful handling of missing values support reliable domain implementation and agent-assisted changes.
+
+Consequences: Types do not replace deterministic musical tests or runtime validation where required. Keep static checking separate from behavioral testing as described in [D013](#d013-vitest-and-separate-behavioral-verification). Do not introduce generic type systems or abstractions for hypothetical capabilities.
+
+Recorded: 2026-10-01. Authority: User's explicit technology-foundation approval and refinements.
+
+## D010: Native ESM with NodeNext semantics
+
+Status: Accepted.
+
+Decision: Use native ESM conventions with NodeNext semantics for TypeScript modules.
+
+Rationale: Explicit module semantics provide a consistent foundation for domain code and Node-based tooling without adding a legacy CommonJS requirement.
+
+Consequences: Verify configuration and module resolution during setup, preserving portable domain boundaries when connecting the application framework. This decision does not establish a package-publication or dual-format distribution system.
+
+Recorded: 2026-10-01. Authority: User's explicit technology-foundation approval and refinements.
+
+## D011: Node.js 24 LTS development baseline
+
+Status: Accepted.
+
+Decision: Use Node.js 24 LTS as the initial development, tooling, and test runtime.
+
+Rationale: A shared LTS baseline makes local development and verification predictable without selecting the eventual hosting environment.
+
+Consequences: Keep Node-specific functionality outside portable domain calculations unless a concrete domain requirement justifies it. A test running under Node does not justify filesystem, process, network, or other Node-specific dependencies in music-theory logic.
+
+Recorded: 2026-10-01. Authority: User's explicit technology-foundation approval and refinements.
+
+## D012: npm and deliberate dependency updates
+
+Status: Accepted.
+
+Decision: Use npm for dependency management. During setup, use the npm version bundled with the selected Node.js 24 LTS release unless a concrete compatibility issue requires otherwise. Commit `package-lock.json` and update dependencies deliberately rather than relying on floating versions.
+
+Rationale: The bundled package manager keeps setup simple, while the lockfile and deliberate updates make dependency changes reproducible and reviewable.
+
+Consequences: Do not introduce pnpm configuration or a second package-manager lockfile. npm does not imply workspaces or a monorepo. Create the manifest and lockfile only during authorized setup.
+
+Recorded: 2026-10-01. Authority: User's explicit selection of npm and setup policy in the technology-foundation approval.
+
+## D013: Vitest and separate behavioral verification
+
+Status: Accepted.
+
+Decision: Use Vitest 5.x in a Node test environment for deterministic behavioral testing. Use separate commands for TypeScript static checking and runtime test execution.
+
+Rationale: Type correctness and behavioral correctness are distinct obligations. Determinism depends on explicit inputs, controlled state, domain rules, and meaningful assertions rather than the test runner itself.
+
+Consequences: A passing type check does not prove musical behavior, and passing runtime tests do not establish type correctness. If Vitest requires a Vite peer dependency, select and pin a supported compatible version during setup. Vite serves test-tooling infrastructure; no Vite version is a project-level architecture decision, and Next.js retains the application-framework role.
+
+Recorded: 2026-10-01. Authority: User's explicit technology-foundation approval and Vite refinement.
+
+## D014: React for application UI and interaction
+
+Status: Accepted.
+
+Decision: Use React as the UI library for guitar controls, fretboard interaction, selection and display state, composition-workbench interaction, and later AI-assisted interaction.
+
+Rationale: Declarative UI and interaction can present and operate on shared deterministic capabilities across the intended application workflows.
+
+Consequences: React components consume domain capabilities rather than contain or duplicate music-theory, fretboard, or playability rules. Selection and display interaction do not establish the state-management architecture or library. React selection does not change [domain-first construction](#d004-domain-first-construction) or require immediate UI implementation.
+
+Recorded: 2026-10-01. Authority: User's explicit technology-foundation approval and React responsibility boundary.
+
+## D015: Next.js as the full-stack application boundary
+
+Status: Accepted.
+
+Decision: Use Next.js as the full-stack application framework around the deterministic domain. FretboAIrd is intended to become a complete full-stack portfolio application.
+
+Rationale: React is selected, the finished application needs full-stack capabilities, and later AI integration needs trusted server-side execution. Next.js provides a common application boundary for future authentication, persistence, APIs, and integrations without maintaining separate frontend and backend stacks or reopening the framework choice when server functionality is needed.
+
+Consequences: Next.js does not own musical or physical truth. Music Theory, Fretboard, and Playability remain usable and testable without Next.js, routing, Server Components, Route Handlers, or server actions, before and after application integration. Introduce server capabilities when needed; the first non-AI UI may primarily interact with the domain on the client. The [deferred technology choices](ARCHITECTURE.md#deferred-technology-choices), including hosting, authentication, persistence, and AI providers, remain undecided.
+
+Recorded: 2026-10-01. Authority: User's explicit selection of Next.js and full-stack application rationale.
+
+## D016: Generic UI controls, accessible primitives, and styling
+
+Status: Accepted.
+
+Decision: Use shadcn/ui as the primary source of reusable application UI components, Base UI as their accessible primitive layer where applicable, and Tailwind CSS for application styling.
+
+Rationale: shadcn/ui supplies customizable controls within the repository, avoiding repeated implementation of generic interactions. Base UI supports keyboard interaction, focus management, and accessible semantics. Tailwind fits this React/Next.js UI approach and supports rapid iteration on the product's own visual identity.
+
+Consequences: These technologies remain presentation and interaction dependencies. Generic controls must not encode musical semantics, fretboard calculations, or playability rules, and their conventions must not determine domain or application architecture. Do not add another broad UI framework such as MUI, Mantine, Chakra UI, or Ant Design without a demonstrated requirement. Introduce visual tokens and further design-system abstractions only when concrete repetition justifies them. The custom fretboard has a separate responsibility under [D017](#d017-custom-fretboard-visualization-with-react-and-svg).
+
+Recorded: 2026-10-01. Authority: User's explicit shadcn/ui, Base UI, and Tailwind CSS selections and constraints.
+
+## D017: Custom fretboard visualization with React and SVG
+
+Status: Accepted.
+
+Decision: Build the core fretboard visualization using React and SVG as a custom product interaction, separate from generic shadcn/ui and Base UI controls.
+
+Rationale: SVG provides a scalable coordinate-based representation, and React provides declarative rendering and interaction. This gives the product direct control over strings, frets, markers, labels, selections, regions, voicings, playable positions, responsive geometry, and domain-driven feedback.
+
+Consequences: The visualization consumes deterministic results through application state and operations. It does not independently determine musical content, note locations, or playability. SVG interactions initiate application operations rather than define musical meaning. Exact component hierarchy, SVG data structures, rendering algorithms, geometry, and state-management architecture remain open. No dedicated fretboard library is selected; a specialized library may be evaluated later for a concrete difficult problem if it preserves domain ownership.
+
+Recorded: 2026-10-01. Authority: User's explicit React + SVG direction and visualization responsibility boundary.
+
+## D018: One private application package with an independent domain
+
+Status: Accepted.
+
+Decision: Start with one repository and one private Next.js application package containing framework-independent deterministic domain modules. Do not introduce a monorepo, separate backend service, or premature package extraction.
+
+Rationale: A single application keeps development structurally simple while preserving the existing logical boundaries. Multiple packages or services are not required to separate domain responsibilities from their consumers.
+
+Consequences: Application and presentation technologies consume the domain. Domain calculations and tests remain independent of React, Next.js, UI libraries, CSS, routing and server framework features, AI providers, and deployment infrastructure. Package or service extraction may be considered later when concrete requirements justify it; do not create placeholder boundaries. This technology selection preserves [D001](#d001-deterministic-domain-authority) and [D004](#d004-domain-first-construction) and does not begin scaffolding or implementation.
+
+Recorded: 2026-10-01. Authority: User's explicit single-package organization and deterministic-domain independence constraints.
