@@ -8,11 +8,11 @@ This document separates accepted architectural boundaries, implementation facts,
 
 ## Current implementation
 
-The repository currently contains a minimal README and the four working documents: `AGENTS.md`, `.agent/PLANS.md`, `docs/ARCHITECTURE.md`, and `docs/DECISIONS.md`.
+The repository contains the working documents plus a minimal Next.js App Router application. `app/layout.tsx` provides the root layout and metadata, `app/page.tsx` is a deliberately generic bootstrap page, and `app/globals.css` imports the configured Tailwind CSS and shadcn/ui styles. `next.config.ts`, `postcss.config.mjs`, `components.json`, and `lib/utils.ts` provide the framework and UI foundation; no shadcn components have been added yet.
 
-The technology foundation below is accepted, but none of it has been scaffolded or installed. There is no dependency manifest, lockfile, configured type-check, test, build, or lint command, source directory, domain module, or test file. There are no React or SVG components, Next.js routes or APIs, UI controls, styles, or AI integration. There is no actual ExecPlan and no `plans/` directory. The components below describe accepted responsibilities, not existing code or a selected source-directory structure.
+`package.json` and `package-lock.json` define one private npm-managed package. `npm run typecheck` runs Next.js type generation and strict TypeScript checks for the application and NodeNext checks for the test configuration. `vitest.config.ts` configures a Node test environment, and `tests/bootstrap.test.ts` verifies that the test runtime works without a DOM. `npm run dev`, `npm run build`, and `npm run start` provide the Next.js lifecycle commands. `.nvmrc` and the package engine target Node.js 24 LTS.
 
-Update this section against the repository as implementation is introduced. Describe actual entry points, modules, interfaces, tests, and integrations only after they exist; distinguish them from remaining intended capabilities.
+No domain modules, React product controls, SVG fretboard visualization, server APIs, persistence, audio, or AI integration exist yet. There is no actual ExecPlan and no `plans/` directory. The components below continue to describe accepted responsibilities that later implementation must preserve.
 
 ## Accepted technology foundation
 

@@ -1,0 +1,13 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "lib": ["es2022"],
+    "types": ["node"],
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "plugins": [],
+    "incremental": false
+  },
+  "include": ["vitest.config.ts", "tests/**/*.ts"],
+  "exclude": ["node_modules"]
+}

@@ -34,7 +34,7 @@ This section is the authoritative threshold. When an ExecPlan is required, read 
 
 ## Commands and verification
 
-Application build, test, and lint commands are not configured at bootstrap. Discover available commands from actual configuration, scripts, documentation, and the execution environment. Do not invent commands, tools, dependencies, or existing project capabilities. If an authorized task introduces tooling, distinguish proposed setup from tools that already exist.
+Application commands are defined in `package.json`: `npm run dev`, `npm run build`, `npm run start`, `npm run typecheck`, and `npm test`. Discover any additional commands from actual configuration, documentation, and the execution environment. Do not invent commands, tools, dependencies, or existing project capabilities. If an authorized task introduces tooling, distinguish proposed setup from tools that already exist.
 
 Verify behavior in proportion to risk. Prefer focused deterministic tests for domain logic, valuable regression coverage for bugs, and direct user-facing checks when presentation or interaction changes. Broaden testing when failures or unresolved risk justify it. Later agent evaluation does not replace ordinary tests.
 

@@ -8,7 +8,7 @@ The application is designed to be useful without AI. Later, optional AI assistan
 
 ## Project status
 
-**Documentation phase; application implementation has not started.** The architecture and initial technology choices are accepted, but no application stack has been scaffolded or installed. There are no source modules, UI components, dependency manifests, or executable tests yet.
+**Technical bootstrap complete; domain implementation has not started.** The repository now contains a minimal Next.js application, strict TypeScript checking, a Node-only Vitest setup, Tailwind CSS, and shadcn/ui configuration with Base UI primitives. No Music Theory, Fretboard, Playability, AI, or product feature implementation has been added.
 
 The descriptions below explain the intended application. See [current implementation status](docs/ARCHITECTURE.md#current-implementation) for the authoritative account of what exists.
 
@@ -26,18 +26,18 @@ Generic controls and the fretboard have distinct roles: shadcn/ui and Base UI pr
 
 ## Selected technology
 
-These are accepted choices for future setup, not installed dependencies.
+These are the selected project technologies. The exact installed versions are pinned in `package.json` and `package-lock.json`.
 
 | Area | Choice |
 | --- | --- |
-| Application | Next.js and React |
-| Language | TypeScript 7.x with strict checking, `noUncheckedIndexedAccess`, and `exactOptionalPropertyTypes` |
-| Modules | Native ESM with NodeNext semantics |
-| Development and test runtime | Node.js 24 LTS |
-| Dependency management | npm bundled with the selected Node.js release, with a committed `package-lock.json` once setup begins |
-| Behavioral testing | Vitest 5.x in a Node environment, separate from TypeScript checking |
-| Generic UI controls | shadcn/ui with Base UI primitives where applicable |
-| Styling | Tailwind CSS |
+| Application | Next.js 16.3.8 and React 19.3.0 |
+| Language | TypeScript 7.0.2 with `strict`, `noUncheckedIndexedAccess`, and `exactOptionalPropertyTypes` |
+| Modules | Native ESM; the Next.js app uses bundler resolution, and Node tooling uses NodeNext |
+| Development and test runtime | Node.js 24.21.0 LTS |
+| Dependency management | npm 11.19.0 with exact dependency versions and `package-lock.json` |
+| Behavioral testing | Vitest 5.0.3 in a Node environment, separate from TypeScript checking |
+| Generic UI controls | shadcn/ui 4.21.0 with Base UI (`@base-ui/react` 1.8.0) |
+| Styling | Tailwind CSS 4.3.3 |
 | Fretboard visualization | Custom React + SVG |
 
 The initial organization is one repository and one private Next.js application package with framework-independent domain modules. Database, authentication, hosting, AI provider, and other [deferred technology choices](docs/ARCHITECTURE.md#deferred-technology-choices) remain open. The [decision log](docs/DECISIONS.md) records the rationale and constraints behind accepted choices.
@@ -57,6 +57,22 @@ Actual ExecPlans will live in repository-level `plans/` when needed. That direct
 
 Development follows the accepted domain-first order: minimal domain concepts, Music Theory with deterministic tests, Fretboard with deterministic tests, and minimal Playability when required. Clear supported contracts then enable a useful non-AI interface before AI integration. This is the construction strategy, not a list of completed features.
 
-There are no install, development-server, build, or test commands configured yet. Setup instructions will be added when the corresponding tooling exists.
+Use Node.js 24.21.0, as recorded in `.nvmrc`, with its bundled npm version. Then install dependencies:
+
+```bash
+npm install
+```
+
+Available commands:
+
+```bash
+npm run dev       # start the Next.js development server
+npm run build     # create the production build
+npm run start     # serve the production build
+npm run typecheck # run Next.js type generation and strict TypeScript checks
+npm test          # run Vitest once in the Node environment
+```
+
+The project targets Node.js 24 LTS and records the expected version in `.nvmrc` and `package.json`. `npm` is the only configured package manager.
 
 For now, start with the architecture and decision log above. Before making changes, read [AGENTS.md](AGENTS.md), inspect the current repository state, and keep work within the requested scope. Use the linked ExecPlan protocol when the repository's threshold applies.
