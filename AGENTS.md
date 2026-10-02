@@ -20,6 +20,8 @@ Develop the domain independently before adding AI. Expose clear, verified contra
 
 When implementing or reviewing Music Theory Engine behavior, consult the relevant sections of the [Music Theory Reference](docs/MUSIC_THEORY_REFERENCE.md). Preserve its stated assumptions and convention distinctions; reference coverage does not establish supported capabilities, software representations, or accepted project decisions.
 
+When implementing or reviewing Fretboard Engine behavior, consult the relevant sections of the [Fretboard Reference](docs/FRETBOARD_REFERENCE.md). Preserve its stated instrument assumptions and convention distinctions; reference coverage does not establish supported capabilities, software representations, or accepted project decisions.
+
 ## Planning and ExecPlans
 
 Plan before significant changes. Use an ExecPlan for:
@@ -49,6 +51,7 @@ Review the changes and relevant Git status before reporting completion. Inspect 
 - [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) owns architectural boundaries and the verified implementation description.
 - [docs/DECISIONS.md](docs/DECISIONS.md) owns persistent accepted decisions and their rationale.
 - [docs/MUSIC_THEORY_REFERENCE.md](docs/MUSIC_THEORY_REFERENCE.md) owns the sourced theoretical domain reference, including its assumptions and convention distinctions.
+- [docs/FRETBOARD_REFERENCE.md](docs/FRETBOARD_REFERENCE.md) owns the sourced physical guitar and fretboard reference, including its instrument assumptions and convention distinctions.
 - An individual ExecPlan owns the context, progress, evidence, and local decisions for its effort.
 
 Update affected documentation when behavior, architecture, or accepted decisions change. Keep task-specific choices in their ExecPlan unless they become persistent project decisions within the task's authority. Explain important tradeoffs concisely enough for the user to review the result.
