@@ -29,7 +29,7 @@ The accepted decisions and rationale are recorded in [DECISIONS.md](DECISIONS.md
 | Responsibility | Owns | Does not own |
 | --- | --- | --- |
 | Domain concepts | Shared musical and instrument concepts needed by supported capabilities. | A speculative type system for all future features. Exact representations remain open. |
-| Music Theory Engine | Deterministic note, interval, scale, degree, and chord calculations. | Natural-language interpretation, fretboard rendering, or hand ergonomics. |
+| Music Theory Engine | Deterministic note, interval, scale, degree, and chord calculations; theoretical context is in the [Music Theory Reference](MUSIC_THEORY_REFERENCE.md), whose coverage does not establish supported capabilities. | Natural-language interpretation, fretboard rendering, or hand ergonomics. |
 | Fretboard Engine | Mapping between tuning, strings, frets, pitches, and available locations or regions. | Redefining music theory or treating a location map as proof of a playable fingering. |
 | Playability capabilities | Physical constraint checks and fingering feasibility; later, comparison of fingerings and configurable ergonomic assessments. | Musical taste, universal claims about every player's anatomy, or silently replacing the requested musical object. |
 | Application boundary (Next.js) | Full-stack application capabilities and connecting application operations to the deterministic domain; trusted server-side execution when later integrations need it. | Musical or physical truth. Routes, Server Components, Route Handlers, and server actions must not become prerequisites for domain use or testing. |

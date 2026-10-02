@@ -18,6 +18,8 @@ Preserve the deterministic domain boundaries described in the architecture docum
 
 Develop the domain independently before adding AI. Expose clear, verified contracts for supported capabilities, and evolve them deliberately rather than attempting to finalize all future interfaces. Reuse suitable existing extension points and keep each change coherent and reviewable.
 
+When implementing or reviewing Music Theory Engine behavior, consult the relevant sections of the [Music Theory Reference](docs/MUSIC_THEORY_REFERENCE.md). Preserve its stated assumptions and convention distinctions; reference coverage does not establish supported capabilities, software representations, or accepted project decisions.
+
 ## Planning and ExecPlans
 
 Plan before significant changes. Use an ExecPlan for:
@@ -46,6 +48,7 @@ Review the changes and relevant Git status before reporting completion. Inspect 
 - [.agent/PLANS.md](.agent/PLANS.md) owns the ExecPlan protocol and template.
 - [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) owns architectural boundaries and the verified implementation description.
 - [docs/DECISIONS.md](docs/DECISIONS.md) owns persistent accepted decisions and their rationale.
+- [docs/MUSIC_THEORY_REFERENCE.md](docs/MUSIC_THEORY_REFERENCE.md) owns the sourced theoretical domain reference, including its assumptions and convention distinctions.
 - An individual ExecPlan owns the context, progress, evidence, and local decisions for its effort.
 
 Update affected documentation when behavior, architecture, or accepted decisions change. Keep task-specific choices in their ExecPlan unless they become persistent project decisions within the task's authority. Explain important tradeoffs concisely enough for the user to review the result.

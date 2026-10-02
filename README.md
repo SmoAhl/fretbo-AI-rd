@@ -48,6 +48,7 @@ The initial organization is one repository and one private Next.js application p
 | --- | --- |
 | [Architecture](docs/ARCHITECTURE.md) | System responsibilities, domain boundaries, implementation status, and open questions. |
 | [Decisions](docs/DECISIONS.md) | Accepted project decisions and their rationale. |
+| [Music Theory Reference](docs/MUSIC_THEORY_REFERENCE.md) | Sourced Western music-theory context under 12-TET; coverage does not imply implemented capabilities. |
 | [Agent instructions](AGENTS.md) | Repository working practices, verification expectations, and the threshold for an ExecPlan. |
 | [ExecPlan protocol](.agent/PLANS.md) | How significant efforts are planned and continued across sessions. |
 

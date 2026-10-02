@@ -4,6 +4,7 @@
 /.vercel/
 /.vitest/
 /coverage/
+/.local/
 *.tsbuildinfo
 next-env.d.ts
 npm-debug.log*
