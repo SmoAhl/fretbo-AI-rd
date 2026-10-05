@@ -50,10 +50,11 @@ The initial organization is one repository and one private Next.js application p
 | [Decisions](docs/DECISIONS.md) | Accepted project decisions and their rationale. |
 | [Music Theory Reference](docs/MUSIC_THEORY_REFERENCE.md) | Sourced Western music-theory context under 12-TET; coverage does not imply implemented capabilities. |
 | [Fretboard Reference](docs/FRETBOARD_REFERENCE.md) | Sourced physical guitar and fretboard context for mapping pitches to locations; coverage does not imply implemented capabilities. |
+| [Playability Reference](docs/PLAYABILITY_REFERENCE.md) | Sourced fingering, grip, transition, and ergonomic context under explicit assumptions; coverage does not imply implemented capabilities. |
 | [Agent instructions](AGENTS.md) | Repository working practices, verification expectations, and the threshold for an ExecPlan. |
 | [ExecPlan protocol](.agent/PLANS.md) | How significant efforts are planned and continued across sessions. |
 
-Actual ExecPlans will live in repository-level `plans/` when needed. That directory does not exist yet; `.agent/PLANS.md` defines the protocol rather than an implementation task.
+Actual ExecPlans live in repository-level `plans/`, beginning with the [Playability Reference documentation effort](plans/playability-reference.md). `.agent/PLANS.md` defines the protocol rather than an implementation task.
 
 ## Development and getting started
 

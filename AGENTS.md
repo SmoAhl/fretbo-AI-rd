@@ -22,6 +22,8 @@ When implementing or reviewing Music Theory Engine behavior, consult the relevan
 
 When implementing or reviewing Fretboard Engine behavior, consult the relevant sections of the [Fretboard Reference](docs/FRETBOARD_REFERENCE.md). Preserve its stated instrument assumptions and convention distinctions; reference coverage does not establish supported capabilities, software representations, or accepted project decisions.
 
+When implementing or reviewing Playability Engine behavior, consult the relevant sections of the [Playability Reference](docs/PLAYABILITY_REFERENCE.md). Preserve its stated contact, technique, player, and timing assumptions; distinguish model constraints from configurable ergonomic judgments. Reference coverage does not establish supported capabilities, software representations, or accepted project decisions.
+
 ## Planning and ExecPlans
 
 Plan before significant changes. Use an ExecPlan for:
@@ -52,6 +54,7 @@ Review the changes and relevant Git status before reporting completion. Inspect 
 - [docs/DECISIONS.md](docs/DECISIONS.md) owns persistent accepted decisions and their rationale.
 - [docs/MUSIC_THEORY_REFERENCE.md](docs/MUSIC_THEORY_REFERENCE.md) owns the sourced theoretical domain reference, including its assumptions and convention distinctions.
 - [docs/FRETBOARD_REFERENCE.md](docs/FRETBOARD_REFERENCE.md) owns the sourced physical guitar and fretboard reference, including its instrument assumptions and convention distinctions.
+- [docs/PLAYABILITY_REFERENCE.md](docs/PLAYABILITY_REFERENCE.md) owns the sourced physical-execution and playability reference, including model assumptions, player variability, and the distinction between feasibility and ergonomic assessment.
 - An individual ExecPlan owns the context, progress, evidence, and local decisions for its effort.
 
 Update affected documentation when behavior, architecture, or accepted decisions change. Keep task-specific choices in their ExecPlan unless they become persistent project decisions within the task's authority. Explain important tradeoffs concisely enough for the user to review the result.
