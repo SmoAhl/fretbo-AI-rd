@@ -22,7 +22,7 @@ When implementing or reviewing Music Theory Engine behavior, consult the relevan
 
 When implementing or reviewing Fretboard Engine behavior, consult the relevant sections of the [Fretboard Reference](docs/FRETBOARD_REFERENCE.md). Preserve its stated instrument assumptions and convention distinctions; reference coverage does not establish supported capabilities, software representations, or accepted project decisions.
 
-When implementing or reviewing Playability Engine behavior, consult the relevant sections of the [Playability Reference](docs/PLAYABILITY_REFERENCE.md). Preserve its stated contact, technique, player, and timing assumptions; distinguish model constraints from configurable ergonomic judgments. Reference coverage does not establish supported capabilities, software representations, or accepted project decisions.
+When implementing or reviewing Playability Engine behavior, consult the relevant sections of the [Playability Reference](docs/PLAYABILITY_REFERENCE.md). Preserve its stated contact, technique, player, and timing assumptions. Distinguish contact-assignment validity from simultaneous anatomy, coupled movement, contact-surface compatibility, and clearance; independent finger checks do not establish one shared hand configuration. Preserve evidence limits and distinguish model contradictions from missing information, unsuccessful searches, and configurable ergonomic judgments. Reference coverage does not establish supported capabilities, software representations, or accepted project decisions.
 
 ## Planning and ExecPlans
 

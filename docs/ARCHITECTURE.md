@@ -12,7 +12,7 @@ The repository contains the working documents plus a minimal Next.js App Router 
 
 `package.json` and `package-lock.json` define one private npm-managed package. `npm run typecheck` runs Next.js type generation and strict TypeScript checks for the application and NodeNext checks for the test configuration. `vitest.config.ts` configures a Node test environment, and `tests/bootstrap.test.ts` verifies that the test runtime works without a DOM. `npm run dev`, `npm run build`, and `npm run start` provide the Next.js lifecycle commands. `.nvmrc` and the package engine target Node.js 24 LTS.
 
-No domain modules, React product controls, SVG fretboard visualization, server APIs, persistence, audio, or AI integration exist yet. The documentation effort for the Playability Reference is recorded in [its ExecPlan](../plans/playability-reference.md). The components below continue to describe accepted responsibilities that later implementation must preserve.
+No domain modules, React product controls, SVG fretboard visualization, server APIs, persistence, audio, or AI integration exist yet. The Playability Reference's [original ExecPlan](../plans/playability-reference.md) and [simultaneous-hand extension](../plans/playability-hand-feasibility.md) record documentation work, not an implemented Playability Engine. The components below continue to describe accepted responsibilities that later implementation must preserve.
 
 ## Accepted technology foundation
 
@@ -86,7 +86,9 @@ Music Theory determines musical content; Fretboard relates that content to the i
 
 Keep a chord's musical identity distinct from its guitar voicing and from a fingering used to realize that voicing. Similarly, all matching note locations across the fretboard are not one simultaneous grip. A display-mode change does not redefine the underlying scale or chord.
 
-Distinguish musical validity, physical feasibility, ergonomics, and subjective usefulness. Deterministic evaluation of a configured constraint does not make that constraint a universal human limit. Failure to find a playable result under given constraints is a meaningful result; it must not be concealed by inventing one or overstating what the search proves.
+Distinguish musical validity, fretboard availability, contact-assignment validity, simultaneous anatomical/kinematic feasibility, ergonomic assessment, and preference. These are conceptual distinctions, not a prescribed pipeline or API. Logically compatible contact labels do not establish one shared hand configuration. An anatomical claim requires compatible geometry, coupled movement, contact surfaces, and clearance under explicit player and technique assumptions; adequate force, endurance, and timed transitions require further evidence.
+
+Fretboard owns instrument facts such as local string/fret positions, surfaces, and neck dimensions; Playability consumes those facts when assessing human realization. Reference coverage does not select geometric fidelity or minimum implementation guarantees. Deterministic evaluation of a configured constraint does not make it a universal human limit. A demonstrated model contradiction, missing information, an unsupported technique, and failure to find a satisfying configuration are distinct; do not invent a result or overstate what a search proves.
 
 ## Contracts and validation
 
@@ -126,6 +128,7 @@ Selecting Next.js does not implicitly select any of these. Custom React + SVG is
 - Initial musical scope and instrument support, including tuning and range.
 - Representations for pitch class, register, note spelling, musical identity, voicing, and fingering.
 - Ownership of voicing candidate generation, initial realization selection, and the minimum playability guarantee.
+- Playability geometry fidelity, calibration and provenance of player measurements, supported techniques, and the scope of force and transition models.
 - Application-state ownership, coordination between interaction paths, and placement of domain execution.
 - Concrete interfaces, the deferred technology choices above, and the timing and scope of later capabilities.
 - React component hierarchy, SVG rendering data structures and algorithms, fretboard geometry, and state-management architecture.

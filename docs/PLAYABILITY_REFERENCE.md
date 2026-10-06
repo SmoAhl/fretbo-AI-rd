@@ -16,17 +16,18 @@ The illustrative instrument follows the [Fretboard Reference](FRETBOARD_REFERENC
 
 Keep the following questions separate:
 
-**Musically valid → available on the fretboard → physically feasible under a stated model → ergonomically assessed under configured assumptions.**
+**Musical validity → fretboard availability → contact-assignment validity → simultaneous anatomical/kinematic feasibility → ergonomic assessment → preference.**
 
 This is a reasoning progression, not a required execution pipeline. Passing an incomplete model establishes only its checked conditions. A demonstrated contradiction, an unmodeled technique, and insufficient information are different conclusions; these are not proposed API result types. Failure of one assignment does not prove that every fingering of the voicing fails, nor does unsuccessful search prove human impossibility.
 
-Labels distinguish **definitions**, **physical facts under assumptions**, **pedagogical/notation conventions**, **derived consequences**, **context-dependent practices**, **empirical findings**, and **model limitations**. Tables inherit nearby qualifications. The primary focus is fretting-hand execution, including sounding, muting, release, and sustain obligations. Detailed picking-hand mechanics, full-body biomechanics, medical advice, setup instructions, extended-technique models, scoring formulas, software representations, UI, and AI tools are outside scope.
+Labels distinguish **definitions**, **anatomical/physical facts**, **biomechanical evidence**, **empirical guitar findings**, **pedagogy**, **model assumptions**, **derived consequences**, **ergonomic judgments**, and **uncertainty/limitations**. Tables inherit nearby qualifications. The primary focus is fretting-hand execution, including sounding, muting, release, and sustain obligations. Detailed picking-hand mechanics, full-body simulation, medical advice, setup instructions, extended-technique models, scoring formulas, software representations, UI, and AI tools are outside scope.
 
 ### Contents
 
 - [Terminology](#terminology)
 - [Physical realization and contact](#physical-realization-and-contact)
 - [Finger assignment](#finger-assignment)
+- [Anatomy and coupled movement](#anatomy-and-coupled-movement)
 - [Simultaneous chord and grip feasibility](#simultaneous-chord-and-grip-feasibility)
 - [Barres and partial barres](#barres-and-partial-barres)
 - [Reach, span, and instrument geometry](#reach-span-and-instrument-geometry)
@@ -56,6 +57,8 @@ Labels distinguish **definitions**, **physical facts under assumptions**, **peda
 | Reach / stretch | Reach concerns attaining or maintaining contacts; stretch describes extending a finger configuration relative to a reference posture. Neither is determined by fret span alone. |
 | Position shift | Movement from one hand position to another along the neck. A finger extension need not be a hand-position shift. |
 | Physical feasibility | Satisfaction of physical obligations under named assumptions; a model conclusion has only the reach of its model. |
+| Contact-assignment validity | Logical compatibility of the assigned stopping, supporting, clearing, and sounding duties within the declared contact model. |
+| Anatomical/kinematic feasibility | Existence of one permitted shared hand configuration satisfying all concurrent contact and clearance duties. It does not establish sufficient force or successful movement into that configuration. |
 | Ergonomic assessment | Evaluation of movement, posture, effort, or other declared demands relative to an instrument, player, and task. |
 | Difficulty / preference | Difficulty concerns execution demands for a player and context; preference additionally reflects habits, expression, and priorities. Neither is a synonym for physical impossibility. |
 
@@ -92,9 +95,31 @@ Distinct finger labels also do not prove that the hand can attain their position
 
 **Context-dependent practice.** Thumb fretting is recognized by T in some notation. [Fender][fender-chart]. The thumb may also support the neck or mute a string; these are distinct duties. [Fender's thumb-muting discussion][fender-thumb]. A teaching tradition that reserves it for support does not establish universal prohibition, and acknowledging thumb fretting does not establish that every player or instrument can use it. The worked ordinary-grip examples below assign only fingers 1–4.
 
+## Anatomy and coupled movement
+
+**Anatomical facts and modeling distinctions.** Fingers are articulated parts of one connected hand, not independently positioned probes. For fingers 1–4, the MCP (metacarpophalangeal) knuckle connects a metacarpal to the proximal phalanx; PIP and DIP joints connect the proximal, middle, and distal phalanges. Segment lengths and joint-center locations affect reach; thickness, pads, and web spaces affect contact and clearance. The thumb has a CMC (carpometacarpal) base joint, MCP joint, and one IP joint, with two phalanges. Its neck-support, muting, or fretting duties must coexist with those of the fingers. See [Park and Bae, section 2.1 and Figure 1][park-bae] and [Buchholz et al., abstract][buchholz-anthro]. These sources do not supply a selected guitar-hand representation.
+
+Finger bases occupy related locations in the palm. Hand translation and rotation move them together; they cannot each choose a different palm pose. A rigid palm is also a simplification: fourth/fifth metacarpal motion can reshape the palmar arch. [Buffi et al.][buffi] demonstrated this in a model informed by CT measurements of **one subject**. It supports acknowledging palm mobility, not importing those measurements as universal values.
+
+**Movement distinctions.** Flexion/extension bends and straightens a digit; abduction/adduction spreads and brings digits together. MCP motion includes both; PIP/DIP motion is commonly approximated mainly by flexion/extension. Within-finger coordination and restrictions differ from coupling between neighboring digits. A joint diagram's separate axes do not imply that all combinations are usable, or that lateral reach can be increased independently of bending. [Park and Bae, section 2.1][park-bae]; [Gracia-Ibáñez et al., abstract][gracia].
+
+**Biomechanical evidence, bounded to the experiments.** Gracia-Ibáñez et al. found that maximum voluntary MCP flexion and extension depend on neighboring MCP posture. Independent per-joint extrema therefore do not establish a feasible combination. Their fitted regressions are not adopted here: using them quantitatively would require reviewing methods, measurement conditions, and applicability to the player and guitar task. [Gracia-Ibáñez et al.][gracia].
+
+Lang and Schieber compared imposed passive motion with active individuated motion in ten healthy adults. Both mechanical coupling and active control mattered under their tested conditions. Soft-tissue and tendon connections differ from neural coordination demands; difficulty moving one digit without another moving is not by itself a proof that a static grip is impossible. [Abstract, Methods, and discussion of mechanical coupling][lang]. Anatomical dissection of 40 cadaver hands documents extensor tendon interconnections and variation, but does not test guitar chords. [von Schroeder et al., abstract][juncturae].
+
+**Assessment implication.** Declare whether movement is active, passively positioned, loaded, or sustained, and which wrist/forearm postures are allowed. A passively attainable angle need not be actively attainable or maintainable against strings. Wrist posture affected muscle activity during unloaded finger movements in an eleven-participant study; that observation is not a guitar force limit or a separation of all mechanical and neural causes. [Beringer et al., Methods and Discussion][wrist-emg]. Loading, force capacity, and duration need additional evidence; a collection of geometry and unloaded ROM measurements does not supply them.
+
 ## Simultaneous chord and grip feasibility
 
-**Derived assessment questions.** Start with the actual voicing and its concurrent sounding requirements, not merely a chord symbol or a pitch-class set. Confirm available locations through Fretboard, then examine finger contacts, their compatibility, the intended speaking segments, required open-string clearance, and intentional silence. A physically coherent assignment still needs any applicable reach, force, and technique assessment.
+**Conceptual model boundary.** Under a declared player, instrument, and technique model, anatomical/kinematic feasibility requires at least one shared hand configuration that satisfies every concurrent contact obligation, respects the model's coupled movement restrictions, avoids incompatible bodily or instrument penetration, and preserves required sounding-string clearance. This is a necessary condition for physical execution, not a guarantee of adequate force, endurance, transition speed, comfort, or safety.
+
+**For every target, some pose reaches it** does not imply **one pose reaches every target together**. All finger configurations must use the same hand translation and orientation, wrist posture, and permitted arm/instrument relationship. Where a contact requires neck support, that support must also fit. This does not require a full-body simulation or select an implementation: it specifies what a simultaneous claim means. Articulated hand models incorporating segment and surface geometry have precedents, but cylinder-grasp validation is not guitar validation. [Buchholz and Armstrong, abstract][buchholz-model].
+
+**Derived assessment questions.** Start with the actual voicing and concurrent sounding intervals. For a proposed assignment, identify the shared posture, digit configurations, contact surfaces, required clearances, and applicable restrictions that could satisfy them together. A positive claim needs a satisfying configuration or appropriately scoped performance evidence. A negative model claim needs a contradiction excluding its allowed configurations; missing measurements or an unsuccessful search instead leave the conclusion undetermined.
+
+**Contact geometry.** A string/fret label specifies a stopping obligation, not the center of a fingertip. The finger presses within a fret space, nutward of the effective crown. Pad position, contact patch, approach orientation, tissue deformation, and the surface used for a barre affect which strings are stopped or damped. Multiple placements may realize the same location; choosing only one arbitrary point can reject another valid placement. Conversely, individually reachable points do not demonstrate compatible pad surfaces or clearance. The distinction between articulated links and their surrounding contact surfaces is illustrated by [Buchholz and Armstrong][buchholz-model]; ordinary stopping geometry follows the [Fretboard definitions](FRETBOARD_REFERENCE.md#instrument-geometry-for-contact-assessment).
+
+**Three-dimensional exclusion.** Crossing projected lines in a diagram does not establish bodily collision: fingers may pass at different heights or touch without incompatible penetration. Nor does a clear two-dimensional drawing establish clearance of finite finger volumes. Assess the actual configuration, including web spaces, neighboring digits, neck/body surfaces, and required sounding segments. Finger-to-finger contact can be permitted if consistent with the declared technique; an unavoidable obstruction or unintended damping is different. Neither crossing nor lack of crossing is a universal feasibility test.
 
 Duplicated chord tones are not redundant physical instructions. Two required C pitches on different strings may have different registers or require separate unison realizations. Preserving pitch-class membership while dropping one loses information. Whether an omission is musically permitted belongs to the musical request and Music Theory context, not to a Playability rule that silently repairs an awkward grip. See [voicing and omissions](MUSIC_THEORY_REFERENCE.md#identity-inversion-and-voicing) and [information loss](MUSIC_THEORY_REFERENCE.md#collections-and-information-loss).
 
@@ -107,6 +132,8 @@ A strum can stagger attacks while notes continue sounding together. A broken cho
 Here **partial barre** means a barre across fewer than all six strings, including two-string examples. **Terminology variation:** Niedt distinguishes a particular contact that clears a neighboring string on the treble side as an “interior barre,” while noting that his earlier material calls it a partial barre. His specialized usage must not redefine all partial barres as three-string contacts. [Niedt, opening terminology note][niedt].
 
 **Derived assessment questions.** Identify the finger, fret, covered string interval, effective stops, higher-fret overrides, and strings that must remain clear. Same-fret targets alone do not prove a barre possible. Nor does a barre diagram establish uniform pressure, contact on every covered string, force requirements, or comfort. Selective contact, joint configuration, and adjacent-string clearance may need a richer model.
+
+The barre surface must fit in the **same** hand configuration as the other stops and any support contact. Finger curvature, joint posture, pad shape, and the instrument's local surfaces determine actual contact; the line drawn across a chord box describes intended coverage only. If no allowed surface placement can provide the stops and preserve clearance, the barre fails that model. If geometry is compatible but pressure or endurance is unknown, those execution demands remain unresolved. A two-dimensional static guitar model studied C, E, G7, and Am using anthropometry, fingertip forces, and joint angles; its abstract does not establish three-dimensional clearance or validate a particular Am/C assignment. [Sung et al.][sung].
 
 **Context-dependent practice and limitation.** A partial barre may trade fewer independent fingers for different pressure and clearance demands; a smaller covered interval is not automatically easier for every player. Niedt's examples demonstrate why neighboring-string clearance must be specified, but his anatomical and genetic assertions are not adopted as general limits. Thumb, hinge, diagonal, and other specialized realizations remain boundary cases rather than silently supported contact modes.
 
@@ -125,17 +152,14 @@ Here **partial barre** means a barre across fewer than all six strings, includin
 
 An octave-higher pair has half the separation in this ideal layout. Changing scale length scales these distances. Neither relationship establishes comfort. Cross-string displacement, fingertip placement within fret spaces, finger identities, posture, and access remain unmeasured by this table.
 
-| Instrument property | Relevant distinction for physical execution |
+| Assessment claim | Instrument information it consumes |
 | --- | --- |
-| Scale length and fret number | Determine longitudinal fret layout; do not by themselves determine hand posture. |
-| String spacing | Separation of identified strings at a specified neck location; distinguish center-to-center spacing from clear gaps. StewMac's outer-string placement and nonuniform spacing example show why nut width alone is insufficient. [Instructions][stewmac-spacing]. |
-| Fretboard width | Surface width at a stated location; includes margins outside the outer strings. It is not the same measurement as their separation. |
-| Fretboard radius | Describes transverse curvature; larger circular radius means a flatter arc at the same width. Compound radius can vary along the neck. [Fender][fender-radius]. |
-| Neck dimensions/profile | Back contour and thickness are separate from fingerboard curvature and width; profile can change along the neck. [Fender's profile description][fender-neck]. These facts do not determine a preferred grip. |
-| Neck location and access | The hand must reach the region around the instrument, not only span two frets. Body/heel clearance and holding posture are contextual limitations; shorter gaps do not prove easier access. |
-| Tuning | Changes which locations realize the musical request. If actual retuning also changes tension, the string, length, and setup assumptions matter; tuning labels alone are not an effort metric. [UNSW, length/tension relationship][unsw-strings]. |
+| Longitudinal reach | Measured fret positions, or positions explicitly idealized from scale length; contact placement within each fret space. |
+| Simultaneous spatial contacts | String positions and spacing at the relevant neck region; fingerboard/fret surface geometry and boundaries. |
+| Clearance and support | String height and diameter where relevant; radius or equivalent measured surface geometry; neck thickness/profile and body/heel access where hand or thumb contact matters. |
+| Force demands | Additional string, setup, contact, and loading information. Geometry alone is insufficient. |
 
-These are instrument facts consumed by physical assessment, not a new instrument schema or SVG geometry. Force-related assessment would additionally need action, string properties, contact placement, and player information. The [ideal Fretboard model](FRETBOARD_REFERENCE.md#mathematical-and-physical-relationships) does not specify these, and no setup prescription follows here.
+Measurement definitions belong to [Fretboard's instrument geometry](FRETBOARD_REFERENCE.md#instrument-geometry-for-contact-assessment). Playability consumes those facts with player and technique assumptions; this is not an instrument schema or rendering geometry. Radius, width, and nominal scale length must not substitute for the more specific geometry on which a conclusion depends. Higher neck positions have smaller ideal fret gaps but may have different access restrictions. Tuning selects locations; it is not an effort metric. No setup prescription follows here.
 
 ## Scale and melodic fingering
 
@@ -149,9 +173,13 @@ Ascending and descending traversal changes preparation and release order, so one
 
 **Derived requirements.** Individually available endpoints do not establish a feasible transition. State what stops sounding, what continues sounding, which fingers become available, whether a supporting or substitute contact preserves a note, and when the next contact must be ready. Distinguish movement time from total note duration: an ongoing obligation can consume part of the interval before the next attack.
 
+Even anatomically feasible configurations at every named instant do not establish a connecting movement. The permitted movement must preserve ongoing stops, clearance, articulation, and support throughout the available time. It may pass through intermediate postures that endpoint checks omit. Release may make two otherwise incompatible obligations sequentially possible; requiring their sustain to overlap restores the simultaneous problem.
+
 Reusing a finger after release differs from demanding it in two places during a sustain overlap. Sliding contact differs from releasing and replacing it, and may change articulation. Open strings can leave the fretting hand available for movement but can also impose clearance and later damping obligations. Without timing and articulation information, a speed-dependent feasibility conclusion is unsupported. Pairwise endpoint checks also cannot certify a whole passage with continuing obligations or cumulative demands.
 
 **Empirical finding, limited population.** Heijink and Meulenbroek studied six male professional classical guitarists performing prescribed single-note sequences at a fixed tempo on one guitar. Hand position, span, and repositioning affected aspects of performance and perceived complexity. This supports treating movement and timing as relevant dimensions, not importing a universal shift penalty or fret-span cutoff. Their movement analysis did not measure a complete force model. [Method, pp. 341–343; Discussion, pp. 348–350][heijink].
+
+**Pedagogical perspective, restricted access.** Iznaola's article places coordinated arm–wrist–hand movement and shifting at the center of its account of extensions, contractions, and barres. This description is supported by the repository abstract; the full article was not accessible during verification. Its detailed procedures, physiological claims, and examples are therefore not adopted here. [Iznaola, abstract and publication notes][iznaola].
 
 **Context-dependent practice.** A printed fingering is guidance for a musical task. Trinity explicitly describes fingerings as suggestions; Berklee discusses multiple locations and phrase-dependent choices. [Trinity][trinity]; [Berklee][berklee-reading]. Minimizing movement alone cannot determine every preferred fingering.
 
@@ -167,11 +195,16 @@ Reusing a finger after release differs from demanding it in two places during a 
 | Is a required open/sustained sound defeated by the stated contact or release? | A conflict in the proposed realization unless a compatible alternative support or technique is specified. |
 | Does the realization preserve the specified voicing and timing? | Compare with the musical obligations; do not silently discard tones, doublings, or durations. |
 | Does a stretch exceed a configured bound? | Deterministic failure of that configuration, not proof of impossibility for all players. |
-| Does an assignment pass the above checks? | Necessary conditions passed within the model; unmodeled anatomy, force, and coordination may still matter. |
+| Does one shared configuration satisfy declared geometry and coupled movement restrictions? | This establishes the modeled anatomical/kinematic conditions only. Independent finger or joint checks are insufficient. |
+| Is penetration, obstruction, or unintended damping unavoidable in every allowed configuration? | A model contradiction, unlike a crossing in a diagram or one failed attempt. |
+| Can an allowed barre surface provide all required stops and clearance together? | A geometric condition distinct from adequate pressure or sustained effort. |
+| Does an assignment pass all modeled kinematic checks? | Force, endurance, timing, and other omitted execution demands may still be unresolved. |
 
-**Configurable assessment factors**, without selected values or formulas: longitudinal and cross-string reach; particular finger-pair combinations and independence; number and duration of active contacts; barre extent and effort; extensions/retractions; shift distance and frequency; string crossings; repeated-finger movements; preparation time; and open-string opportunities or clearance/damping costs. These are questions to assess, not a calibrated universal ranking. Lower counts do not automatically mean easier execution.
+**Ergonomic and preference assessment**, without selected values or formulas: proximity to movement extremes; longitudinal/transverse spread; coordination and finger independence; number and duration of active contacts; barre pressure and sustained effort; wrist deviation and tendon/force demand; preparation, shifts, and repeated-finger movements; clearance/damping demands; familiarity and expressive priorities. Reduced independence, crossing, or an awkward posture alone must not become binary impossibility. These factors do not constitute a calibrated universal ranking; lower counts do not automatically mean easier execution.
 
 Distinguish a hard restriction within a configured task from a physical law. For example, “no shifts” can be a practice constraint even when a shifting solution is physically feasible. Likewise, a player may prefer a more demanding fingering for phrasing or familiarity. A result labeled feasible under assumptions does not establish comfort, safety, musical usefulness, or preference.
+
+A force-capacity restriction can become a hard model constraint when explicitly supported and configured for the relevant posture, load, and duration. An uncalibrated effort score cannot supply that restriction. Similarly, a declared unavailable digit or prohibited technique can exclude an assignment without establishing a limit for other players or tasks.
 
 ## Player variability and configurable assumptions
 
@@ -179,11 +212,13 @@ Distinguish a hard restriction within a configured task from a physical law. For
 
 **Assessment context, not a profile schema.** Relevant questions include available fingers and hand size, finger lengths and usable movement, strength and endurance, coordination/independence, experience with the technique, playing posture, current fatigue, and injury/disability or adaptations. Do not infer one of these from another: a hand-size measurement does not establish technique, pain, or ability. Missing player information stays unspecified rather than becoming an invented population norm.
 
+For a geometric claim, distinguish hand/base dimensions, individual segment lengths, digit thickness and pads, usable **combinations** of movement, and technique allowances or mobility restrictions. External hand length predicts some anatomical dimensions imperfectly; it is not a complete set of joint centers or segment measurements. [Buchholz et al.][buchholz-anthro]. A study measuring active ROM in 195 volunteers (390 hands) illustrates sample variability and measurement conventions. Its marginal joint measurements do not provide universal limits or a simultaneously attainable set of extremes. [Mohamed Ibrahim et al., Methods and Results][rom].
+
 Any later configurable assumption needs a stated purpose, provenance, and applicability. A player's chosen restriction differs from a measured capability and from a pedagogical exercise. Injury/disability may change available techniques or resources; this reference neither diagnoses a condition nor predicts an individual's ability from a label. The four-finger examples describe an illustrative resource set, not a requirement every guitarist must satisfy.
 
 ## Model limitations
 
-Location labels and finger numbers do not capture three-dimensional joint motion, fingertip contact area, force distribution, string deflection, detailed damping, endurance, or coordination of both hands. A logically coherent grip is not a guarantee that every required note will ring cleanly on every instrument. An all-open example avoids finger stopping but still requires excitation and sound control.
+Location labels and finger numbers do not capture the shared anatomy described here. This reference explains requirements for an anatomical/kinematic claim but supplies no validated human-hand solver, player calibration, or force model. Its explicit geometric constructions establish only their stated idealizations. A contact-coherent grip is not a guarantee that every required note will ring cleanly; even kinematic feasibility leaves force distribution, string deflection, endurance, and both-hand coordination to further assessment. An all-open example avoids finger stopping but still requires excitation and sound control.
 
 The core examples do not model bends, vibrato, natural/artificial harmonics, slide, tapping, diagonal/hinged barres, partial capos, multiscale layouts, paired courses, or assistance from the other hand. Mentioning these boundaries does not declare them invalid. Thumb fretting requires an explicitly expanded technique/resource assumption. The full-capo boundary uses the existing [Fretboard treatment](FRETBOARD_REFERENCE.md#capos) without generalizing to all capo mechanics.
 
@@ -197,6 +232,8 @@ Research cited here does not justify a universal maximum comfortable fret span, 
 
 Each row requires the listed pitches to sound concurrently while their effective stops are maintained. No attack speed, required holding duration, or force threshold is inferred.
 
+Here “coherent” means **contact-assignment validity**, not demonstrated anatomical feasibility. Familiar chord names or diagrams do not add missing player measurements. The separately sourced comparison below provides pedagogical evidence, with its limits stated.
+
 | Case | Locations, sounding pitches, and assignment | What follows |
 | --- | --- | --- |
 | Open-position C major | Frets: omit, 3, 2, open, 1, open. Pitches: C3–E3–G3–C4–E4. Fingers 3 at (5,3), 2 at (4,2), 1 at (2,1). | A coherent ordinary assignment if required strings remain clear. Repeated C/E pitch classes retain their registers; string 6 is not silently added. |
@@ -207,6 +244,44 @@ Each row requires the listed pitches to sound concurrently while their effective
 | Same E-major voicing, different assignments | Frets: open, 2, 2, 1, open, open. Pitches: E2–B2–E3–G♯3–B3–E4. For (5,2), (4,2), (3,1), compare fingers 2/3/1 with 3/4/2. | Both assignments preserve the locations and exact voicing under the contact model. The second leaves the index available; context and player determine whether that helps. |
 
 The C-major contradiction covers both contradictory use of one finger and a musically valid voicing with an invalid proposed assignment. The F-major cases cross-check the distinction between contacts and actual sounding pitches. They do not supply numeric force or comfort evidence.
+
+### Assignment comparison and the Am/C incident
+
+**Sourced positive comparison, pedagogical evidence.** Jimmy Brown teaches two assignments for the same open-G locations: frets 3, 2, open, open, open, 3, producing G2–B2–D3–G3–B3–G4. For strings 6/5/1 he gives fingers **3/2/4** and **2/1/3**, and relates the choice to surrounding C or D chords. This is evidence of taught realizations, not a measured anatomy study or a universal ranking. Both retain the open middle strings and all six pitches. [Brown, Figure 1 discussion][brown-g].
+
+**Derived comparison.** The assignments put different connected digits over the same targets and leave different fingers unused. Their shared postures, segment arrangements, pad placement, and open-string clearance must therefore be assessed separately. The teaching evidence supports the alternatives; it does not identify a unique wrist angle or prove either preferable for an unspecified player.
+
+**Regression: small span and unique fingers.** The motivating Am/C uses frets **omit, 3, 2, 2, 1, open**, sounding **C3–E3–A3–C4–E4**. On strings 5/4/3/2, compare **3/2/4/1** with **4/2/3/1**. Both assign four distinct fingers to ordinary individual stops and have fretted span **2**. In the first, finger 3 serves the bass while finger 4 serves string 3; the second swaps those duties. That changes the connected segment arrangement, including clearance around the middle finger and the open first string. It is not a mere relabeling of interchangeable probes.
+
+No shared anatomical configuration or matched performance evidence is established here for either Am/C assignment. Both remain **undetermined at that level**. Neither the pitch calculation, unique labels, small span, nor the second assignment's more conventional fret ordering proves a playable or superior grip. The comparison candidate is not an accepted correction; nor is the incident assignment declared universally impossible.
+
+### Constructed shared-configuration regressions
+
+**Explicit model assumptions, not measured human dimensions.** The following deliberately simplified two-digit geometry isolates the logical issue. It is not a guitar-hand calibration or an execution recommendation. Coordinates are millimetres: x is longitudinal, y transverse, z above a flat test contact surface at z = 0. The instrument is externally supported. There are no other digits, thumb-support duties, strings to keep sounding, or obstacles; contact is purely geometric and force is unspecified.
+
+Digit 2 has base B2 = (h, 0, 31); digit 3 has base B3 = (h + 20, 10, 31). A rigid connecting palm segment fixes their relative placement. Only the shared longitudinal translation h may change; orientation and base height remain fixed. Each digit has three fixed-length articulated segments, moving in its own x–z plane (y = 0 or y = 10). In this artificial model all joint-angle combinations in those planes are allowed, subject to surface and body exclusion. It intentionally omits physiological coupling so that any negative result cannot be blamed on an invented human joint limit.
+
+Each segment is surrounded by a radius-1 capsule, including rounded joints and the distal pad. Adjacent segments and their attachment to the palm join into one body; incompatible overlap elsewhere is prohibited. Contact occurs when a distal pad centered at z = 1 touches the test surface. Other segment surfaces must remain above it. The palm also has radius 1. These are mathematical surfaces, not measurements of fingers or frets.
+
+Require digit 2's pad center at **T2 = (0, 0, 1)** and digit 3's at **T3 = (60, 10, 1)** concurrently. This is the fully specified test grip for both profiles below.
+
+| Illustrative profile | Configuration or contradiction |
+| --- | --- |
+| P: each digit has segment lengths 10, 10, 10 | Each target is individually reachable: at h = 0 digit 2 extends vertically down; at h = 40 digit 3 does so. In each case the unconstrained digit can extend vertically upward, clear of the surface. But each base is 30 mm above its target, equal to its entire 30 mm segment chain. Any horizontal offset makes the straight-line distance exceed 30 mm. Thus the first target requires h = 0 and the second h = 40. No shared h satisfies both. |
+| Q: each digit has segment lengths 20, 20, 10; all other assumptions unchanged | At h = 20, digit 2 follows (20,0,31) → (20,0,11) → (0,0,11) → (0,0,1). Digit 3 follows (40,10,31) → (40,10,11) → (60,10,11) → (60,10,1). Each successive length is 20, 20, 10; all segments stay above the surface except the intended distal tangencies. The planes are 10 mm apart, leaving at least 8 mm between the radius-1 digit volumes. Both contacts coexist in this model. |
+
+**Derived conclusions.** P demonstrates individually reachable but jointly unavailable targets. Q supplies an actual satisfying configuration for the same grip, rather than inferring success from longer fingers alone. Its positive conclusion is confined to the declared geometry; real joint combinations, pads, strings, support, and force could invalidate the analogy. The negative P result likewise does not describe a population or a particular guitarist.
+
+**Ordering exception proved in the constructed model.** Keep Q and h = 20, but require digit 2 at (60,0,1) and digit 3 at (0,10,1). A satisfying pair is:
+
+- Digit 2: (20,0,31) → (36,0,19) → (52,0,7) → (60,0,1).
+- Digit 3: (40,10,31) → (24,10,19) → (8,10,7) → (0,10,1).
+
+The first two displacements have length √(16² + 12²) = 20 and the last √(8² + 6²) = 10. Their projected paths cross, but their planes remain 10 mm apart. All segment surfaces clear z = 0 until the distal tangencies. Digit 2 reaches the bridgeward target while digit 3 reaches the nutward target. A monotonic digit-number/longitudinal-order filter would reject this demonstrated model configuration. **This is a geometric counterexample, not evidence of a human performing a particular guitar fingering.**
+
+**Empirical ordering candidate still unresolved.** Stylianides describes finger 2 at (6,10), finger 3 moving from (5,10) to (5,9), with finger 1 at (4,7). The prose asserts a concurrent crossing, but its A-major description does not match those locations under this reference's standard tuning: they yield D3–G3–A3, then D3–F♯3–A3. Inspection of the neighboring score pages did not securely reconcile the named bar, contacts, and durations. Do not silently repair the source or count it as a verified positive human example. [Thesis, printed pp. 210–212][stylianides]. The mathematical exception above stands independently; an evidenced simultaneous human ordering exception remains a research gap.
+
+**Temporal companion.** P can place each digit at its own target at separate times if the earlier contact may release and sufficient translation time is allowed. Requiring both contacts to remain makes h = 0 and h = 40 concurrent obligations again, so the contradiction returns. No movement-speed guarantee follows from the two endpoint configurations.
 
 ### Melodic paths and transitions
 
@@ -228,14 +303,14 @@ Reversing either scale gives a descending sequence, but reverses preparation/rel
 | Case | Consequence |
 | --- | --- |
 | All six strings open | E2–A2–D3–G3–B3–E4 requires no finger stops. There is no fretted-contact span; this is not a claim about an intended chord or complete performance difficulty. |
-| Barre extent versus an open string | In an A-major realization with open string 1, a contact stopping strings 4–2 at fret 2 must clear string 1. Extending the stopping barre through string 1 produces F♯4 there instead of E4. A specialized selective contact cannot be inferred from the dots alone. |
+| Barre extent versus an open string | A major at omit, open, 2, 2, 2, open requires A2–E3–A3–C♯4–E4. A partial barre stopping strings 4–2 at fret 2 must leave strings 5 and 1 clear. A firm stop on string 1 changes E4 to F♯4; a lighter unintended touch can damp it instead. Intended coverage of strings 4–2 does not establish that the actual pad/joint surface ends or lifts clear of string 1. The surface and other contacts must coexist in one posture; an allowed selective contact must be demonstrated, not inferred from the dots. |
 | Two stops on one string | Contacts at (1,1) and (1,3) can coexist with the latter determining G4; they cannot make F4 and G4 independently sound together from that ordinary speaking segment. |
 | Omitted versus muted | An omitted low string in open C must be skipped or controlled as required by the actual playing task. The location list does not certify a muting action. |
 | Full capo at physical fret 2 | String 6 effective open is F♯2. A finger at physical fret 5 produces A2, three frets above the capo. The capo is not an extra hand finger; physical geometry still uses physical fret coordinates. See [Capos](FRETBOARD_REFERENCE.md#capos). |
 
 ## Sources and verification
 
-Checked on **2026-10-05**. **Direct text** means the relevant prose/formulas were retrieved and read; it does not mean all illustrations, videos, linked pages, or claims were audited. **PDF text, selected sections** means the identified sections of the author-hosted paper were read, not that its notation figures were visually verified. No source illustrations are reproduced. Undated means no publication date is assigned here.
+Original sources checked on **2026-10-05**; extension evidence checked on **2026-10-05–06**. **Direct text** means the relevant prose/formulas were retrieved and read; it does not mean all illustrations, videos, linked pages, or claims were audited. **PDF text, selected sections** means the identified passages were read; visual score inspection is stated separately. **Indexed text** means search retrieval exposed the named passage, while direct full-text access was unavailable. **Abstract only** does not establish methods or detailed examples. No source illustrations are reproduced. Undated means no publication date is assigned here. The [extension claim ledger](../plans/playability-hand-feasibility.md#claim-ledger) records classifications, passages, assumptions, corroboration, and limits.
 
 | Source | Material used and limitations |
 | --- | --- |
@@ -249,12 +324,24 @@ Checked on **2026-10-05**. **Direct text** means the relevant prose/formulas wer
 | Hank Heijink and Ruud G. J. Meulenbroek, [*On the Complexity of Classical Guitar Playing: Functional Adaptations to Task Constraints*][heijink], *Journal of Motor Behavior* 34(4), 339–351, 2002; [DOI/abstract][heijink-abstract] | **PDF text, selected sections:** definitions p. 339; Method pp. 341–343; pre/posttest results and Discussion pp. 347–350. Six male professionals, one guitar, prescribed tempo; not a general population or force study. Publisher retrieval failed; the university-hosted author copy supplied the methods. |
 | Sigal Portnoy et al., [*Correlations between body postures and musculoskeletal pain in guitar players*][portnoy], *PLOS ONE* 17(1), e0262207, 2022-01-04 | **Direct text:** Methods 2.1–2.3 and Discussion, especially limitations. Selected 25-player sample; observational correlations do not calibrate fingering feasibility or predict injury. |
 | R. M. Mottola, [*Calculating Fret Positions*][mottola], updated 2026-06-21 | Modern twelfth-root formula. **Direct text.** Formula corroborates existing Fretboard geometry; ergonomic opinions excluded. |
-| StewMac, [*String Spacing Rule Instructions*][stewmac-spacing], I-0673, undated | Outer-string placement and proportional spacing. **Direct text.** Establishes measurement distinctions, not preferred spacing or comfortable margins. |
-| Jeff Owens, Fender, [*What Is Fingerboard Radius?*][fender-radius], undated | Transverse curvature and compound-radius definition. **Direct text.** Generic comfort rankings and product prevalence not adopted. |
-| Fender, [*The Most Talked-About American Elite Feature*][fender-neck], undated | Neck back-profile description and variation along the neck. **Direct text.** Product ergonomic superiority claims excluded. |
 | Joe Wolfe, UNSW Physics, [*Strings, standing waves and harmonics*][unsw-strings], undated | “Harmonics and modes,” length/tension relationships, and ideal-string qualifications. **Direct text.** No harmonic-playing, setup, or injury guidance is inferred. |
+| Yeongyu Park and Joonbum Bae, [*A Three-dimensional Finger Motion Measurement System of a Thumb and an Index Finger Without a Calibration Process*][park-bae], *Sensors* 20(3), 756, 2020; [accessible PDF copy][park-bae-copy] | **PDF text, section 2.1, pp. 2–3:** finger/thumb joint anatomy and movement axes. Publisher access failed; the original paper's mirrored PDF supplied the passage. Its instrumentation, numerical ranges, and joint simplifications are not selected as a guitar model. |
+| John H. Buffi, Joseph J. Crisco, and Wendy M. Murray, [*A Method for Defining Carpometacarpal Joint Kinematics from Three-Dimensional Rotations of the Metacarpal Bones Captured In Vivo Using Computed Tomography*][buffi], *Journal of Biomechanics* 46(12), 2104–2108, 2013 | **Indexed text, abstract/methods:** fourth/fifth metacarpal movement and palmar arch; one subject. Direct PMC retrieval was blocked. No population geometry or guitar validation inferred. |
+| Verónica Gracia-Ibáñez, Margarita Vergara, and Joaquín L. Sancho-Bru, [*Interdependency of the maximum range of flexion–extension of hand metacarpophalangeal joints*][gracia], *Computer Methods in Biomechanics and Biomedical Engineering* 19(16), 1800–1807, 2016 | **Abstract only:** neighboring MCP posture changes maximum voluntary flexion/extension. Quantitative regressions not adopted; passive, loaded, wrist-dependent, and guitar-specific limits remain separate questions. |
+| Catherine E. Lang and Marc H. Schieber, [*Human Finger Independence: Limitations due to Passive Mechanical Coupling Versus Active Neuromuscular Control*][lang], *Journal of Neurophysiology* 92, 2802–2810, 2004 | **Abstract and indexed selected Methods/Discussion:** ten healthy adults; matched passive and active individuated motion. Distinguishes mechanisms in that task, not a universal independence ranking or chord-impossibility test. |
+| H. P. von Schroeder, M. J. Botte, and H. Gellman, [*Anatomy of the juncturae tendinum of the hand*][juncturae], *Journal of Hand Surgery* 15(4), 595–602, 1990 | **Abstract only:** extensor interconnections and variation in 40 cadaver hands. Anatomical corroboration for mechanical coupling, not evidence about successful guitar grips. |
+| Carl R. Beringer III et al., [*The effect of wrist posture on extrinsic finger muscle activity during single joint movements*][wrist-emg], *Scientific Reports* 10, 8377, 2020 | **Indexed text, abstract/Methods/Discussion:** eleven participants, unloaded motion and differing wrist postures. Muscle activity does not by itself isolate each cause or set force/ROM limits for guitar playing. |
+| Bryan Buchholz, Thomas J. Armstrong, and Steven A. Goldstein, [*Anthropometric data for describing the kinematics of the human hand*][buchholz-anthro], *Ergonomics* 35(3), 261–273, 1992 | **Abstract only:** segment and joint-center geometry; imperfect prediction from external measurements. No complete individual hand inferred from hand length. |
+| Bryan Buchholz and Thomas J. Armstrong, [*A kinematic model of the human hand to evaluate its prehensile capabilities*][buchholz-model], *Journal of Biomechanics* 25(2), 149–162, 1992 | **Indexed abstract only:** articulated segments and surface contact, with cylindrical-grasp validation. Precedent for geometry, not a selected representation or guitar validation. |
+| Kiseok Sung, Joonho Chang, Andris Freivalds, and Yong-Ku Kong, [*Development of the Two-Dimensional Biomechanical Hand Model for a Guitar Player*][sung], *HFES Annual Meeting Proceedings* 57(1), 1653–1657, 2013 | **Abstract only:** static two-dimensional force modeling for C, E, G7, Am using anthropometry, fingertip forces, and joint angles. Full text unavailable; neither three-dimensional collision reasoning nor this Am/C assignment validated. |
+| B. K. Mohamed Ibrahim et al., [*The Normal Active Range of Motion of the Index, Middle, Ring, and Little Fingers in a Sample of Indian Population*][rom], *Indian Journal of Plastic Surgery* 57, 248–255, 2024 | **PDF text, Methods/Results:** active goniometric measurements in 195 volunteers, 390 hands. Sample/protocol variability illustrates why marginal measurements are not universal or jointly attainable extrema. |
+| Ricardo Iznaola, [*Left-Hand Technique and the Limits of the Possible*][iznaola], *Guitar Forum* 1, 1–44, 2001; reprinted *Soundboard Scholar* 11, 2026 | **Repository abstract and bibliographic record only.** PDF returned 403. Established pedagogical treatment of coordinated movement; detailed procedures and physiological assertions need passage-level review. |
+| Jimmy Brown, [*Two essential G chord shapes: when to use each finger position and why*][brown-g], *Guitar World*, 2026-07-19 | **Direct text, Figure 1 discussion:** two assignments of the open-G voicing and phrase-dependent choice. Pedagogical positive comparison; no player measurements or universal superiority claim. Images were not used as independent verification. |
+| Timotheos Stylianides, [*The guitar performance practice in Spanish neoclassicism, focusing on El Grupo de los Ocho*][stylianides], University of Glasgow PhD thesis, 2025 | **PDF text and visual score inspection, printed pp. 210–212:** proposed crossing in bar 67. Prose locations, chord label, and notated timing were not securely reconciled. Candidate remains unverified and is excluded from positive human evidence. |
 
 Foundational checks pair Berklee with Yamaha for barre/position usage and with Fender for finger notation; Trinity independently illustrates the conditional nature of fingering advice and duration. Physical contact consequences derive from the existing sourced Fretboard model and UNSW, with ordinary barre practice as a cross-check. Mottola corroborates fret spacing. Neither multiple pages from one organization nor an abstract and its full paper count as independent authorities. Niedt is used for a named terminology variation, not as a sole source of deterministic anatomical truth.
+
+The anatomy sources address different parts of the explanation: joint structure and dimensions, palmar mobility, movement combinations, and mechanical versus active coupling. They corroborate the need to declare connected geometry and usable combinations; they do not jointly constitute a calibrated guitar model. Instrument-spacing, radius, profile, and action sources now accompany their definitions in the [Fretboard Reference](FRETBOARD_REFERENCE.md#sources-and-verification).
 
 The pitch and distance examples are recomputed derivations. That checks arithmetic, not independent pedagogical corroboration, player testing, or implemented domain behavior. Research does not supply the absent universal thresholds; statements about their absence are limitations of this reference's evidence, not a claim to have surveyed every study. For corrections, inspect the relevant source context, corroborate foundational changes, preserve convention differences, and update access/verification notes honestly.
 
@@ -269,7 +356,18 @@ The pitch and distance examples are recomputed derivations. That checks arithmet
 [heijink-abstract]: https://pubmed.ncbi.nlm.nih.gov/12446249/
 [portnoy]: https://pmc.ncbi.nlm.nih.gov/articles/PMC8726467/
 [mottola]: https://www.liutaiomottola.com/formulae/fret.htm
-[stewmac-spacing]: https://www.stewmac.com/video-and-ideas/online-resources/learn-about-guitar-nut-and-saddle-setup-and-repair/string-spacing-rule-instructions/
-[fender-radius]: https://www.fender.com/articles/setup/what-is-fingerboard-radius
-[fender-neck]: https://www.fender.com/articles/instruments/the-most-talked-about-american-elite-feature
 [unsw-strings]: https://newt.phys.unsw.edu.au/jw/strings.html
+[park-bae]: https://doi.org/10.3390/s20030756
+[park-bae-copy]: https://pdfs.semanticscholar.org/c4f8/f388f3516bc6762e70758147d4f36648fda1.pdf
+[buffi]: https://pmc.ncbi.nlm.nih.gov/articles/PMC3788642/
+[gracia]: https://pubmed.ncbi.nlm.nih.gov/27198763/
+[lang]: https://pubmed.ncbi.nlm.nih.gov/15212429/
+[juncturae]: https://pubmed.ncbi.nlm.nih.gov/2380523/
+[wrist-emg]: https://pmc.ncbi.nlm.nih.gov/articles/PMC7239904/
+[buchholz-anthro]: https://pubmed.ncbi.nlm.nih.gov/1572336/
+[buchholz-model]: https://www.sciencedirect.com/science/article/pii/0021929092902723
+[sung]: https://journals.sagepub.com/doi/10.1177/1541931213571367
+[rom]: https://www.thieme-connect.com/products/ejournals/pdf/10.1055/s-0044-1788593.pdf
+[iznaola]: https://digitalcommons.du.edu/sbs/vol11/iss1/1/
+[brown-g]: https://www.guitarworld.com/lessons/chords/two-essential-g-chord-shapes
+[stylianides]: https://theses.gla.ac.uk/85539/3/2025StylianidesPhD.pdf

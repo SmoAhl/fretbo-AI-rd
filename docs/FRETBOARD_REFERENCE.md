@@ -15,6 +15,7 @@ Outside scope: fingering generation, finger assignment, barre feasibility, anato
 ### Contents
 
 - [Instrument structure and terminology](#instrument-structure-and-terminology)
+- [Instrument geometry for contact assessment](#instrument-geometry-for-contact-assessment)
 - [String identity, numbering, and orientation](#string-identity-numbering-and-orientation)
 - [Tuning and register](#tuning-and-register)
 - [Frets, locations, and range](#frets-locations-and-range)
@@ -42,6 +43,21 @@ Outside scope: fingering generation, finger assignment, barre feasibility, anato
 **Physical fact and measurement convention.** Real saddles may be displaced for compensation. Fender determines nominal scale length by doubling the nut-to-twelfth-fret distance, then adjusts saddle positions. Thus nominal scale and each actual nut-to-saddle distance need not coincide. This convention is scoped to the ordinary layout, not every unusual instrument. [Fender][fender-scale]; [UNSW][unsw-strings].
 
 For ideal note mapping, the essential facts are identified strings, registered open tuning, available frets, and the fret system. Scale length adds physical distances. Gauge, action (string height), fingerboard radius, materials, and construction affect physical behavior, sound, or ergonomics; they are not extra inputs to the ideal semitone mapping established [below](#mathematical-and-physical-relationships).
+
+## Instrument geometry for contact assessment
+
+**Instrument facts and measurement conventions.** Pitch locations alone do not specify the surfaces needed for a physical-contact claim. The following definitions describe instrument measurements; [Playability](PLAYABILITY_REFERENCE.md#reach-span-and-instrument-geometry) determines their relevance to a declared human assessment. They do not prescribe a software schema or measurement procedure.
+
+| Instrument information | Measurement distinction |
+| --- | --- |
+| Longitudinal fret positions | Identify the string, fret, coordinate origin, and whether positions are measured or idealized from nominal scale. A fret crown is not a fingertip center; a stopping finger presses nutward within the fret space. [Fret definitions][yamaha-strings]; [fret equation](#mathematical-and-physical-relationships). |
+| String positions and spacing | Specify the neck region and identified strings. Center-to-center spacing differs from clear gaps between strings of finite diameter. Outer-string placement and proportional spacing need not be inferred from nut width. [StewMac][stewmac-spacing]. |
+| Fingerboard width and boundaries | Width at a stated region includes margins outside the outer strings; it is not outer-string separation. Record relevant edges and fret surfaces when their geometry matters. [StewMac][stewmac-spacing]. |
+| Transverse surface geometry | A circular fingerboard radius describes curvature; a larger radius gives a flatter arc at equal width. Compound radius varies along the neck. Radius alone does not specify fret heights or string positions. [Fender][fender-radius]. |
+| String height and diameter | Action describes string clearance, with the reference surface, string, neck location, and measurement conditions stated. Diameter affects the distinction between centers and surfaces. These facts do not determine required fretting force by themselves. [Fender's action discussion][fender-scale]; [StewMac][stewmac-spacing]. |
+| Neck thickness/profile and access | Back contour and thickness differ from fingerboard width/curvature; profile can change along the neck. Relevant body/heel boundaries describe physical access, without supplying a human reach verdict. [Fender's neck-profile description][fender-neck]; [Taylor's neck/body-joint terminology][taylor-12]. |
+
+Use measured surfaces or explicitly declared idealizations at the fidelity needed by the claim. A nominal scale, nut width, or radius is not a substitute for missing local geometry. String material, tension, deflection, and loading require additional assumptions for force-related claims; ideal pitch mapping does not provide them. [UNSW][unsw-strings]. Geometry ownership stays here; finger dimensions, shared hand configurations, clearance feasibility, and ergonomic judgments stay in Playability.
 
 ## String identity, numbering, and orientation
 
@@ -156,7 +172,10 @@ Foundational cross-checks: HyperPhysics and D'Addario for registered standard tu
 | Joe Wolfe, UNSW Physics, [*Strings, standing waves and harmonics*][unsw-strings], undated | Ideal-string frequency/length relationship, stiffness, fretting-induced stretch, and compensation. Harmonic-playing instructions are not used. |
 | R. M. Mottola, [*Calculating Fret Positions*][mottola], updated 2026-06-21 | Modern twelfth-root formula, historical divisor distinction, multiscale and microtonal boundaries. Construction instructions and ergonomic opinions are not adopted. |
 | StewMac, [*Fret Scale Ruler Instructions*][stewmac], I-0800, undated | Independent equal-tempered spacing description and rounded divisor. No machining accuracy policy is adopted. |
-| Fender, [*How do I set up my Stratocaster guitar properly?*][fender-scale], undated | “Intonation (Roughing It Out)” and “Intonation (Fine Tuning)”: scale measurement and saddle displacement, not setup procedures. |
+| StewMac, [*String Spacing Rule Instructions*][stewmac-spacing], I-0673, undated | Outer-string placement and proportional spacing; center spacing versus gaps, without preferred ergonomic margins. Geometry definitions consolidated from Playability on 2026-10-05; relevant direct text reviewed. |
+| Jeff Owens, Fender, [*What Is Fingerboard Radius?*][fender-radius], undated | Transverse and compound-radius definitions. Direct text reviewed 2026-10-05; comfort rankings excluded. |
+| Fender, [*The Most Talked-About American Elite Feature*][fender-neck], undated | Back-profile description and variation along the neck. Direct text reviewed 2026-10-05; product superiority claims excluded. |
+| Fender, [*How do I set up my Stratocaster guitar properly?*][fender-scale], undated | “Intonation (Roughing It Out)” and “Intonation (Fine Tuning)”: scale measurement and saddle displacement. “Action,” checked 2026-10-06: string-height reference surfaces and neck location. Numerical setup recommendations and procedures are not adopted. |
 | Fender, [*Tune Like a Rock Star*][fender-drop-d], undated | Drop D changes only the low E string; style recommendations are not used. |
 | D'Addario, [*EJ38H High Strung/Nashville Tuning*][daddario-nashville], undated | Registered string-pitch chart supporting the nonmonotonic ordering example. |
 | Jeff Owens, Fender, [*What Is a Capo?*][fender-capo], undated | Endpoints, effective open strings, unchanged fretted pitches, and partial capo distinction; no universal placement limit is inferred. |
@@ -178,6 +197,9 @@ For corrections, retrieve the relevant source context, independently corroborate
 [unsw-strings]: https://newt.phys.unsw.edu.au/jw/strings.html
 [mottola]: https://www.liutaiomottola.com/formulae/fret.htm
 [stewmac]: https://www.stewmac.com/video-and-ideas/online-resources/learn-about-guitar-and-instrument-fretting-and-fretwork/fret-scale-rule-instructions/
+[stewmac-spacing]: https://www.stewmac.com/video-and-ideas/online-resources/learn-about-guitar-nut-and-saddle-setup-and-repair/string-spacing-rule-instructions/
+[fender-radius]: https://www.fender.com/articles/setup/what-is-fingerboard-radius
+[fender-neck]: https://www.fender.com/articles/instruments/the-most-talked-about-american-elite-feature
 [fender-scale]: https://support.fender.com/hc/en-gb/articles/42584764005019-How-do-I-set-up-my-Stratocaster-guitar-properly
 [fender-drop-d]: https://www.fender.com/articles/setup/tune-like-a-rock-star
 [daddario-nashville]: https://www.daddario.com/en-gb/products/ej38h-phosphor-bronze-acoustic-guitar-strings-high-strung-nashville-tuning-10-27
