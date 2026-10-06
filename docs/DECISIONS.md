@@ -236,6 +236,10 @@ Decision: FretboAIrd models a discrete fretboard and produces chord fingerings t
 
 Rationale: Concise domain rules support useful, deterministic behavior without simulating instrument construction or a human hand.
 
-Consequences: Keep string identities, registered tuning, fret range, contact rules, finger assignments, barres, and shared grip constraints. Separate hard validity checks from ergonomic preference. References contain the knowledge needed to derive answers, rather than exhaustive results. Historical plan assumptions do not extend current scope; candidate-generation ownership, concrete grip limits, and ranking parameters remain open.
+Consequences: Keep string identities, registered tuning, fret range, contact rules, finger assignments, barres, and shared grip constraints. Separate hard validity checks from ergonomic preference. References contain the knowledge needed to derive answers, rather than exhaustive results. Historical plan assumptions do not extend current scope; candidate-generation ownership, concrete hard grip limits, and ranking parameters remain open. The Playability Reference now supplies conservative recommendation heuristics: ordinarily at most five consecutive fret positions (span 4), reviewed six-position stretches (span 5), and complete finger-placement checks. These are project recommendation rules, not universal anatomical limits; further supported shapes and exceptions remain to be established.
 
 Recorded: 2026-10-06. Authority: User's explicit domain-reference refactoring request. D001 and D015 terminology is aligned with this scope; D008 retains the same plan workflow with external attribution removed.
+
+Clarified: 2026-10-06. Authority: User's request to add fret-span/reach and playable finger-ordering heuristics to the Playability Reference.
+
+Reference set: 2026-10-06. Authority: User-supplied CAGED major and movable minor assignments. The Playability Reference records the initial supported examples and explicit barre coverage; additional shapes and exceptions remain open. These examples do not introduce engine behavior or exclusive fingering solutions.

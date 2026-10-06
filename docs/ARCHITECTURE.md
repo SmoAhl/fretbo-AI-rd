@@ -129,7 +129,7 @@ Selecting Next.js does not implicitly select any of these. Custom React + SVG is
 
 - Representations for pitch class, register, note spelling, musical identity, voicing, and fingering.
 - Ownership of voicing candidate generation, initial realization selection, and the playability guarantee.
-- Concrete chord grip limits, supported contact rules, and ergonomic ranking criteria.
+- Concrete hard chord grip limits, additional supported contact rules, and ergonomic ranking criteria. The Playability Reference supplies conservative recommendation heuristics and initial CAGED reference fingerings; further supported shapes and exceptions remain to be established.
 - Application-state ownership, coordination between interaction paths, and placement of domain execution.
 - Concrete interfaces, the deferred technology choices above, and the timing and scope of later capabilities.
 - React component hierarchy, SVG rendering data structures and algorithms, fretboard geometry, and state-management architecture.
