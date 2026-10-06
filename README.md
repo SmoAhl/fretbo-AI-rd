@@ -42,7 +42,7 @@ These are the selected project technologies. The exact installed versions are pi
 | Styling | Tailwind CSS 4.3.3 |
 | Fretboard visualization | Custom React + SVG |
 
-The initial organization is one repository and one private Next.js application package with framework-independent domain modules. Database, authentication, hosting, AI provider, and other [deferred technology choices](docs/ARCHITECTURE.md#deferred-technology-choices) remain open. The [decision log](docs/DECISIONS.md) records the rationale and constraints behind accepted choices.
+The initial organization is one repository and one private Next.js application package; future domain modules will remain framework-independent within that package. Database, authentication, hosting, AI provider, and other [deferred technology choices](docs/ARCHITECTURE.md#deferred-technology-choices) remain open. The [decision log](docs/DECISIONS.md) records the rationale and constraints behind accepted choices.
 
 ## Repository guide
 
@@ -52,15 +52,17 @@ The initial organization is one repository and one private Next.js application p
 | [Decisions](docs/DECISIONS.md) | Accepted project decisions and their rationale. |
 | [Music Theory Reference](docs/MUSIC_THEORY_REFERENCE.md) | Pitch, spelling, intervals, scales, modes, and chord construction under 12-TET. |
 | [Fretboard Reference](docs/FRETBOARD_REFERENCE.md) | Discrete strings, registered tuning, frets, and pitch-location mapping. |
-| [Playability Reference](docs/PLAYABILITY_REFERENCE.md) | Chord contacts, finger assignments, barres, shared grip constraints, and ergonomic ranking. |
+| [Playability Reference](docs/PLAYABILITY_REFERENCE.md) | Chord contact and barre rules, fret-span/reach and finger-placement heuristics, CAGED reference fingerings, and ergonomic ranking. |
 | [Agent instructions](AGENTS.md) | Repository working practices, verification expectations, and the threshold for an ExecPlan. |
 | [ExecPlan protocol](.agent/PLANS.md) | How significant efforts are planned and continued across sessions. |
 
-Actual ExecPlans live in repository-level `plans/`. The [original Playability Reference effort](plans/playability-reference.md) is historical; the [domain-reference simplification](plans/domain-reference-simplification.md) records the current refactoring. `.agent/PLANS.md` defines the protocol rather than an implementation task.
+The references provide domain knowledge and examples, not implemented capabilities or fixed engine interfaces. Consult the relevant sections when building each engine.
+
+Actual ExecPlans live in repository-level `plans/`. The [original Playability Reference effort](plans/playability-reference.md) is historical; the [domain-reference simplification](plans/domain-reference-simplification.md) records the completed documentation refactoring. `.agent/PLANS.md` defines the protocol rather than an implementation task.
 
 ## Development and getting started
 
-Development follows the accepted domain-first order: minimal domain concepts, Music Theory with deterministic tests, Fretboard with deterministic tests, and minimal Playability when required. Clear supported contracts then enable a useful non-AI interface before AI integration. This is the construction strategy, not a list of completed features.
+Build the domain engines in order: **Music Theory → Fretboard → Playability**, introducing the minimal shared concepts needed and deterministic tests at each stage. Clear supported contracts then enable a useful non-AI interface before AI integration. This is the construction strategy, not a list of completed features.
 
 Use Node.js 24.21.0, as recorded in `.nvmrc`, with its bundled npm version. Then install dependencies:
 
