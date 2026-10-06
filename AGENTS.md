@@ -14,15 +14,19 @@ Resolve discoverable questions by inspecting the repository. Distinguish verifie
 
 ## Engineering boundaries
 
-Preserve the deterministic domain boundaries described in the architecture document. Direct application interaction and later AI interaction must use the same domain capabilities. AI interprets and orchestrates; UI and renderer layers present results. Neither defines musical or physical truth.
+Preserve the deterministic domain boundaries described in the architecture document. Direct application interaction and later AI interaction must use the same domain capabilities. AI interprets and orchestrates; UI and renderer layers present results. Domain code owns musical rules, discrete fretboard mapping, and chord fingering validation.
+
+FretboAIrd models a discrete fretboard and produces chord fingerings that are musically correct, available on that fretboard, and practically sensible. Music Theory determines the musical object; Fretboard determines where its pitches can occur; Playability validates and ranks proposed chord fingerings.
 
 Develop the domain independently before adding AI. Expose clear, verified contracts for supported capabilities, and evolve them deliberately rather than attempting to finalize all future interfaces. Reuse suitable existing extension points and keep each change coherent and reviewable.
 
-When implementing or reviewing Music Theory Engine behavior, consult the relevant sections of the [Music Theory Reference](docs/MUSIC_THEORY_REFERENCE.md). Preserve its stated assumptions and convention distinctions; reference coverage does not establish supported capabilities, software representations, or accepted project decisions.
+When implementing or reviewing Music Theory Engine behavior, consult the relevant sections of the [Music Theory Reference](docs/MUSIC_THEORY_REFERENCE.md).
 
-When implementing or reviewing Fretboard Engine behavior, consult the relevant sections of the [Fretboard Reference](docs/FRETBOARD_REFERENCE.md). Preserve its stated instrument assumptions and convention distinctions; reference coverage does not establish supported capabilities, software representations, or accepted project decisions.
+When implementing or reviewing Fretboard Engine behavior, consult the relevant sections of the [Fretboard Reference](docs/FRETBOARD_REFERENCE.md).
 
-When implementing or reviewing Playability Engine behavior, consult the relevant sections of the [Playability Reference](docs/PLAYABILITY_REFERENCE.md). Preserve its stated contact, technique, player, and timing assumptions. Distinguish contact-assignment validity from simultaneous anatomy, coupled movement, contact-surface compatibility, and clearance; independent finger checks do not establish one shared hand configuration. Preserve evidence limits and distinguish model contradictions from missing information, unsuccessful searches, and configurable ergonomic judgments. Reference coverage does not establish supported capabilities, software representations, or accepted project decisions.
+When implementing or reviewing Playability Engine behavior, consult the relevant sections of the [Playability Reference](docs/PLAYABILITY_REFERENCE.md).
+
+Read only the sections relevant to the behavior being changed. References contain the domain knowledge needed to derive answers, rather than every derivable answer. Preserve useful assumptions and convention distinctions; reference coverage does not establish implemented capabilities or select software representations. Scales and melodies currently require note locations only.
 
 ## Planning and ExecPlans
 
@@ -52,9 +56,9 @@ Review the changes and relevant Git status before reporting completion. Inspect 
 - [.agent/PLANS.md](.agent/PLANS.md) owns the ExecPlan protocol and template.
 - [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) owns architectural boundaries and the verified implementation description.
 - [docs/DECISIONS.md](docs/DECISIONS.md) owns persistent accepted decisions and their rationale.
-- [docs/MUSIC_THEORY_REFERENCE.md](docs/MUSIC_THEORY_REFERENCE.md) owns the sourced theoretical domain reference, including its assumptions and convention distinctions.
-- [docs/FRETBOARD_REFERENCE.md](docs/FRETBOARD_REFERENCE.md) owns the sourced physical guitar and fretboard reference, including its instrument assumptions and convention distinctions.
-- [docs/PLAYABILITY_REFERENCE.md](docs/PLAYABILITY_REFERENCE.md) owns the sourced physical-execution and playability reference, including model assumptions, player variability, and the distinction between feasibility and ergonomic assessment.
+- [docs/MUSIC_THEORY_REFERENCE.md](docs/MUSIC_THEORY_REFERENCE.md) owns musical definitions, construction rules, and convention distinctions.
+- [docs/FRETBOARD_REFERENCE.md](docs/FRETBOARD_REFERENCE.md) owns discrete string, tuning, fret, and pitch-location mapping knowledge.
+- [docs/PLAYABILITY_REFERENCE.md](docs/PLAYABILITY_REFERENCE.md) owns chord contact, finger assignment, shared grip, and ergonomic ranking knowledge.
 - An individual ExecPlan owns the context, progress, evidence, and local decisions for its effort.
 
 Update affected documentation when behavior, architecture, or accepted decisions change. Keep task-specific choices in their ExecPlan unless they become persistent project decisions within the task's authority. Explain important tradeoffs concisely enough for the user to review the result.

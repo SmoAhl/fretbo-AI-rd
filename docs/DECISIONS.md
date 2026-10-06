@@ -16,7 +16,7 @@ An ExecPlan's Decision Log concerns one effort. Promote a choice here only when 
 
 Status: Accepted.
 
-Decision: The deterministic domain owns music-theory calculations, fretboard mapping, and applicable physical and playability logic. AI, UI, and renderer layers do not define musical or physical truth.
+Decision: The deterministic domain owns music-theory calculations, discrete fretboard mapping, and chord fingering validation and ranking. AI, UI, and renderer layers consume those rules. The scope is clarified in [D019](#d019-discrete-fretboard-and-practical-chord-fingerings).
 
 Rationale: The product's musical expertise must be verifiable independently of probabilistic model output or visual presentation.
 
@@ -96,11 +96,11 @@ Consequences: Link to the document that owns a rule instead of maintaining compe
 
 Recorded: 2026-10-01. Authority: User's approved documentation bootstrap and accepted requirement to preserve unresolved questions.
 
-## D008: Cookbook-based ExecPlans for significant efforts
+## D008: Self-contained ExecPlans for significant efforts
 
 Status: Accepted.
 
-Decision: Use the OpenAI Cookbook ExecPlan approach for work meeting the authoritative [threshold in AGENTS.md](../AGENTS.md#planning-and-execplans). The protocol lives in [.agent/PLANS.md](../.agent/PLANS.md); actual plans live at `plans/<descriptive-execplan-name>.md` under the repository root.
+Decision: Use self-contained ExecPlans for work meeting the authoritative [threshold in AGENTS.md](../AGENTS.md#planning-and-execplans). The protocol lives in [.agent/PLANS.md](../.agent/PLANS.md); actual plans live at `plans/<descriptive-execplan-name>.md` under the repository root.
 
 Rationale: Significant efforts need durable, self-contained execution context. Keeping the protocol separate from actual plans avoids confusing working rules with individual efforts and avoids imposing heavyweight planning on small changes.
 
@@ -188,7 +188,7 @@ Decision: Use Next.js as the full-stack application framework around the determi
 
 Rationale: React is selected, the finished application needs full-stack capabilities, and later AI integration needs trusted server-side execution. Next.js provides a common application boundary for future authentication, persistence, APIs, and integrations without maintaining separate frontend and backend stacks or reopening the framework choice when server functionality is needed.
 
-Consequences: Next.js does not own musical or physical truth. Music Theory, Fretboard, and Playability remain usable and testable without Next.js, routing, Server Components, Route Handlers, or server actions, before and after application integration. Introduce server capabilities when needed; the first non-AI UI may primarily interact with the domain on the client. The [deferred technology choices](ARCHITECTURE.md#deferred-technology-choices), including hosting, authentication, persistence, and AI providers, remain undecided.
+Consequences: Next.js consumes domain rules rather than defining musical content, pitch locations, or chord usability. Music Theory, Fretboard, and Playability remain usable and testable without Next.js, routing, Server Components, Route Handlers, or server actions, before and after application integration. Introduce server capabilities when needed; the first non-AI UI may primarily interact with the domain on the client. The [deferred technology choices](ARCHITECTURE.md#deferred-technology-choices), including hosting, authentication, persistence, and AI providers, remain undecided.
 
 Recorded: 2026-10-01. Authority: User's explicit selection of Next.js and full-stack application rationale.
 
@@ -227,3 +227,15 @@ Rationale: A single application keeps development structurally simple while pres
 Consequences: Application and presentation technologies consume the domain. Domain calculations and tests remain independent of React, Next.js, UI libraries, CSS, routing and server framework features, AI providers, and deployment infrastructure. Package or service extraction may be considered later when concrete requirements justify it; do not create placeholder boundaries. This technology selection preserves [D001](#d001-deterministic-domain-authority) and [D004](#d004-domain-first-construction) and does not begin scaffolding or implementation.
 
 Recorded: 2026-10-01. Authority: User's explicit single-package organization and deterministic-domain independence constraints.
+
+## D019: Discrete fretboard and practical chord fingerings
+
+Status: Accepted.
+
+Decision: FretboAIrd models a discrete fretboard and produces chord fingerings that are musically correct, possible on that fretboard, and practically sensible. Music Theory determines the musical object; Fretboard maps its pitches to available locations; Playability validates proposed chord fingerings and ranks valid alternatives. Scales and melodies currently need locations only.
+
+Rationale: Concise domain rules support useful, deterministic behavior without simulating instrument construction or a human hand.
+
+Consequences: Keep string identities, registered tuning, fret range, contact rules, finger assignments, barres, and shared grip constraints. Separate hard validity checks from ergonomic preference. References contain the knowledge needed to derive answers, rather than exhaustive results. Historical plan assumptions do not extend current scope; candidate-generation ownership, concrete grip limits, and ranking parameters remain open.
+
+Recorded: 2026-10-06. Authority: User's explicit domain-reference refactoring request. D001 and D015 terminology is aligned with this scope; D008 retains the same plan workflow with external attribution removed.

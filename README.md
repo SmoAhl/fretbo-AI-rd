@@ -2,9 +2,9 @@
 
 A guitar and music-theory workbench for exploring the fretboard and developing musical ideas.
 
-FretboAIrd is intended to connect notes, intervals, scales, and chords with their positions and possible realizations on the guitar. An interactive fretboard and ordinary application controls will support both musical exploration and composition or arrangement, with the musician providing creative direction.
+FretboAIrd is intended to connect notes, intervals, scales, and chords with their locations on a discrete fretboard and produce practically sensible chord fingerings. An interactive fretboard and ordinary application controls will support both musical exploration and composition or arrangement, with the musician providing creative direction.
 
-The application is designed to be useful without AI. Later, optional AI assistance will interpret intent and orchestrate the same deterministic capabilities used by direct interaction. Musical calculations and physical constraints remain the responsibility of the domain code.
+The application is designed to be useful without AI. Later, optional AI assistance will interpret intent and orchestrate the same deterministic capabilities used by direct interaction. Musical calculations, fretboard mapping, and chord fingering rules remain the responsibility of the domain code.
 
 ## Project status
 
@@ -16,9 +16,11 @@ The descriptions below explain the intended application. See [current implementa
 
 Three domain responsibilities underpin the application:
 
-- **Music Theory:** determine notes, intervals, scales, degrees, and chords.
-- **Fretboard:** map musical content to strings, frets, tunings, and available locations.
-- **Playability:** assess applicable physical constraints and fingering feasibility. A map of matching notes is not automatically a playable grip.
+- **Music Theory:** determine what the musical object is.
+- **Fretboard:** determine where its pitches can occur on the discrete fretboard.
+- **Playability:** determine whether a proposed chord fingering is logically usable and rank valid fingerings for practical suitability.
+
+Scales and melodies currently require note locations only. FretboAIrd does not simulate a guitar or a human hand.
 
 Application controls, the custom fretboard, and later AI integration consume these shared capabilities. The deterministic domain stays usable and testable independently of React, Next.js, presentation libraries, AI providers, and deployment infrastructure.
 
@@ -48,13 +50,13 @@ The initial organization is one repository and one private Next.js application p
 | --- | --- |
 | [Architecture](docs/ARCHITECTURE.md) | System responsibilities, domain boundaries, implementation status, and open questions. |
 | [Decisions](docs/DECISIONS.md) | Accepted project decisions and their rationale. |
-| [Music Theory Reference](docs/MUSIC_THEORY_REFERENCE.md) | Sourced Western music-theory context under 12-TET; coverage does not imply implemented capabilities. |
-| [Fretboard Reference](docs/FRETBOARD_REFERENCE.md) | Sourced physical guitar and fretboard context for mapping pitches to locations; coverage does not imply implemented capabilities. |
-| [Playability Reference](docs/PLAYABILITY_REFERENCE.md) | Sourced fingering, grip, transition, and ergonomic context under explicit assumptions; coverage does not imply implemented capabilities. |
+| [Music Theory Reference](docs/MUSIC_THEORY_REFERENCE.md) | Pitch, spelling, intervals, scales, modes, and chord construction under 12-TET. |
+| [Fretboard Reference](docs/FRETBOARD_REFERENCE.md) | Discrete strings, registered tuning, frets, and pitch-location mapping. |
+| [Playability Reference](docs/PLAYABILITY_REFERENCE.md) | Chord contacts, finger assignments, barres, shared grip constraints, and ergonomic ranking. |
 | [Agent instructions](AGENTS.md) | Repository working practices, verification expectations, and the threshold for an ExecPlan. |
 | [ExecPlan protocol](.agent/PLANS.md) | How significant efforts are planned and continued across sessions. |
 
-Actual ExecPlans live in repository-level `plans/`, beginning with the [Playability Reference documentation effort](plans/playability-reference.md). `.agent/PLANS.md` defines the protocol rather than an implementation task.
+Actual ExecPlans live in repository-level `plans/`. The [original Playability Reference effort](plans/playability-reference.md) is historical; the [domain-reference simplification](plans/domain-reference-simplification.md) records the current refactoring. `.agent/PLANS.md` defines the protocol rather than an implementation task.
 
 ## Development and getting started
 

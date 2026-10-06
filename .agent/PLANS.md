@@ -1,10 +1,10 @@
 # ExecPlan protocol
 
-## Purpose and reference
+## Purpose
 
 An ExecPlan is a self-contained, living Markdown document for one significant implementation or investigation effort. It carries the knowledge needed to continue that effort across sessions. It is neither the project roadmap nor a replacement for architecture documentation.
 
-This protocol follows the OpenAI Cookbook's [Using PLANS.md for multi-hour problem solving](https://developers.openai.com/cookbook/articles/codex_exec_plans), including its skeleton and living sections. The reference is currently marked archived. Its model recommendations are not project decisions. The project-specific rules below adapt the workflow to the accepted repository boundaries and user authorization.
+The rules and template below define the repository's workflow for self-contained plans with living progress, findings, decisions, and outcomes.
 
 ## When and where to use a plan
 
@@ -28,13 +28,13 @@ Define acceptance through observable behavior, including meaningful tests or a s
 
 Keep Progress, Surprises & Discoveries, Decision Log, and Outcomes & Retrospective current throughout the effort. At each stopping point, record completed work with timestamps, separate partial completion from remaining work, and preserve concise evidence for relevant findings and checks. Use UTC timestamps with an explicit `Z` suffix.
 
-On continuation, inspect the working tree and verify the plan's recorded state before acting. Update stale facts explicitly. Continue through authorized milestones without repeatedly asking for next steps. If direction changes, update every affected section and append a dated revision note explaining what changed and why.
+On continuation, inspect the working tree and verify the plan's recorded state before acting. Current instructions and accepted decisions take precedence over superseded plan assumptions. Mark outdated plans as historical; do not restore removed scope from them. Update stale facts explicitly. Continue through authorized milestones without repeatedly asking for next steps. If direction changes, update every affected section and append a dated revision note explaining what changed and why.
 
 At major milestones and completion, compare the achieved behavior with the plan's purpose. Record remaining limitations and lessons. Do not mark work complete because files were written or compilation succeeded when the acceptance behavior remains unverified.
 
 ## Authority and decisions
 
-An ExecPlan does not authorize additional scope, dependencies, Git actions, or changes to accepted project decisions. Follow the current task's authority; the Cookbook example's advice about committing is not blanket permission to commit or publish.
+An ExecPlan does not authorize additional scope, dependencies, Git actions, or changes to accepted project decisions. Follow the current task's authority; a plan does not grant permission to commit or publish.
 
 Resolve routine implementation details within the agreed scope and record significant choices with their rationale, date, and author. Keep assumptions and unanswered questions distinguishable from decisions. If a consequential product or architecture question blocks a milestone, state that dependency and obtain the missing decision before doing the dependent work. Continue independent authorized work where possible.
 
