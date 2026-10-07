@@ -8,7 +8,7 @@ The application is designed to be useful without AI. Later, optional AI assistan
 
 ## Project status
 
-**Technical bootstrap and the first minimal Music Theory capability are implemented.** The repository contains a minimal Next.js application, strict TypeScript checking, a Node-only Vitest setup, Tailwind CSS, and shadcn/ui configuration with Base UI primitives. The independent domain represents numeric pitch classes `0..11` and transposes them by signed integer semitone offsets with octave wrapping and focused tests. Scales, chords, Fretboard, Playability, AI, and product UI remain unimplemented.
+**Technical bootstrap, numeric pitch-class transposition, and explicit note-spelling conversion are implemented.** The repository contains a minimal Next.js application, strict TypeScript checking, a Node-only Vitest setup, Tailwind CSS, and shadcn/ui configuration with Base UI primitives. The independent domain represents numeric pitch classes `0..11` with C = 0, transposes them by signed safe-integer semitone offsets, and converts structured letter/accidental spellings (through double flats and sharps) to pitch classes. Focused tests verify these capabilities. Register, automatic spelling selection, text parsing, scales, chords, Fretboard, Playability, AI, and product UI remain unimplemented.
 
 The descriptions below explain the intended application. See [current implementation status](docs/ARCHITECTURE.md#current-implementation) for the authoritative account of what exists.
 

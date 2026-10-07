@@ -243,3 +243,15 @@ Recorded: 2026-10-06. Authority: User's explicit domain-reference refactoring re
 Clarified: 2026-10-06. Authority: User's request to add fret-span/reach and playable finger-ordering heuristics to the Playability Reference.
 
 Reference set: 2026-10-06. Authority: User-supplied CAGED major and movable minor assignments. The Playability Reference records the initial supported examples and explicit barre coverage; additional shapes and exceptions remain open. These examples do not introduce engine behavior or exclusive fingering solutions.
+
+## D020: C-based pitch classes and explicit note spelling
+
+Status: Accepted.
+
+Decision: Interpret numeric pitch classes with C = 0 and natural letters D=2, E=4, F=5, G=7, A=9, B=11. Represent explicit spelling as a readonly object with required uppercase `letter` (A through G) and numeric `accidental` (-2|-1|0|1|2, for double flat through double sharp). Convert spellings one way to pitch class using the existing semitone transposition capability.
+
+Rationale: A named origin connects the numeric foundation to Western letter spelling. Keeping letter and accidental explicit preserves enharmonic distinctions before conversion without choosing a canonical spelling or requiring key context. C = 0 is a project convention; octave equivalence and modulo-12 arithmetic are mathematical properties.
+
+Consequences: Conversion does not mutate input and its numeric result loses spelling information. Existing numeric transposition remains unchanged and does not select a spelling. The contract accepts typed structured inputs; arbitrary JavaScript and external-data validation belong to a future input boundary. Register, reverse spelling selection, text parsing, formatting, and spelled transposition remain outside this increment and undecided where relevant. No framework or runtime-specific dependency is introduced into the domain.
+
+Recorded: 2026-10-07. Authority: User's explicit approval and implementation request for the note-spelling plan.
