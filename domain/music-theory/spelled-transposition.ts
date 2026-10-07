@@ -64,6 +64,29 @@ export function validateSpelledInterval(interval: SpelledInterval): void {
 }
 
 /**
+ * Invert a simple interval (numbers 1..8) by octave displacement, flipping direction.
+ * Reject augmented octaves because their inverse is an unsupported diminished unison.
+ */
+export function invertSimpleInterval(interval: SpelledInterval): SpelledInterval {
+  validateSpelledInterval(interval);
+  if (interval.number > 8) {
+    throw new RangeError("Simple interval inversion requires an interval number in 1..8.");
+  }
+
+  const complementaryQualities: Readonly<Record<IntervalQuality, IntervalQuality>> = {
+    perfect: "perfect", major: "minor", minor: "major",
+    augmented: "diminished", diminished: "augmented",
+  };
+  const result: SpelledInterval = {
+    number: 9 - interval.number,
+    quality: complementaryQualities[interval.quality],
+    direction: interval.direction === "up" ? "down" : "up",
+  };
+  validateSpelledInterval(result);
+  return result;
+}
+
+/**
  * Identify an interval from written letter positions and sounding displacement.
  * Identical notes use perfect unison/up; altered unisons use sounding direction.
  * Reject pairs that cannot be expressed by the existing interval contract.

@@ -315,3 +315,15 @@ Rationale: Sounding distance alone cannot distinguish an augmented fourth from a
 Consequences: Preserve compound interval distance and explicit note spelling. Reject unsupported multiply augmented/diminished qualities, opposing written/sounding motion, invalid numeric inputs, and unsafe distances with RangeError. Existing registered-note octave-base validation applies. Inputs remain unchanged and every supported identified interval can transpose its source to its exact target. No new qualities, direction values, pitch-class distance convention, interval formatter/inversion, dependencies, or framework-specific domain code are introduced.
 
 Recorded: 2026-10-07. Authority: User's interval measurement/identification implementation request and explicit approval of the existing interval contract and edge-case rules.
+
+## D026: Simple interval inversion by octave displacement
+
+Status: Accepted.
+
+Decision: Invert validated simple intervals with numbers 1 through 8 using complementary number 9 minus the original number and qualities perfect↔perfect, major↔minor, augmented↔diminished. Flip up/down direction: major third/up becomes minor sixth/down. Return the existing SpelledInterval type without mutating the source.
+
+Rationale: Moving the source note one octave in the original interval's direction leaves the target unchanged; the interval from that displaced source to the target has complementary number/quality and opposite direction. Unison and octave are retained as distinct endpoints of this operation.
+
+Consequences: Reuse shared interval validation for input and result. Invalid or compound intervals throw RangeError. Augmented octaves cannot be inverted within the existing model because their complements are excluded diminished unisons; reject them without respelling or expanding the quality/direction vocabulary. Inversion is involutive for supported inputs. Earlier D025 exclusions described that increment; simple inversion is now implemented under this decision. Formatting, compound reduction, chord inversion, and other domain capabilities remain outside this increment.
+
+Recorded: 2026-10-07. Authority: User's simple-interval inversion implementation request and approval to continue with the recommended direction-flipping convention and input limits.

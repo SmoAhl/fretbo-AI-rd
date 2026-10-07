@@ -12,6 +12,8 @@ The application is designed to be useful without AI. Later, optional AI assistan
 
 The domain also measures signed semitone distance between registered pitches and identifies numbered, qualified intervals between registered spelled notes. Identification preserves compound distance and distinguishes enharmonic interval spellings, such as augmented fourth versus diminished fifth. It retains the existing interval model and rejects unsupported pairs rather than respelling them.
 
+Simple-interval inversion complements number and quality and flips direction through octave displacement, including unison/octave endpoints. It rejects compound intervals and augmented octaves whose inverses require unsupported diminished unisons.
+
 The descriptions below explain the intended application. See [current implementation status](docs/ARCHITECTURE.md#current-implementation) for the authoritative account of what exists.
 
 ## Core architecture
