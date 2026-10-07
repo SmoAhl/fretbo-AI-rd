@@ -14,7 +14,9 @@ The repository contains the working documents plus a minimal Next.js App Router 
 
 `package.json` and `package-lock.json` define one private npm-managed package. `npm run typecheck` runs Next.js type generation and strict TypeScript checks for the application and NodeNext checks for the test configuration. `vitest.config.ts` configures a Node test environment, and `tests/bootstrap.test.ts` verifies that the test runtime works without a DOM. `npm run dev`, `npm run build`, and `npm run start` provide the Next.js lifecycle commands. `.nvmrc` and the package engine target Node.js 24 LTS.
 
-No domain modules, React product controls, SVG fretboard visualization, server APIs, persistence, audio, or AI integration exist yet. The [original Playability Reference plan](../plans/playability-reference.md) is historical documentation context. The [current reference refactoring](../plans/domain-reference-simplification.md) changes guidance, not engine behavior. The components below describe responsibilities that later implementation must preserve.
+`domain/music-theory/pitch-class.ts` provides the first minimal Music Theory capability: `PitchClass` represents numeric classes `0..11`, and `transposePitchClass` transposes a typed pitch class by a signed safe-integer semitone offset, wrapping into `0..11`. Unsupported offsets throw `RangeError`. Reducing the offset before addition preserves precision at the safe-integer limits. The module has no imports or framework, Node API, or UI dependencies. `tests/pitch-class.test.ts` covers all twelve classes, octave equivalence, positive and negative wrapping, large offsets, and invalid offsets. These numeric classes carry no note spelling, named origin, or register.
+
+No other domain capabilities, React product controls, SVG fretboard visualization, server APIs, persistence, audio, or AI integration exist yet. The [original Playability Reference plan](../plans/playability-reference.md) is historical documentation context. The [current reference refactoring](../plans/domain-reference-simplification.md) changes guidance, not engine behavior. The components below describe responsibilities that later implementation must preserve.
 
 ## Accepted technology foundation
 
@@ -127,7 +129,7 @@ Selecting Next.js does not implicitly select any of these. Custom React + SVG is
 
 ## Open architectural questions
 
-- Representations for pitch class, register, note spelling, musical identity, voicing, and fingering.
+- Representations for register, note spelling, musical identity, voicing, and fingering; any future named interpretation of the numeric pitch classes.
 - Ownership of voicing candidate generation, initial realization selection, and the playability guarantee.
 - Concrete hard chord grip limits, additional supported contact rules, and ergonomic ranking criteria. The Playability Reference supplies conservative recommendation heuristics and initial CAGED reference fingerings; further supported shapes and exceptions remain to be established.
 - Application-state ownership, coordination between interaction paths, and placement of domain execution.
