@@ -255,3 +255,15 @@ Rationale: A named origin connects the numeric foundation to Western letter spel
 Consequences: Conversion does not mutate input and its numeric result loses spelling information. Existing numeric transposition remains unchanged and does not select a spelling. The contract accepts typed structured inputs; arbitrary JavaScript and external-data validation belong to a future input boundary. Register, reverse spelling selection, text parsing, formatting, and spelled transposition remain outside this increment and undecided where relevant. No framework or runtime-specific dependency is introduced into the domain.
 
 Recorded: 2026-10-07. Authority: User's explicit approval and implementation request for the note-spelling plan.
+
+## D021: Registered pitch coordinates with C0 as origin
+
+Status: Accepted.
+
+Decision: Represent registered sounding pitches as numeric safe-integer semitone coordinates with C0 = 0, C4 = 48, and C5 = 60. Support negative coordinates and octave numbers. A readonly `RegisteredNote` extends the existing explicit spelling with a required written octave. Convert notes to sounding coordinates, transpose by signed semitone addition without wrapping, and extract pitch class by discarding register.
+
+Rationale: Numeric coordinates preserve octave distance and support comparison and future fretboard semitone mapping without coupling the domain to a renderer, instrument preset, or MIDI representation. A separate spelled-note input retains the written letter's octave convention: B-sharp3 and C4 identify the same sounding pitch. C0 = 0 is a project convention, not a universal numbering rule.
+
+Consequences: `RegisteredPitch` is a number alias rather than a branded type or constructor. Each function validates numeric inputs and results as safe integers and throws `RangeError` for invalid values or overflow. Note conversion also requires a safe C-based octave coordinate (12 * octave), even if an accidental could bring the final mathematical result into range. Group the natural letter displacement and accidental before adding that octave base. These are software arithmetic limits, not musical or instrument bounds. Letter/accidental validity retains the existing typed-input contract. Conversion preserves the input and loses spelling in its numeric result. No dependency or existing API change is needed. Text parsing, formatting, reverse spelling selection, spelled transposition, and fretboard implementation remain outside this increment.
+
+Recorded: 2026-10-07. Authority: User's explicit approval and implementation request for the registered-pitch plan.
