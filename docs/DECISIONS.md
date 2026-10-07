@@ -267,3 +267,27 @@ Rationale: Numeric coordinates preserve octave distance and support comparison a
 Consequences: `RegisteredPitch` is a number alias rather than a branded type or constructor. Each function validates numeric inputs and results as safe integers and throws `RangeError` for invalid values or overflow. Note conversion also requires a safe C-based octave coordinate (12 * octave), even if an accidental could bring the final mathematical result into range. Group the natural letter displacement and accidental before adding that octave base. These are software arithmetic limits, not musical or instrument bounds. Letter/accidental validity retains the existing typed-input contract. Conversion preserves the input and loses spelling in its numeric result. No dependency or existing API change is needed. Text parsing, formatting, reverse spelling selection, spelled transposition, and fretboard implementation remain outside this increment.
 
 Recorded: 2026-10-07. Authority: User's explicit approval and implementation request for the registered-pitch plan.
+
+## D022: Note text and explicit reverse spelling policy
+
+Status: Accepted.
+
+Decision: Parse separate unregistered spellings and registered notes using uppercase A-G, optional #/♯, b/♭, ##/𝄪, bb/𝄫, or ♮, and a required signed decimal integer octave for registered notes. Trim outer whitespace and reject internal spaces, lowercase, x, mixed accidentals, and repeated Unicode accidentals. Format supplied spelling in ASCII or Unicode, defaulting to Unicode; omit natural tokens and include the written octave only for registered notes. Reverse conversion requires an explicit sharps/flats policy, preferring naturals and otherwise single accidentals for all twelve classes.
+
+Rationale: Text syntax and display choices are explicit project conventions. Formatting an existing spelling must not silently choose an enharmonic alternative; selecting spelling from a numeric pitch is a separate operation whose policy cannot be inferred from the number alone.
+
+Consequences: Parse functions return existing structured types and throw `SyntaxError` for malformed text, `RangeError` for unsupported numeric register. Optional ASCII +/- and leading octave zeroes are accepted and normalize on formatting. Reverse selection returns independent objects, preserves source pitches through conversion, and retains the safe-octave-base restriction of D021, rejecting unsupported extreme lower coordinates. No key-aware policy, scale context, interval parser, or UI logic is introduced. Modules depend only on portable sibling domain code.
+
+Recorded: 2026-10-07. Authority: User's explicit answers to parser/formatter and reverse-spelling questions during the four-capability implementation goal.
+
+## D023: Spelled transposition by qualified intervals
+
+Status: Accepted.
+
+Decision: Describe spelled transposition with a positive safe-integer interval number (including compound intervals), perfect/major/minor/augmented/diminished quality, and explicit up/down direction. Determine the target letter from interval number and its accidental from the sounding semitone displacement. Support both unregistered spellings and registered notes. Reject diminished unisons and derived accidentals outside the existing -2..2 contract with `RangeError`.
+
+Rationale: Semitone distance alone cannot distinguish an augmented unison from a minor second. Keeping letter and chromatic displacement separate preserves musical spelling. Rejecting diminished unison avoids an up/down instruction whose chromatic motion contradicts that direction; rejecting unsupported accidentals preserves explicit interval meaning instead of silently respelling.
+
+Consequences: Apply perfect quality to simple 1/4/5 families, major/minor to 2/3/6/7, and augmented/diminished to either except diminished unison. Compound intervals retain octave distance in registered output; unregistered output discards it. Validate numeric interval displacements and registered coordinates under the existing safe-integer/base restrictions; exact portable BigInt intermediates avoid precision loss. Preserve input objects and existing numeric APIs. Multiply augmented/diminished qualities, interval text parsing, scales, chords, fretboard mapping, and future-feature abstractions are outside scope.
+
+Recorded: 2026-10-07. Authority: User's explicit interval-interface and diminished-unison answers during the four-capability implementation goal.
