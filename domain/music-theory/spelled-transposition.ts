@@ -57,6 +57,11 @@ function intervalDisplacement(interval: SpelledInterval): { letters: bigint; sem
   return { letters: sign * letterSteps, semitones: Number(sign * semitones) };
 }
 
+/** Validate interval semantics independently of any source note or resulting spelling. */
+export function validateSpelledInterval(interval: SpelledInterval): void {
+  intervalDisplacement(interval);
+}
+
 /** Transpose by interval number, quality, and direction, retaining written register. */
 export function transposeRegisteredNote(
   note: RegisteredNote,

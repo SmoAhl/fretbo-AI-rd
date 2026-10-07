@@ -291,3 +291,15 @@ Rationale: Semitone distance alone cannot distinguish an augmented unison from a
 Consequences: Apply perfect quality to simple 1/4/5 families, major/minor to 2/3/6/7, and augmented/diminished to either except diminished unison. Compound intervals retain octave distance in registered output; unregistered output discards it. Validate numeric interval displacements and registered coordinates under the existing safe-integer/base restrictions; exact portable BigInt intermediates avoid precision loss. Preserve input objects and existing numeric APIs. Multiply augmented/diminished qualities, interval text parsing, scales, chords, fretboard mapping, and future-feature abstractions are outside scope.
 
 Recorded: 2026-10-07. Authority: User's explicit interval-interface and diminished-unison answers during the four-capability implementation goal.
+
+## D024: Interval text syntax with required direction
+
+Status: Accepted.
+
+Decision: Parse compact interval symbols P/M/m/A/d with a decimal number, full quality with a named interval from unison through fifteenth (octave for 8), or full quality with a decimal number for arbitrary supported compound intervals. Require trailing up/down. Preserve case-sensitive compact quality symbols to distinguish major M from minor m; full quality/name/direction words are case-insensitive.
+
+Rationale: Both concise notation and readable names translate directly into the existing interval contract. Explicit direction avoids silently assuming upward transposition. Parsing validates interval semantics independently of a source note rather than attempting transposition on a dummy note.
+
+Consequences: Trim outer whitespace and allow whitespace between tokens. Unsigned ASCII decimal numbers may have leading zeroes; signed numbers, fractions, ordinal suffixes, multiply augmented/diminished aliases, and unspecified word names are unsupported. Malformed syntax throws `SyntaxError`; existing quality compatibility, diminished-unison rejection, and safe-displacement rules throw `RangeError`. `validateSpelledInterval` shares the existing rules between parsing and transposition. No interval formatter, dependency, or change to existing transposition behavior is introduced. The earlier D023 exclusion described that increment's scope; interval text parsing is now implemented under this decision.
+
+Recorded: 2026-10-07. Authority: User's interval-parser implementation request and explicit compact/full syntax and required-direction answers.
