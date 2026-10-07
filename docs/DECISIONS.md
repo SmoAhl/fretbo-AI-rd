@@ -303,3 +303,15 @@ Rationale: Both concise notation and readable names translate directly into the 
 Consequences: Trim outer whitespace and allow whitespace between tokens. Unsigned ASCII decimal numbers may have leading zeroes; signed numbers, fractions, ordinal suffixes, multiply augmented/diminished aliases, and unspecified word names are unsupported. Malformed syntax throws `SyntaxError`; existing quality compatibility, diminished-unison rejection, and safe-displacement rules throw `RangeError`. `validateSpelledInterval` shares the existing rules between parsing and transposition. No interval formatter, dependency, or change to existing transposition behavior is introduced. The earlier D023 exclusion described that increment's scope; interval text parsing is now implemented under this decision.
 
 Recorded: 2026-10-07. Authority: User's interval-parser implementation request and explicit compact/full syntax and required-direction answers.
+
+## D025: Registered interval measurement and identification
+
+Status: Accepted.
+
+Decision: Measure registered chromatic distance as signed target minus source with safe-integer inputs/results and positive zero for equality. Identify intervals between registered spelled notes using the existing SpelledInterval number/quality/up-or-down contract. Written letter/octave positions determine interval number and direction when positions differ, including enharmonic equality. Same-position altered unisons use sounding direction; identical notes return perfect unison/up.
+
+Rationale: Sounding distance alone cannot distinguish an augmented fourth from a diminished fifth. Written and chromatic displacements together recover intervals usable by existing transposition. Up for an identical note is a deterministic project convention, not a claim that stationary pitches move upward. C4 to C-flat4 is represented as augmented unison/down under the existing rejection of diminished unisons.
+
+Consequences: Preserve compound interval distance and explicit note spelling. Reject unsupported multiply augmented/diminished qualities, opposing written/sounding motion, invalid numeric inputs, and unsafe distances with RangeError. Existing registered-note octave-base validation applies. Inputs remain unchanged and every supported identified interval can transpose its source to its exact target. No new qualities, direction values, pitch-class distance convention, interval formatter/inversion, dependencies, or framework-specific domain code are introduced.
+
+Recorded: 2026-10-07. Authority: User's interval measurement/identification implementation request and explicit approval of the existing interval contract and edge-case rules.

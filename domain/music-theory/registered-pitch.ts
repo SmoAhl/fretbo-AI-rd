@@ -51,6 +51,15 @@ export function transposeRegisteredPitch(
   return transposed;
 }
 
+/** Signed semitone distance (to minus from), retaining register and returning +0 for equality. */
+export function semitoneDistance(from: RegisteredPitch, to: RegisteredPitch): number {
+  if (!Number.isSafeInteger(from)) {
+    throw new RangeError("Registered pitch must be a safe integer.");
+  }
+  const distance = transposeRegisteredPitch(to, -from);
+  return distance === 0 ? 0 : distance;
+}
+
 /** Discard register and normalize the coordinate to a pitch class in 0..11. */
 export function pitchClassFromRegisteredPitch(pitch: RegisteredPitch): PitchClass {
   if (!Number.isSafeInteger(pitch)) {

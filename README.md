@@ -10,6 +10,8 @@ The application is designed to be useful without AI. Later, optional AI assistan
 
 **Technical bootstrap and deterministic pitch, spelling, notation, and transposition capabilities are implemented.** The independent Music Theory domain supports numeric pitch classes with C = 0, registered semitone coordinates with C0 = 0, explicit spellings through double accidentals, and conversions among these representations. It parses note and interval text, formats supplied note spelling in Unicode or ASCII, selects reverse spellings with an explicit sharps/flats policy, and transposes spellings or registered notes by numbered, qualified intervals in either direction. Interval text supports compact and full forms with required direction, such as `m3 up`, `minor third down`, and `major 16 up`. Focused tests verify behavior and numerical boundaries. The application retains its minimal Next.js/TypeScript/Vitest and presentation-tooling bootstrap. Key-aware spelling selection, scales, chords, Fretboard, Playability, AI, and product UI remain unimplemented.
 
+The domain also measures signed semitone distance between registered pitches and identifies numbered, qualified intervals between registered spelled notes. Identification preserves compound distance and distinguishes enharmonic interval spellings, such as augmented fourth versus diminished fifth. It retains the existing interval model and rejects unsupported pairs rather than respelling them.
+
 The descriptions below explain the intended application. See [current implementation status](docs/ARCHITECTURE.md#current-implementation) for the authoritative account of what exists.
 
 ## Core architecture

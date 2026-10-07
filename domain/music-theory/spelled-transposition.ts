@@ -2,6 +2,7 @@ import { type Accidental, type NoteSpelling, pitchClassFromSpelling } from "./no
 import {
   type RegisteredNote,
   registeredPitchFromNote,
+  semitoneDistance,
   transposeRegisteredPitch,
 } from "./registered-pitch.js";
 
@@ -60,6 +61,51 @@ function intervalDisplacement(interval: SpelledInterval): { letters: bigint; sem
 /** Validate interval semantics independently of any source note or resulting spelling. */
 export function validateSpelledInterval(interval: SpelledInterval): void {
   intervalDisplacement(interval);
+}
+
+/**
+ * Identify an interval from written letter positions and sounding displacement.
+ * Identical notes use perfect unison/up; altered unisons use sounding direction.
+ * Reject pairs that cannot be expressed by the existing interval contract.
+ */
+export function identifySpelledInterval(from: RegisteredNote, to: RegisteredNote): SpelledInterval {
+  const semitones = semitoneDistance(registeredPitchFromNote(from), registeredPitchFromNote(to));
+  const fromPosition = BigInt(from.octave) * 7n + BigInt(letters.indexOf(from.letter));
+  const toPosition = BigInt(to.octave) * 7n + BigInt(letters.indexOf(to.letter));
+  const letterSteps = toPosition - fromPosition;
+  const direction: IntervalDirection = letterSteps < 0n || (letterSteps === 0n && semitones < 0)
+    ? "down" : "up";
+  const magnitude = letterSteps < 0n ? -letterSteps : letterSteps;
+  const number = Number(magnitude + 1n);
+  if (!Number.isSafeInteger(number)) {
+    throw new RangeError("Interval number must be a positive safe integer.");
+  }
+
+  // Different written positions set direction, even when their pitches are equal.
+  const directedSemitones = BigInt(semitones) * (direction === "up" ? 1n : -1n);
+  if (directedSemitones < 0n) {
+    throw new RangeError("Written and sounding motion cannot oppose each other in this interval contract.");
+  }
+  const simpleIndex = Number(magnitude % 7n);
+  const perfectFamily = simpleIndex === 0 || simpleIndex === 3 || simpleIndex === 4;
+  const baseline = (magnitude / 7n) * 12n + baselineSemitones[simpleIndex]!;
+  const adjustment = directedSemitones - baseline;
+  let quality: IntervalQuality;
+  if (adjustment === 0n) {
+    quality = perfectFamily ? "perfect" : "major";
+  } else if (adjustment === 1n) {
+    quality = "augmented";
+  } else if (adjustment === -1n) {
+    quality = perfectFamily ? "diminished" : "minor";
+  } else if (!perfectFamily && adjustment === -2n) {
+    quality = "diminished";
+  } else {
+    throw new RangeError("The note pair requires an unsupported interval quality.");
+  }
+
+  const interval: SpelledInterval = { number, quality, direction };
+  validateSpelledInterval(interval);
+  return interval;
 }
 
 /** Transpose by interval number, quality, and direction, retaining written register. */
