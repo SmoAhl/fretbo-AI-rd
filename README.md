@@ -14,6 +14,8 @@ The domain also measures signed semitone distance between registered pitches and
 
 Simple-interval inversion complements number and quality and flips direction through octave displacement, including unison/octave endpoints. It rejects compound intervals and augmented octaves whose inverses require unsupported diminished unisons.
 
+`formatSpelledInterval` produces compact interval text by default (`m3 up`) or full English text (`minor third up`), always including direction. Full notation names numbers 1–15 and uses decimal numbers beyond them (`major 16 up`); both forms round-trip through the parser. `semitonesFromInterval` exposes the existing validated signed displacement without requiring a source note, preserving compound octave distance and returning positive zero for zero displacement.
+
 The descriptions below explain the intended application. See [current implementation status](docs/ARCHITECTURE.md#current-implementation) for the authoritative account of what exists.
 
 ## Core architecture

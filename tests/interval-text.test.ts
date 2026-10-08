@@ -1,8 +1,9 @@
 import { describe, expect, test } from "vitest";
-import { parseSpelledInterval } from "../domain/music-theory/interval-text.js";
+import { formatSpelledInterval, parseSpelledInterval } from "../domain/music-theory/interval-text.js";
 import { formatRegisteredNote, parseRegisteredNote } from "../domain/music-theory/note-text.js";
 import {
   type IntervalQuality,
+  type SpelledInterval,
   transposeRegisteredNote,
   validateSpelledInterval,
 } from "../domain/music-theory/spelled-transposition.js";
@@ -83,6 +84,84 @@ describe("parseSpelledInterval", () => {
   });
 });
 
+describe("formatSpelledInterval", () => {
+  test.each([
+    [1, "perfect", "P1", "perfect unison"],
+    [2, "major", "M2", "major second"],
+    [3, "minor", "m3", "minor third"],
+    [4, "augmented", "A4", "augmented fourth"],
+    [5, "diminished", "d5", "diminished fifth"],
+    [6, "major", "M6", "major sixth"],
+    [7, "minor", "m7", "minor seventh"],
+    [8, "perfect", "P8", "perfect octave"],
+    [9, "major", "M9", "major ninth"],
+    [10, "minor", "m10", "minor tenth"],
+    [11, "augmented", "A11", "augmented eleventh"],
+    [12, "perfect", "P12", "perfect twelfth"],
+    [13, "minor", "m13", "minor thirteenth"],
+    [14, "major", "M14", "major fourteenth"],
+    [15, "perfect", "P15", "perfect fifteenth"],
+    [16, "major", "M16", "major 16"],
+    [22, "diminished", "d22", "diminished 22"],
+    [5254199565265579, "perfect", "P5254199565265579", "perfect 5254199565265579"],
+  ] as const)("formats %i %s in both notations and directions", (number, quality, compact, full) => {
+    for (const direction of ["up", "down"] as const) {
+      const interval = Object.freeze({ number, quality, direction });
+      expect(formatSpelledInterval(interval)).toBe(`${compact} ${direction}`);
+      expect(formatSpelledInterval(interval, "compact")).toBe(`${compact} ${direction}`);
+      expect(formatSpelledInterval(interval, "full")).toBe(`${full} ${direction}`);
+      for (const notation of ["compact", "full"] as const) {
+        expect(parseSpelledInterval(formatSpelledInterval(interval, notation))).toEqual(interval);
+      }
+      expect(interval).toEqual({ number, quality, direction });
+    }
+  });
+
+  test("round-trips every supported quality family across simple and compound numbers", () => {
+    for (let number = 1; number <= 22; number++) {
+      const perfectFamily = [1, 4, 5].includes((number - 1) % 7 + 1);
+      const qualities: readonly IntervalQuality[] = perfectFamily
+        ? ["perfect", "augmented", ...(number === 1 ? [] : ["diminished"] as const)]
+        : ["major", "minor", "augmented", "diminished"];
+      for (const quality of qualities) {
+        for (const direction of ["up", "down"] as const) {
+          const interval = { number, quality, direction };
+          for (const notation of ["compact", "full"] as const) {
+            expect(parseSpelledInterval(formatSpelledInterval(interval, notation))).toEqual(interval);
+          }
+        }
+      }
+    }
+  });
+
+  test.each([
+    { number: 1, quality: "diminished", direction: "up" },
+    { number: 3, quality: "perfect", direction: "up" },
+    { number: 5, quality: "major", direction: "down" },
+    { number: 3, quality: "double-augmented", direction: "up" },
+    { number: 3, quality: "minor", direction: "sideways" },
+    ...[0, -1, 1.5, NaN, Infinity, Number.MAX_SAFE_INTEGER + 1, Number.MAX_SAFE_INTEGER]
+      .map((number) => ({ number, quality: "augmented", direction: "up" })),
+    { number: 5254199565265579, quality: "augmented", direction: "down" },
+  ])("rejects invalid interval %o in either notation", (interval) => {
+    for (const notation of ["compact", "full"] as const) {
+      expect(() => formatSpelledInterval(interval as SpelledInterval, notation)).toThrow(RangeError);
+    }
+  });
+
+  test("rejects an unsupported notation", () => {
+    // @ts-expect-error Only compact and full notation are supported.
+    expect(() => formatSpelledInterval({ number: 3, quality: "minor", direction: "up" }, "named"))
+      .toThrow(RangeError);
+  });
+
+  test("canonicalizes accepted noncanonical text", () => {
+    const interval = parseSpelledInterval("  MiNoR\t003 DOWN ");
+    expect(formatSpelledInterval(interval)).toBe("m3 down");
+    expect(formatSpelledInterval(interval, "full")).toBe("minor third down");
+  });
+});
+
 test("shared interval validation preserves frozen input and checks all quality families", () => {
   const interval = Object.freeze({ number: 9, quality: "major", direction: "down" } as const);
   expect(validateSpelledInterval(interval)).toBeUndefined();
@@ -96,4 +175,6 @@ test("shared interval validation preserves frozen input and checks all quality f
 if (false) {
   // @ts-expect-error The text boundary requires a string.
   parseSpelledInterval({ number: 3, quality: "minor", direction: "up" });
+  // @ts-expect-error Formatting requires a structured interval, not text.
+  formatSpelledInterval("m3 up");
 }

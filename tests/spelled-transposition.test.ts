@@ -5,6 +5,7 @@ import { transposePitchClass } from "../domain/music-theory/pitch-class.js";
 import { registeredPitchFromNote } from "../domain/music-theory/registered-pitch.js";
 import {
   type IntervalQuality, type SpelledInterval,
+  semitonesFromInterval,
   transposeNoteSpelling, transposeRegisteredNote,
 } from "../domain/music-theory/spelled-transposition.js";
 
@@ -27,6 +28,49 @@ const intervals: readonly [number, IntervalQuality, number, string][] = [
   [12, "perfect", 19, "G5"], [13, "minor", 20, "Ab5"],
   [14, "major", 23, "B5"], [15, "perfect", 24, "C6"],
 ];
+
+describe("semitonesFromInterval", () => {
+  test.each(intervals)("converts %i %s to %i signed semitones", (number, quality, semitones) => {
+    for (const direction of ["up", "down"] as const) {
+      const interval = Object.freeze({ number, quality, direction });
+      const displacement = semitonesFromInterval(interval);
+      expect(displacement).toBe(semitones === 0 ? 0 : direction === "up" ? semitones : -semitones);
+      const source = parseRegisteredNote("C4");
+      const result = transposeRegisteredNote(source, interval);
+      expect(displacement).toBe(registeredPitchFromNote(result) - registeredPitchFromNote(source));
+      expect(interval).toEqual({ number, quality, direction });
+    }
+  });
+
+  test("retains compound octaves and converts independently of source spelling", () => {
+    expect(semitonesFromInterval({ number: 16, quality: "major", direction: "up" })).toBe(26);
+    expect(semitonesFromInterval({ number: 22, quality: "diminished", direction: "down" })).toBe(-35);
+    const interval = { number: 1, quality: "augmented", direction: "up" } as const;
+    expect(semitonesFromInterval(interval)).toBe(1);
+    expect(() => transposeRegisteredNote(parseRegisteredNote("C##4"), interval)).toThrow(RangeError);
+  });
+
+  test("supports both exact safe-integer limits and rejects displacement overflow", () => {
+    for (const direction of ["up", "down"] as const) {
+      const interval = { number: 5254199565265579, quality: "perfect", direction } as const;
+      expect(semitonesFromInterval(interval))
+        .toBe(direction === "up" ? Number.MAX_SAFE_INTEGER : Number.MIN_SAFE_INTEGER);
+      expect(() => semitonesFromInterval({ ...interval, quality: "augmented" })).toThrow(RangeError);
+    }
+  });
+
+  test.each([
+    { number: 1, quality: "diminished", direction: "up" },
+    { number: 3, quality: "perfect", direction: "up" },
+    { number: 5, quality: "minor", direction: "down" },
+    { number: 3, quality: "double-diminished", direction: "up" },
+    { number: 3, quality: "minor", direction: "sideways" },
+    ...[0, -1, 1.5, NaN, Infinity, Number.MAX_SAFE_INTEGER + 1, Number.MAX_SAFE_INTEGER]
+      .map((number) => ({ number, quality: "augmented", direction: "up" })),
+  ])("rejects invalid interval %o", (interval) => {
+    expect(() => semitonesFromInterval(interval as SpelledInterval)).toThrow(RangeError);
+  });
+});
 
 describe("spelled transposition", () => {
   test.each(intervals)("transposes C4 up %i %s by %i semitones to %s", (number, quality, semitones, text) => {
@@ -138,6 +182,8 @@ describe("spelled transposition", () => {
 });
 
 if (false) {
+  // @ts-expect-error Semitone conversion requires a structured interval.
+  semitonesFromInterval(3);
   // @ts-expect-error A semitone count alone cannot determine spelled transposition.
   transposeNoteSpelling({ letter: "C", accidental: 0 }, 1);
   // @ts-expect-error Interval direction is required.

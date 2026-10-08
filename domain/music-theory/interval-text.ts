@@ -5,6 +5,8 @@ import {
   validateSpelledInterval,
 } from "./spelled-transposition.js";
 
+export type IntervalNotation = "compact" | "full";
+
 const compactQualities: Readonly<Record<string, IntervalQuality>> = {
   P: "perfect", M: "major", m: "minor", A: "augmented", d: "diminished",
 };
@@ -61,4 +63,21 @@ export function parseSpelledInterval(text: string): SpelledInterval {
   // Validate the interval itself, without imposing the limits of a particular note.
   validateSpelledInterval(interval);
   return interval;
+}
+
+/** Format a validated interval with explicit direction; full names cover numbers 1..15. */
+export function formatSpelledInterval(
+  interval: SpelledInterval,
+  notation: IntervalNotation = "compact",
+): string {
+  validateSpelledInterval(interval);
+  if (notation !== "compact" && notation !== "full") {
+    throw new RangeError("Interval notation must be compact or full.");
+  }
+  if (notation === "compact") {
+    const symbol = Object.entries(compactQualities).find(([, quality]) => quality === interval.quality)![0];
+    return `${symbol}${interval.number} ${interval.direction}`;
+  }
+  const name = Object.entries(namedNumbers).find(([, number]) => number === interval.number)?.[0];
+  return `${interval.quality} ${name ?? interval.number} ${interval.direction}`;
 }

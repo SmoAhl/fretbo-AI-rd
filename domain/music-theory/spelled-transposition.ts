@@ -63,6 +63,11 @@ export function validateSpelledInterval(interval: SpelledInterval): void {
   intervalDisplacement(interval);
 }
 
+/** Return signed semitone displacement without requiring a source note. Zero is positive. */
+export function semitonesFromInterval(interval: SpelledInterval): number {
+  return intervalDisplacement(interval).semitones;
+}
+
 /**
  * Invert a simple interval (numbers 1..8) by octave displacement, flipping direction.
  * Reject augmented octaves because their inverse is an unsupported diminished unison.

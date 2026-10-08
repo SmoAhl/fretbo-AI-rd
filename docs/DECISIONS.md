@@ -327,3 +327,15 @@ Rationale: Moving the source note one octave in the original interval's directio
 Consequences: Reuse shared interval validation for input and result. Invalid or compound intervals throw RangeError. Augmented octaves cannot be inverted within the existing model because their complements are excluded diminished unisons; reject them without respelling or expanding the quality/direction vocabulary. Inversion is involutive for supported inputs. Earlier D025 exclusions described that increment; simple inversion is now implemented under this decision. Formatting, compound reduction, chord inversion, and other domain capabilities remain outside this increment.
 
 Recorded: 2026-10-07. Authority: User's simple-interval inversion implementation request and approval to continue with the recommended direction-flipping convention and input limits.
+
+## D027: Interval formatting and public semitone displacement
+
+Status: Accepted.
+
+Decision: Format the existing SpelledInterval as compact text by default (`m3 up`) or full English text (`minor third up`), always including direction. Export IntervalNotation with compact/full choices. Full notation uses the parser's existing names for numbers 1 through 15 and decimal numbers beyond them (`major 16 up`). Expose semitonesFromInterval as the signed safe-integer displacement of a validated interval, independently of a source note; normalize zero displacement to positive zero.
+
+Rationale: Canonical text supports presentation and parser round trips without changing the interval model. Public semitone conversion lets other domain consumers reuse the existing arithmetic without dummy transposition or duplicated quality rules. Direction and compound octave distance remain explicit.
+
+Consequences: Reuse existing interval validation, exact arithmetic, and parser symbol/name tables. Unsupported notation, invalid intervals, and unsafe displacement throw RangeError. Inputs remain unchanged. Earlier formatter exclusions described those increments' scopes; formatting is now implemented under this decision. Existing parsing/transposition behavior remains intact. No new qualities, localization, dependencies, or source-note constraints are introduced.
+
+Recorded: 2026-10-08. Authority: User's approval and implementation request for the interval formatting and semitone conversion plan.
