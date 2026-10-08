@@ -40,6 +40,10 @@ The repository contains the working documents plus a minimal Next.js App Router 
 
 `domain/music-theory/spelled-transposition.ts` also exports `semitonesFromInterval(interval): number`, exposing the existing validated signed displacement independently of source-note spelling or register. Up is positive, down is negative, and zero displacement is positive zero. Compound octave distance and safe-integer limits are preserved through the existing exact arithmetic. Inputs remain unchanged. `tests/interval-text.test.ts` and `tests/spelled-transposition.test.ts` verify canonical output, round trips, both directions, zero displacements, source-note independence, frozen inputs, and validation/numerical limits. See [D027](DECISIONS.md#d027-interval-formatting-and-public-semitone-displacement).
 
+`domain/music-theory/scales.ts` exports `ScaleType` for major, natural-minor, harmonic-minor, melodic-minor-ascending, and ionian/dorian/phrygian/lydian/mixolydian/aeolian/locrian, plus ordinal `ScaleDegree` 1..7. `scalePitchClasses(tonic, type)` returns seven pitch classes in tonic-relative degree order, with no repeated octave. `scaleNoteSpellings(tonic, type)` returns seven successive letters from the supplied tonic spelling. Both share upward tonic-relative interval definitions and reuse existing semitone and spelled transposition; major/Ionian and natural minor/Aeolian share their respective patterns. Spelling retains the double-accidental limit and rejects unsupported results with `RangeError` rather than respelling. Numeric construction does not inherit that spelling limit.
+
+`pitchClassAtScaleDegree(tonic, type, degree)` retrieves an ordinal degree; `scaleDegreeOfPitchClass(tonic, type, pitchClass)` returns its ordinal degree or `undefined` for non-members. E-flat is degree 3 in C natural minor; flat 3 describes its major-relative formula instead. Unknown types and invalid degrees throw `RangeError`. Inputs retain the existing typed pitch/spelling contracts and remain unchanged; construction returns independent readonly arrays and independent note objects. `tests/scales.test.ts` verifies every numeric tonic/type, mode rotations, independent spelling expectations for all 35 tonic spellings, enharmonics, accidental limits, degree queries, type contracts, and parse/construct/format integration. The fixed melodic-minor-ascending collection leaves classical/jazz traversal conventions open. See [D028](DECISIONS.md#d028-seven-note-scales-modes-and-ordinal-degrees) and the [completed scales and modes effort](../plans/scales-and-modes.md).
+
 No other domain capabilities, React product controls, SVG fretboard visualization, server APIs, persistence, audio, or AI integration exist yet. The [original Playability Reference plan](../plans/playability-reference.md) is historical documentation context. The [current reference refactoring](../plans/domain-reference-simplification.md) changes guidance, not engine behavior. The components below describe responsibilities that later implementation must preserve.
 
 ## Accepted technology foundation
@@ -132,13 +136,23 @@ Verify early deterministic capabilities through ordinary tests and, when useful,
 
 The accepted construction strategy is domain-first: establish domain concepts, Music Theory and tests, Fretboard and tests, and Playability. Clear contracts support a basic non-AI UI before agent/tool integration and AI orchestration. See the [construction decision](DECISIONS.md#d004-domain-first-construction).
 
-Root, scale, and chord controls and direct fretboard interaction illustrate the intended conventional experience; exact controls and initial supported musical scope are not fixed. The application should eventually support both exploration and continued development of the user's musical ideas.
+Root, scale, and chord controls and direct fretboard interaction illustrate the intended conventional experience; exact controls and broader musical scope are not fixed. The supported seven-note scale/mode domain catalog is described above. The application should eventually support both exploration and continued development of the user's musical ideas.
 
 Selecting React, Next.js, and the presentation stack does not start UI or server implementation. The first non-AI interface may primarily use client-side interaction over the deterministic domain. Introduce server functionality only when its capabilities are needed.
 
 One agent and structured JSON communication are the current initial AI direction, not permanent architectural commitments. AI providers, agent tooling, and evaluation platforms remain undecided.
 
 Audio, broader evaluation, patterns, voice leading, and idea development remain later capabilities as justified. RAG, web search, visual agent feedback, multiple agents, MIDI, and tablature are future possibilities, not implementation prerequisites or a committed backlog.
+
+### Scales and modes: deferred capabilities
+
+These are deferred possibilities; their scope and priority remain undecided:
+
+- Major/minor pentatonic and chromatic collections.
+- Modes of harmonic and melodic minor.
+- Registered scale runs with direction and octave endpoints.
+- Custom scale patterns and relative-mode derivation.
+- Scale-name parsing, key/signature relationships, and scale harmonization.
 
 ## Deferred technology choices
 
@@ -153,6 +167,7 @@ Selecting Next.js does not implicitly select any of these. Custom React + SVG is
 
 ## Open architectural questions
 
+- Should future melodic-minor behavior expose separate classical and jazz conventions, including direction-dependent classical traversal? The implemented `melodic-minor-ascending` identifies a fixed collection and does not settle that question.
 - Representations for musical identity, voicing, and fingering; context-aware spelling selection and any future extension of explicit note spelling, register, notation, or intervals.
 - Ownership of voicing candidate generation, initial realization selection, and the playability guarantee.
 - Concrete hard chord grip limits, additional supported contact rules, and ergonomic ranking criteria. The Playability Reference supplies conservative recommendation heuristics and initial CAGED reference fingerings; further supported shapes and exceptions remain to be established.

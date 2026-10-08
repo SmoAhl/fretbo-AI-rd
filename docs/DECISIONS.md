@@ -339,3 +339,15 @@ Rationale: Canonical text supports presentation and parser round trips without c
 Consequences: Reuse existing interval validation, exact arithmetic, and parser symbol/name tables. Unsupported notation, invalid intervals, and unsafe displacement throw RangeError. Inputs remain unchanged. Earlier formatter exclusions described those increments' scopes; formatting is now implemented under this decision. Existing parsing/transposition behavior remains intact. No new qualities, localization, dependencies, or source-note constraints are introduced.
 
 Recorded: 2026-10-08. Authority: User's approval and implementation request for the interval formatting and semitone conversion plan.
+
+## D028: Seven-note scales, modes, and ordinal degrees
+
+Status: Accepted.
+
+Decision: Support explicit ScaleType identifiers major, natural-minor, harmonic-minor, melodic-minor-ascending, ionian, dorian, phrygian, lydian, mixolydian, aeolian, and locrian. Construct seven tonic-relative ordered pitch classes or NoteSpelling values with no repeated octave tonic. Share upward SpelledInterval patterns between numeric and spelled construction, including shared major/Ionian and natural-minor/Aeolian definitions. Expose ordinal ScaleDegree 1..7, class retrieval by degree, and class-to-degree membership returning undefined for non-members.
+
+Rationale: Shared interval definitions preserve both sounding distance and seven successive letter roles without duplicating musical rules or applying a generic sharp/flat preference. Ordinal degree is the position in the chosen scale, distinct from its major-relative formula. An explicitly named ascending melodic-minor collection is useful without selecting future classical/jazz traversal behavior.
+
+Consequences: Reuse existing semitone and spelled transposition, preserve typed pitch/spelling inputs, and return independent readonly arrays and spelling objects. Unsupported types/degrees and results beyond double accidentals throw RangeError; no silent respelling occurs. Numeric construction has no derived accidental limit. The broader melodic-minor convention remains open. Other collections, registered runs, custom patterns, relative-mode derivation, scale-name parsing, keys/signatures, harmonization, Fretboard, UI, AI, and dependencies are outside this increment. Earlier scale exclusions described preceding increments; supported scales/modes are now implemented under this decision.
+
+Recorded: 2026-10-08. Authority: User's approval of the scales and modes plan, explicit implementation request, and instruction to retain the melodic-minor question and deferred architecture list.
