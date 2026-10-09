@@ -62,6 +62,10 @@ The seven diatonic modes derive from rotations of the major pattern, each with i
 
 C major and D Dorian share pitch classes but have different tonics and degree roles. Starting a melody on D alone does not establish D Dorian.
 
+Harmonic minor and the fixed ascending melodic-minor collection each also yield seven modes by rotating their cyclic step patterns. Choose a parent collection and starting degree; that degree becomes the new tonic. To express the rotated collection as tonic-relative semitone offsets, subtract the selected degree's offset from each parent member and wrap into one octave. The new tonic is offset zero, and the closing steps still sum to twelve semitones. Preserve seven successive letter roles when spelling these modes.
+
+For example, rotating C harmonic minor from degree 2 gives D–E♭–F–G–A♭–B–C; rotating the fixed ascending C melodic-minor collection from degree 2 gives D–E♭–F–G–A–B–C. These have different fifth degrees above D. Each derived mode is a fixed collection in both directions: the latter descends D–C–B–A–G–F–E♭–D. Classical melodic-minor exercise substitution does not automatically apply to a mode of the fixed ascending parent. A parent collection and rotation degree identify the intended mode without requiring an alternative naming convention.
+
 Major pentatonic uses 1–2–3–5–6 (semitone offsets 0, 2, 4, 7, 9); minor pentatonic uses 1–♭3–4–5–♭7 (0, 3, 5, 7, 10). The chromatic collection contains all twelve pitch classes.
 
 ## Degrees, keys, and spelling

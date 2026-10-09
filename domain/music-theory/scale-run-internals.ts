@@ -1,0 +1,75 @@
+import { type NoteSpelling, pitchClassFromSpelling } from "./note-spelling.js";
+import {
+  type RegisteredNote,
+  type RegisteredPitch,
+  registeredPitchFromNote,
+  transposeRegisteredPitch,
+} from "./registered-pitch.js";
+import { type IntervalDirection } from "./spelled-transposition.js";
+
+export type ScaleRunOptions = Readonly<{
+  direction: IntervalDirection;
+  octaves: number;
+  includeEndpoint: boolean;
+}>;
+
+/** Software allocation limit, not a musical or instrument bound. */
+export const MAX_SCALE_RUN_NOTES = 10_000;
+
+function runLength(cardinality: number, options: ScaleRunOptions): number {
+  if (options.direction !== "up" && options.direction !== "down") {
+    throw new RangeError("Scale run direction must be up or down.");
+  }
+  if (!Number.isSafeInteger(options.octaves) || options.octaves < 1) {
+    throw new RangeError("Scale run octaves must be a positive safe integer.");
+  }
+  if (typeof options.includeEndpoint !== "boolean") {
+    throw new RangeError("Scale run endpoint inclusion must be an explicit boolean.");
+  }
+  const endpointCount = options.includeEndpoint ? 1 : 0;
+  // Bound multiplication before computing or allocating the requested length.
+  if (options.octaves > Math.floor((MAX_SCALE_RUN_NOTES - endpointCount) / cardinality)) {
+    throw new RangeError(`Scale run must contain at most ${MAX_SCALE_RUN_NOTES} notes.`);
+  }
+  return cardinality * options.octaves + endpointCount;
+}
+
+function scalePosition(index: number, cardinality: number, direction: IntervalDirection) {
+  const signedIndex = direction === "up" ? index : -index;
+  return {
+    degree: ((signedIndex % cardinality) + cardinality) % cardinality,
+    octave: Math.floor(signedIndex / cardinality),
+  };
+}
+
+/** Internal sequencing of trusted domain-generated offsets, not custom-pattern validation. */
+export function registeredRunPitches(
+  tonic: RegisteredPitch,
+  offsets: readonly number[],
+  options: ScaleRunOptions,
+): readonly RegisteredPitch[] {
+  transposeRegisteredPitch(tonic, 0);
+  const length = runLength(offsets.length, options);
+  return Array.from({ length }, (_, index) => {
+    const position = scalePosition(index, offsets.length, options.direction);
+    return transposeRegisteredPitch(tonic, position.octave * 12 + offsets[position.degree]!);
+  });
+}
+
+/** Internal spelling of an already validated run using its fixed collection's spellings. */
+export function registeredRunNotes(
+  pitches: readonly RegisteredPitch[],
+  spellings: readonly NoteSpelling[],
+  direction: IntervalDirection,
+): readonly RegisteredNote[] {
+  return pitches.map((pitch, index) => {
+    const position = scalePosition(index, spellings.length, direction);
+    const spelling = spellings[position.degree]!;
+    const naturalClass = pitchClassFromSpelling({ letter: spelling.letter, accidental: 0 });
+    // Subtraction may exceed safe Number arithmetic even when pitch itself is safe.
+    const octave = Number((BigInt(pitch) - BigInt(naturalClass + spelling.accidental)) / 12n);
+    const note: RegisteredNote = { ...spelling, octave };
+    registeredPitchFromNote(note);
+    return note;
+  });
+}
