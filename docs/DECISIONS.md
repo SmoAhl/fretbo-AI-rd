@@ -351,3 +351,15 @@ Rationale: Shared interval definitions preserve both sounding distance and seven
 Consequences: Reuse existing semitone and spelled transposition, preserve typed pitch/spelling inputs, and return independent readonly arrays and spelling objects. Unsupported types/degrees and results beyond double accidentals throw RangeError; no silent respelling occurs. Numeric construction has no derived accidental limit. The broader melodic-minor convention remains open. Other collections, registered runs, custom patterns, relative-mode derivation, scale-name parsing, keys/signatures, harmonization, Fretboard, UI, AI, and dependencies are outside this increment. Earlier scale exclusions described preceding increments; supported scales/modes are now implemented under this decision.
 
 Recorded: 2026-10-08. Authority: User's approval of the scales and modes plan, explicit implementation request, and instruction to retain the melodic-minor question and deferred architecture list.
+
+## D029: Pentatonic collections and scale-specific ordinal limits
+
+Status: Accepted. Additive extension of [D028](#d028-seven-note-scales-modes-and-ordinal-degrees).
+
+Decision: Add major-pentatonic and minor-pentatonic to ScaleType and support them through the existing four scale functions. Major pentatonic uses upward intervals P1/M2/M3/P5/M6 (semitone offsets 0/2/4/7/9); minor pentatonic uses P1/m3/P4/P5/m7 (0/3/5/7/10). Return five tonic-relative ordered classes or spellings with no octave repetition. Preserve all function signatures and ScaleDegree 1..7; runtime cardinality validation rejects pentatonic degrees 6/7 while retaining them for seven-note scales.
+
+Rationale: Ordinal degree identifies position in the selected collection, while explicit interval number and quality identify musical role and spelling. G is ordinal degree 4 of C major pentatonic but a fifth above C; E-flat is ordinal degree 2 of C minor pentatonic but a minor third above C. Existing shared interval consumers already support these skipped roles without a public custom-pattern contract or scale-specific type overloads.
+
+Consequences: Retain the seven-note pattern helper and existing definitions, typed pitch/spelling inputs, independent readonly outputs, and double-accidental limits. Non-members return undefined; invalid degrees, unknown types, and unsupported spellings throw RangeError. No new public functions or dependencies are introduced. Pentatonic is implemented rather than deferred; chromatic collections and other deferred capabilities remain open, including classical/jazz melodic-minor traversal. D028's original seven-note scope is preserved as historical context rather than an exclusion of this extension.
+
+Recorded: 2026-10-09. Authority: User's approval and implementation request for the pentatonic ExecPlan, explicit selection of runtime degree limits, and requirement to record remaining deferred capabilities and open questions after implementation.

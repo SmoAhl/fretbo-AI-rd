@@ -9,6 +9,8 @@ import {
 
 export type ScaleType =
   | "major"
+  | "major-pentatonic"
+  | "minor-pentatonic"
   | "natural-minor"
   | "harmonic-minor"
   | "melodic-minor-ascending"
@@ -40,6 +42,20 @@ const naturalMinorPattern = scalePattern([
 // Each interval is measured upward from the tonic; the repeated octave is excluded.
 const patterns: Readonly<Record<ScaleType, readonly SpelledInterval[]>> = {
   major: majorPattern,
+  "major-pentatonic": [
+    { number: 1, quality: "perfect", direction: "up" },
+    { number: 2, quality: "major", direction: "up" },
+    { number: 3, quality: "major", direction: "up" },
+    { number: 5, quality: "perfect", direction: "up" },
+    { number: 6, quality: "major", direction: "up" },
+  ],
+  "minor-pentatonic": [
+    { number: 1, quality: "perfect", direction: "up" },
+    { number: 3, quality: "minor", direction: "up" },
+    { number: 4, quality: "perfect", direction: "up" },
+    { number: 5, quality: "perfect", direction: "up" },
+    { number: 7, quality: "minor", direction: "up" },
+  ],
   "natural-minor": naturalMinorPattern,
   "harmonic-minor": scalePattern([
     "perfect", "major", "minor", "perfect", "perfect", "minor", "major",
@@ -73,26 +89,27 @@ function patternFor(type: ScaleType): readonly SpelledInterval[] {
   return patterns[type];
 }
 
-/** Seven pitch classes in tonic-relative degree order, with no octave repetition. */
+/** Pitch classes in tonic-relative degree order, with no octave repetition. */
 export function scalePitchClasses(tonic: PitchClass, type: ScaleType): readonly PitchClass[] {
   return patternFor(type).map((interval) => transposePitchClass(tonic, semitonesFromInterval(interval)));
 }
 
-/** Spell seven successive letters from the supplied tonic; reject unsupported accidentals. */
+/** Spell each interval role from the supplied tonic; reject unsupported accidentals. */
 export function scaleNoteSpellings(tonic: NoteSpelling, type: ScaleType): readonly NoteSpelling[] {
   return patternFor(type).map((interval) => transposeNoteSpelling(tonic, interval));
 }
 
-/** Retrieve a pitch class by ordinal degree 1..7 in the selected scale. */
+/** Retrieve an ordinal degree within the selected scale's five or seven notes. */
 export function pitchClassAtScaleDegree(
   tonic: PitchClass,
   type: ScaleType,
   degree: ScaleDegree,
 ): PitchClass {
-  if (!Number.isInteger(degree) || degree < 1 || degree > 7) {
-    throw new RangeError("Scale degree must be an integer in 1..7.");
+  const pattern = patternFor(type);
+  if (!Number.isInteger(degree) || degree < 1 || degree > pattern.length) {
+    throw new RangeError(`Scale degree must be an integer in 1..${pattern.length}.`);
   }
-  return scalePitchClasses(tonic, type)[degree - 1]!;
+  return transposePitchClass(tonic, semitonesFromInterval(pattern[degree - 1]!));
 }
 
 /** Identify ordinal degree by pitch-class membership; non-members return undefined. */
