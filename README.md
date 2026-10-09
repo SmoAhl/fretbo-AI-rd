@@ -18,6 +18,8 @@ Simple-interval inversion complements number and quality and flips direction thr
 
 `scalePitchClasses` and `scaleNoteSpellings` construct seven ordered degrees for major, natural minor, harmonic minor, melodic minor ascending, and the seven major-scale modes, or five degrees for major/minor pentatonic. Construction excludes the repeated octave tonic; spelling preserves each interval role, including E-sharp in F-sharp major and C–E-flat–F–G–B-flat in C minor pentatonic, and rejects results beyond double accidentals. `pitchClassAtScaleDegree` and `scaleDegreeOfPitchClass` provide ordinal degree lookup and membership. Pentatonic degrees 6/7 throw `RangeError`; seven-note scales retain them. Broader melodic-minor conventions remain an [open question](docs/ARCHITECTURE.md#open-architectural-questions); [deferred scale/mode capabilities](docs/ARCHITECTURE.md#scales-and-modes-deferred-capabilities) are recorded separately.
 
+`relativeModePitchClasses` and `relativeModeNoteSpellings` derive a relative mode from a parent tonic, an existing major-scale mode (or major/natural-minor alias), and ordinal degree 1..7. Results contain the derived tonic, canonical mode name, and reordered parent collection: C major degree 2 gives D Dorian; D Dorian degree 6 gives B Locrian. Exact parent spellings are retained. Unsupported parents/degrees and unrepresentable parent spellings throw `RangeError`. This capability adds no registered runs or melodic-minor traversal convention.
+
 The descriptions below explain the intended application. See [current implementation status](docs/ARCHITECTURE.md#current-implementation) for the authoritative account of what exists.
 
 ## Core architecture

@@ -363,3 +363,15 @@ Rationale: Ordinal degree identifies position in the selected collection, while 
 Consequences: Retain the seven-note pattern helper and existing definitions, typed pitch/spelling inputs, independent readonly outputs, and double-accidental limits. Non-members return undefined; invalid degrees, unknown types, and unsupported spellings throw RangeError. No new public functions or dependencies are introduced. Pentatonic is implemented rather than deferred; chromatic collections and other deferred capabilities remain open, including classical/jazz melodic-minor traversal. D028's original seven-note scope is preserved as historical context rather than an exclusion of this extension.
 
 Recorded: 2026-10-09. Authority: User's approval and implementation request for the pentatonic ExecPlan, explicit selection of runtime degree limits, and requirement to record remaining deferred capabilities and open questions after implementation.
+
+## D030: Relative relationships between major-scale modes
+
+Status: Accepted. Additive extension of [D028](#d028-seven-note-scales-modes-and-ordinal-degrees).
+
+Decision: Derive a relative tonic, canonical mode name, and ordered collection from a parent tonic, a major-scale mode, and ordinal degree 1..7. Accept major as an Ionian parent alias and natural-minor as an Aeolian parent alias; return only ionian/dorian/phrygian/lydian/mixolydian/aeolian/locrian names. Expose relativeModePitchClasses and relativeModeNoteSpellings in a separate domain module with readonly structured results and a narrow RelativeModeParent type.
+
+Rationale: Relative derivation preserves a parent's collection while changing tonic and degree roles. Reusing existing construction and rotating its output preserves exact spellings without choosing new enharmonic alternatives. Canonical output names identify the resulting mode consistently, including degree-1 alias inputs. This operation is distinct from constructing a named mode at an independently supplied tonic.
+
+Consequences: The numeric result has tonic/mode/pitchClasses fields; the spelled result has tonic/mode/noteSpellings fields. The tonic is the first collection member, including the same readonly note object for spelled output. Results and their arrays/notes are independent between calls, not runtime-frozen; the supplied tonic is preserved. Unsupported runtime parents/degrees and parent construction requiring accidentals outside -2..2 throw RangeError. Numeric tonic and structured spelling inputs retain the existing typed-input boundary. No harmonic/melodic-minor modes, pentatonic rotations, custom patterns, registered runs, parsing, key/signature inference, dependencies, or UI are introduced. D028's relative-mode exclusion described its original increment; relationships between existing major-scale modes are now implemented. The classical/jazz melodic-minor question remains open.
+
+Recorded: 2026-10-09. Authority: User's implementation request for relative relationships between existing major-scale modes. Canonical alias handling and the minimal structured result contracts were selected within that scope and explained before implementation.
