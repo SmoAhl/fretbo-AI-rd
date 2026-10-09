@@ -50,6 +50,8 @@ The repository contains the working documents plus a minimal Next.js App Router 
 
 Each registered-run call describes one directional leg. A caller can compose a fixed-collection round trip by generating the ascending leg with its endpoint, starting the descending leg at that upper tonic, and skipping the descending leg's first note when joining them to avoid repeating the turning tonic. For example, C4 major up to C5 and back ends C5–B4–A4–G4–F4–E4–D4–C4 after the ascending leg. This is composition of existing capabilities, not an implemented combined-run API or prompt handler. Each leg's 10,000-note limit applies independently; it does not impose a combined-output budget. If a traversal convention changes the descending collection, that change must be explicit rather than inferred from direction or from the round-trip request.
 
+`domain/music-theory/scale-text.ts` exports `parseScaleType(text: string): ScaleType`. It accepts all thirteen existing identifiers or their space-separated word forms: major, major-pentatonic, minor-pentatonic, natural-minor, harmonic-minor, melodic-minor-ascending, and ionian/dorian/phrygian/lydian/mixolydian/aeolian/locrian. Capitalization is ignored; outer whitespace is trimmed and repeated word whitespace (including tabs/newlines) is normalized. Hyphenated identifiers must retain their exact separators; mixed spaces/hyphens and whitespace around hyphens are rejected. Major/Ionian and natural-minor/Aeolian remain distinct returned identifiers. Unsupported or malformed text throws `SyntaxError`, including bare minor, bare melodic minor, abbreviations, tonic-prefixed text, and extra words. Parsing returns an identifier for the existing construction functions without inferring a tonic, key, or traversal convention; construction retains its own `RangeError` validation. No scale-name formatter or additional scale definitions are introduced. `tests/scale-text.test.ts` covers the complete catalog and grammar, ambiguity rejection, type contracts, and scale/spelling/registered-run integration. See [D032](DECISIONS.md#d032-strict-scale-name-parsing).
+
 No other domain capabilities, React product controls, SVG fretboard visualization, server APIs, persistence, audio, or AI integration exist yet. The [original Playability Reference plan](../plans/playability-reference.md) is historical documentation context. The [current reference refactoring](../plans/domain-reference-simplification.md) changes guidance, not engine behavior. The components below describe responsibilities that later implementation must preserve.
 
 ## Accepted technology foundation
@@ -158,7 +160,7 @@ These are deferred possibilities; their scope and priority remain undecided:
 - Modes of harmonic and melodic minor.
 - Registered scale runs with arbitrary start/end pitch bounds.
 - Custom scale patterns and relative-mode derivation beyond the existing major-scale modes.
-- Scale-name parsing, key/signature relationships, and scale harmonization.
+- Key/signature relationships and scale harmonization.
 
 ## Deferred technology choices
 

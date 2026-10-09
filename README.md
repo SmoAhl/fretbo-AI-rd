@@ -26,6 +26,8 @@ Each registered-run call handles one direction. A caller can compose an up-and-d
 
 Direction changes the ordering of the selected fixed collection; it does not choose a different collection automatically. In particular, descending `melodic-minor-ascending` keeps its raised sixth and seventh. Classical melodic-minor exercises commonly use natural minor downward; jazz melodic minor commonly keeps the ascending collection in both directions. An unqualified request for "melodic minor up and down" therefore needs an explicit convention. This remains an [open architectural question](docs/ARCHITECTURE.md#open-architectural-questions), including future modes derived from the fixed ascending collection.
 
+`parseScaleType` translates an existing scale identifier or its space-separated name into `ScaleType`: `"  Major   Pentatonic "` becomes `"major-pentatonic"`. It ignores capitalization, trims outer whitespace, and accepts repeated whitespace between words. Hyphenated identifiers require exact separators; mixed spaces/hyphens are rejected. Major/Ionian and natural-minor/Aeolian identifiers remain distinct. Unsupported names, abbreviations, bare minor/melodic minor, tonic-prefixed text, and extra words throw `SyntaxError`. The parser supplies existing construction functions with an identifier; it infers no tonic, key, or melodic-minor convention. Later construction can independently throw `RangeError` for an unsupported spelling or numeric result.
+
 The descriptions below explain the intended application. See [current implementation status](docs/ARCHITECTURE.md#current-implementation) for the authoritative account of what exists.
 
 ## Core architecture

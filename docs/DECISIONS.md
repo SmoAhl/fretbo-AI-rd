@@ -389,3 +389,15 @@ Consequences: Note count is scale cardinality times octaves plus one if includeE
 Recorded: 2026-10-09. Authority: User's registered-run implementation request and explicit approval to continue with the recommended extent, endpoint, numeric/spelled output, and 10,000-note cap.
 
 Clarified: 2026-10-09. Authority: User's documentation request about up/down prompts and later convention-sensitive traversal. A call remains a single directional leg. Callers may compose two legs, starting the descent at the upper tonic and omitting that leg's starting note when a single turning tonic is desired. Each call's note cap applies independently; combined-output budgets and turning-note repetition policies remain future product choices. Classical downward natural-minor substitution is not part of fixed-collection reversal and must not be inferred from direction, an unqualified melodic-minor prompt, or future modes derived from the fixed ascending collection. This clarification changes no implemented behavior.
+
+## D032: Strict scale-name parsing
+
+Status: Accepted.
+
+Decision: Expose parseScaleType(text: string): ScaleType in a separate scale-text domain module. Accept every existing ScaleType identifier and its space-separated word form, ignoring capitalization, trimming outer whitespace, and normalizing repeated whitespace between words. Hyphenated forms retain exact separators: do not normalize mixed spaces/hyphens, whitespace around hyphens, or alternative punctuation. Preserve major/ionian and natural-minor/aeolian as distinct returned identifiers.
+
+Rationale: A small explicit name catalog translates text directly into existing structured domain inputs without choosing musical context. Bare minor and melodic minor do not identify an approved explicit collection/convention, so the parser must not silently expand them. An exhaustive ScaleType-keyed name table ensures future additions require deliberate parser coverage without exposing scale pattern internals.
+
+Consequences: Unsupported or malformed text throws SyntaxError, including abbreviations, bare minor/melodic minor, unsupported collections, reordered words, tonic-prefixed text, and extra words. Parsing has no numeric or source-note semantic checks; existing construction functions retain their RangeError behavior independently. The complete accepted catalog is major, major-pentatonic, minor-pentatonic, natural-minor, harmonic-minor, melodic-minor-ascending, ionian, dorian, phrygian, lydian, mixolydian, aeolian, and locrian, with each hyphenated identifier also accepted as separate words. No inferred tonic/key, broader alias grammar, scale formatter, new collection, traversal convention, dependency, or product input UI is introduced. D028's parser exclusion described its original increment; this strict parser is now implemented. The existing melodic-minor traversal and combined-run questions remain open.
+
+Recorded: 2026-10-09. Authority: User's strict scale-name parsing implementation request and explicit selection of the recommended grammar.
