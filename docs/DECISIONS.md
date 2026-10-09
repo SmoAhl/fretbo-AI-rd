@@ -401,3 +401,15 @@ Rationale: A small explicit name catalog translates text directly into existing 
 Consequences: Unsupported or malformed text throws SyntaxError, including abbreviations, bare minor/melodic minor, unsupported collections, reordered words, tonic-prefixed text, and extra words. Parsing has no numeric or source-note semantic checks; existing construction functions retain their RangeError behavior independently. The complete accepted catalog is major, major-pentatonic, minor-pentatonic, natural-minor, harmonic-minor, melodic-minor-ascending, ionian, dorian, phrygian, lydian, mixolydian, aeolian, and locrian, with each hyphenated identifier also accepted as separate words. No inferred tonic/key, broader alias grammar, scale formatter, new collection, traversal convention, dependency, or product input UI is introduced. D028's parser exclusion described its original increment; this strict parser is now implemented. The existing melodic-minor traversal and combined-run questions remain open.
 
 Recorded: 2026-10-09. Authority: User's strict scale-name parsing implementation request and explicit selection of the recommended grammar.
+
+## D033: Standalone numeric chromatic collection
+
+Status: Accepted.
+
+Decision: Expose chromaticPitchClasses(tonic: PitchClass): readonly PitchClass[] in a separate chromatic domain module. Construct all twelve classes in tonic-relative ascending semitone order from offsets 0..11 using existing transposePitchClass, without repeating the tonic. Return a fresh array for each call, readonly by type and not runtime-frozen.
+
+Rationale: Numeric chromatic exploration needs no twelve-note spelling or ordinal-degree policy. A standalone helper supplies the complete ordered collection without expanding the scale catalog's shared numeric/spelled contracts or duplicating pitch arithmetic.
+
+Consequences: Retain the existing typed PitchClass input boundary; do not add arbitrary JavaScript input validation. ScaleType, ScaleDegree 1..7, existing scale functions, scale-name parsing, relative-mode helpers, and registered-run APIs remain unchanged. parseScaleType("chromatic") continues to throw SyntaxError. Chromatic spelling, ordinal degree queries, and scale-catalog integration remain deferred. No direction option, registered output, dependency, UI, or new traversal convention is introduced. Earlier chromatic exclusions described preceding increments; standalone numeric construction is now implemented. Melodic-minor traversal and combined-run questions remain open.
+
+Recorded: 2026-10-09. Authority: User's explicit selection of a dedicated helper with deferred degree queries, followed by the approved-plan implementation request.

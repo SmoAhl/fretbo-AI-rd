@@ -52,6 +52,8 @@ Each registered-run call describes one directional leg. A caller can compose a f
 
 `domain/music-theory/scale-text.ts` exports `parseScaleType(text: string): ScaleType`. It accepts all thirteen existing identifiers or their space-separated word forms: major, major-pentatonic, minor-pentatonic, natural-minor, harmonic-minor, melodic-minor-ascending, and ionian/dorian/phrygian/lydian/mixolydian/aeolian/locrian. Capitalization is ignored; outer whitespace is trimmed and repeated word whitespace (including tabs/newlines) is normalized. Hyphenated identifiers must retain their exact separators; mixed spaces/hyphens and whitespace around hyphens are rejected. Major/Ionian and natural-minor/Aeolian remain distinct returned identifiers. Unsupported or malformed text throws `SyntaxError`, including bare minor, bare melodic minor, abbreviations, tonic-prefixed text, and extra words. Parsing returns an identifier for the existing construction functions without inferring a tonic, key, or traversal convention; construction retains its own `RangeError` validation. No scale-name formatter or additional scale definitions are introduced. `tests/scale-text.test.ts` covers the complete catalog and grammar, ambiguity rejection, type contracts, and scale/spelling/registered-run integration. See [D032](DECISIONS.md#d032-strict-scale-name-parsing).
 
+`domain/music-theory/chromatic.ts` exports `chromaticPitchClasses(tonic: PitchClass): readonly PitchClass[]`. It reuses `transposePitchClass` for semitone offsets 0..11, returning all twelve classes exactly once in ascending semitone order from the tonic, with modulo-12 wrapping and no octave repetition. Tonic 10 gives 10,11,0,1,2,3,4,5,6,7,8,9. Each call returns an independent array, readonly by type rather than runtime-frozen. The helper retains the existing typed pitch-class input boundary and carries no spelling or register. It is separate from `ScaleType`: scale construction, `ScaleDegree` 1..7, scale-name parsing, relative-mode helpers, and registered-run APIs remain unchanged. `parseScaleType("chromatic")` still throws `SyntaxError`. `tests/chromatic.test.ts` verifies all twelve tonics, wraparound, uniqueness/order, independent results, and type contracts. See [D033](DECISIONS.md#d033-standalone-numeric-chromatic-collection).
+
 No other domain capabilities, React product controls, SVG fretboard visualization, server APIs, persistence, audio, or AI integration exist yet. The [original Playability Reference plan](../plans/playability-reference.md) is historical documentation context. The [current reference refactoring](../plans/domain-reference-simplification.md) changes guidance, not engine behavior. The components below describe responsibilities that later implementation must preserve.
 
 ## Accepted technology foundation
@@ -156,7 +158,7 @@ Audio, broader evaluation, patterns, voice leading, and idea development remain 
 
 These are deferred possibilities; their scope and priority remain undecided:
 
-- Chromatic collections.
+- Chromatic spelling, ordinal degree queries, and integration into the scale catalog.
 - Modes of harmonic and melodic minor.
 - Registered scale runs with arbitrary start/end pitch bounds.
 - Custom scale patterns and relative-mode derivation beyond the existing major-scale modes.

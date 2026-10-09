@@ -28,6 +28,8 @@ Direction changes the ordering of the selected fixed collection; it does not cho
 
 `parseScaleType` translates an existing scale identifier or its space-separated name into `ScaleType`: `"  Major   Pentatonic "` becomes `"major-pentatonic"`. It ignores capitalization, trims outer whitespace, and accepts repeated whitespace between words. Hyphenated identifiers require exact separators; mixed spaces/hyphens are rejected. Major/Ionian and natural-minor/Aeolian identifiers remain distinct. Unsupported names, abbreviations, bare minor/melodic minor, tonic-prefixed text, and extra words throw `SyntaxError`. The parser supplies existing construction functions with an identifier; it infers no tonic, key, or melodic-minor convention. Later construction can independently throw `RangeError` for an unsupported spelling or numeric result.
 
+`chromaticPitchClasses(tonic)` returns all twelve numeric pitch classes in ascending semitone order from the tonic, wrapping modulo 12 without repeating the tonic. For tonic 10, the result is 10,11,0,1,2,3,4,5,6,7,8,9. This standalone helper provides no spelling, register, or degree queries; chromatic is not a `ScaleType`, and the scale-name parser continues to reject it. Chromatic spelling, degree access, and scale-catalog integration remain deferred.
+
 The descriptions below explain the intended application. See [current implementation status](docs/ARCHITECTURE.md#current-implementation) for the authoritative account of what exists.
 
 ## Core architecture
