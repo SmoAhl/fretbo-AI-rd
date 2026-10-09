@@ -46,6 +46,8 @@ A scale has a tonic and ordered degrees. Degree formulas below compare intervals
 
 Classical melodic-minor exercises commonly use the ascending form upward and natural minor downward. Jazz melodic minor commonly uses the ascending collection in both directions. State which convention is intended; neither dictates every melody in minor.
 
+For C minor, the classical exercise convention gives C–D–E♭–F–G–A–B–C upward and C–B♭–A♭–G–F–E♭–D–C downward. Reversing the fixed ascending collection instead gives C–B–A–G–F–E♭–D–C downward. These are different requested behaviors. Direction alone orders a specified collection; a convention-dependent traversal also specifies which collection applies in each direction. Likewise, a mode derived specifically from the fixed ascending melodic-minor collection does not acquire a different descending collection merely because its parent name mentions melodic minor.
+
 The seven diatonic modes derive from rotations of the major pattern, each with its own tonic:
 
 | Mode | Formula |
