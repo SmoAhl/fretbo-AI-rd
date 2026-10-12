@@ -453,3 +453,19 @@ Text contract: Expose parseDegreeFormula and formatDegreeFormula in degree-text.
 Compound/registered formulas, arbitrary note-to-formula identification, keys/signatures, key-aware spelling, custom collections, harmonization, dependencies, UI, Fretboard, and AI remain outside this increment. Earlier exclusions describe their original increments; this narrow Degrees capability is now implemented.
 
 Recorded: 2026-10-09. Authority: User's explicit selections of the narrow Degrees contract and shared API, followed by the approved-plan implementation request.
+
+## D037: Explicit major/minor keys and conventional signatures
+
+Status: Accepted. Additive extension of [D020](#d020-c-based-pitch-classes-and-explicit-note-spelling), [D028](#d028-seven-note-scales-modes-and-ordinal-degrees), and [D036](#d036-simple-degree-formulas-and-shared-collection-queries).
+
+Decision: Expose KeyMode major/minor, readonly Key with required tonic: NoteSpelling and mode: KeyMode, and createKey. Keep identity independent of signature support and musical collection selection. Expose keySignature returning KeySignature, a readonly array of KeySignatureAccidental entries with letter and single accidental -1/1. Support conventional signatures of zero through seven sharps or flats, in F-C-G-D-A-E-B or B-E-A-D-G-C-F order; zero alterations are omitted and count is array length. Preserve enharmonic tonic spelling without automatic substitution.
+
+Rationale: A minor key is not one fixed minor scale. Existing major/natural-minor spelling supplies the conventional signature baseline without adding a collection field or new musical definitions. Keeping identity independent allows theoretical identities and relationships even when their signatures exceed this increment's support. Ordered entries provide the actual altered letters without redundant count/direction fields or renderer-specific placement.
+
+Relationships: Expose relativeKey, deriving formula 6 from major or ♭3 from minor with existing noteSpellingFromDegreeFormula and changing mode. Expose parallelKey, preserving exact tonic spelling and changing mode. Neither validates signature availability. All seventy existing tonic/mode identities and parallel relationships are supported; thirty have conventional signatures and sixty-four relative results are spellable within ±2. The six relative results needing triple accidentals are rejected.
+
+Consequences: Unsupported runtime modes, non-conventional signatures, and spelling-limit failures throw RangeError. Tonic spelling retains the existing typed-input boundary. Results are fresh readonly objects/arrays rather than runtime-frozen, including copied tonic and signature entries. Existing scale, text, degree, and spelling-selection contracts remain unchanged; key identity does not extend DegreeCollection. Key text, theoretical signatures, key-aware spelling, inverse signature lookup, harmonization, UI, AI, and dependencies are outside this increment.
+
+Deferred improvements: Triple accidentals and improved error classification are documentation-only TODOs with capability-driven triggers in [Architecture](ARCHITECTURE.md#deferred-music-theory-improvements). They do not widen current spelling limits, change public errors, add structured codes, or introduce infrastructure in this increment.
+
+Recorded: 2026-10-12. Authority: User's explicit identity/signature and structured-input selections, acceptance of the plan with deferred TODO triggers, and implementation request.

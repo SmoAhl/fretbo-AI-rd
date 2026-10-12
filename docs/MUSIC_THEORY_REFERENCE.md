@@ -78,6 +78,10 @@ A key establishes a tonic and tonal relationships; it is not limited to one fixe
 
 Relative major/minor keys share a key signature, such as C major/A minor. Parallel keys share a tonic, such as C major/C minor. A key signature alone does not identify which relative key or mode is intended. In conventional signatures, sharps accumulate F–C–G–D–A–E–B and flats B–E–A–D–G–C–F.
 
+The relative minor tonic is a major sixth above the major tonic; the relative major tonic is a minor third above the minor tonic, retaining letter spelling and discarding octave for key identity. D major therefore has relative B minor and parallel D minor. D major/B minor use F♯ and C♯; D minor uses B♭. Enharmonic key tonics retain distinct signatures: F♯ major has six sharps, while G♭ major has six flats.
+
+The conventional minor signature corresponds to its natural-minor collection. Raised sixth or seventh degrees in harmonic/melodic-minor material do not redefine the key signature: B minor retains F♯/C♯ when harmonic minor uses A♯. A theoretical key identity or relative/parallel relationship can be meaningful even when its written signature needs accidentals beyond a system's supported limits.
+
 For the seven-degree scales and modes above, use seven successive letters before repeating the tonic. F♯ major therefore includes E♯ as degree 7; replacing it with F hides that degree relationship. Scales with fewer or more notes do not inherit a seven-letter requirement.
 
 ## Chords, symbols, and realization
