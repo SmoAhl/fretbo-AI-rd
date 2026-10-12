@@ -70,7 +70,11 @@ Major pentatonic uses 1–2–3–5–6 (semitone offsets 0, 2, 4, 7, 9); minor 
 
 ## Degrees, keys, and spelling
 
-Ordinal degrees refer to positions in the named scale. E♭ is degree 3 of C minor but ♭3 in a major-relative formula. A key establishes a tonic and tonal relationships; it is not limited to one fixed scale collection. Minor-key music can use variable sixth and seventh degrees.
+Ordinal degrees refer to positions in the selected collection. E♭ is ordinal 3 of C natural minor and ordinal 2 of C minor pentatonic, but formula ♭3 in both. G is ordinal 4 of C major pentatonic but formula 5.
+
+Simple major-relative formulas use reference numbers 1–7 with offsets 0, 2, 4, 5, 7, 9, 11 semitones above the tonic. An alteration adds or subtracts semitones while retaining that reference letter role: C + ♯4 is F♯, whereas C + ♭5 is G♭. Formula alterations are not necessarily the accidental written on the resulting note: F♯ + 7 is E♯, and B𝄪 + ♭3 is D𝄪. Double alterations express roles such as ♭♭7, the diminished seventh; harmonic minor's seventh rotation at C uses C–D♭–E♭–F♭–G♭–A♭–B𝄫. Selecting a parent rotation and querying a position within its resulting mode are distinct operations. Pitch-class membership identifies that collection's role, not a unique spelling or role outside it.
+
+A key establishes a tonic and tonal relationships; it is not limited to one fixed scale collection. Minor-key music can use variable sixth and seventh degrees.
 
 Relative major/minor keys share a key signature, such as C major/A minor. Parallel keys share a tonic, such as C major/C minor. A key signature alone does not identify which relative key or mode is intended. In conventional signatures, sharps accumulate F–C–G–D–A–E–B and flats B–E–A–D–G–C–F.
 
