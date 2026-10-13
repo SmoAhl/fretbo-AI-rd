@@ -82,6 +82,8 @@ The relative minor tonic is a major sixth above the major tonic; the relative ma
 
 The conventional minor signature corresponds to its natural-minor collection. Raised sixth or seventh degrees in harmonic/melodic-minor material do not redefine the key signature: B minor retains F♯/C♯ when harmonic minor uses A♯. A theoretical key identity or relative/parallel relationship can be meaningful even when its written signature needs accidentals beyond a system's supported limits.
 
+Key context guides spelling but does not uniquely determine every chromatic pitch's role. In C major, C♯ can express ♯1 and D♭ can express ♭2 at the same sounding class; explicit role determines the letter. A signature-baseline spelling is one convention for requests without a role, not a claim that other pitches cannot occur in the key. In F♯ major the baseline seventh is E♯; in B minor the baseline seventh is A, while explicit major-relative formula 7 identifies A♯. Formula 6 in B minor identifies G♯ and ♭6 identifies G. These roles preserve the same major/perfect reference regardless of key mode.
+
 For the seven-degree scales and modes above, use seven successive letters before repeating the tonic. F♯ major therefore includes E♯ as degree 7; replacing it with F hides that degree relationship. Scales with fewer or more notes do not inherit a seven-letter requirement.
 
 ## Chords, symbols, and realization

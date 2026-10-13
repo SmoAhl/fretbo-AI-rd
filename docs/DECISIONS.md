@@ -469,3 +469,17 @@ Consequences: Unsupported runtime modes, non-conventional signatures, and spelli
 Deferred improvements: Triple accidentals and improved error classification are documentation-only TODOs with capability-driven triggers in [Architecture](ARCHITECTURE.md#deferred-music-theory-improvements). They do not widen current spelling limits, change public errors, add structured codes, or introduce infrastructure in this increment.
 
 Recorded: 2026-10-12. Authority: User's explicit identity/signature and structured-input selections, acceptance of the plan with deferred TODO triggers, and implementation request.
+
+## D038: Key-aware pitch-class spelling with explicit degree roles
+
+Status: Accepted. Additive extension of [D022](#d022-note-text-and-explicit-reverse-spelling-policy), [D036](#d036-simple-degree-formulas-and-shared-collection-queries), and [D037](#d037-explicit-majorminor-keys-and-conventional-signatures).
+
+Decision: Expose spellingFromPitchClassInKey(pitchClass, key, role?) in a separate portable domain module, returning NoteSpelling or undefined. Require numeric class and explicit Key; optional role is the existing major-relative DegreeFormula measured from key tonic. Without a role, major/natural-minor baseline membership supplies the formula to spell. Pitches outside that baseline return undefined rather than receiving an inferred role or fallback spelling. This baseline is a spelling-selection convention, not a selected collection for subsequent operations or a definition of every pitch usable in the key.
+
+Rationale: Key context supplies conventional baseline spellings such as E-sharp in F-sharp major, while chromatic pitches can retain multiple musical roles. Existing numeric degree membership and formula conversion separate role selection from spelling construction. An explicit role can deliberately override baseline spelling, including C-major class 0 as B-sharp under sharp 7. Roles remain major/perfect-relative in minor: B-minor formula 6 is G-sharp, not a natural-minor ordinal or alteration added to its baseline sixth.
+
+Consequences: Validate runtime classes as integers in 0..11 and key mode through existing key construction; tonic spelling retains its typed boundary. For supplied roles, validate formula/pitch agreement numerically before spelling. Invalid inputs, contradictory roles, and selected spellings beyond +/-2 throw RangeError without fallback. Support all existing key identities, validate only the selected output, and never require conventional signature support or full collection spelling. Return fresh readonly-by-type spellings without runtime freezing or input mutation. Generic sharps/flats selection, registered spelling, key/signature, degree, and parser contracts remain unchanged.
+
+Registered output, candidate enumeration, fallback policies, collection-ordinal roles, broader functional/context inference, triple accidentals, structured error infrastructure, UI, AI, and dependencies are outside this increment. The [deferred improvements](ARCHITECTURE.md#deferred-music-theory-improvements) retain their capability-driven triggers. Earlier key-aware exclusions describe preceding increments; this narrow key-and-formula capability is now implemented.
+
+Recorded: 2026-10-12. Authority: User's explicit unresolved-result, DegreeFormula, pitch-class output, and selected-result key-support choices, followed by the approved-plan implementation request.
