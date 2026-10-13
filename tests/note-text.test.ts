@@ -8,6 +8,7 @@ describe("note text", () => {
   test.each([
     ["C", "C", 0], ["D#", "D", 1], ["D♯", "D", 1],
     ["Eb", "E", -1], ["E♭", "E", -1], ["F##", "F", 2], ["F𝄪", "F", 2],
+    ["C###", "C", 3], ["C♯𝄪", "C", 3], ["Dbbb", "D", -3], ["D♭𝄫", "D", -3],
     ["Gbb", "G", -2], ["G𝄫", "G", -2], ["A♮", "A", 0], [" B♭ \n", "B", -1],
   ])("parses spelling %s", (text, letter, accidental) => {
     expect(parseNoteSpelling(text)).toEqual({ letter, accidental });
@@ -25,7 +26,7 @@ describe("note text", () => {
   });
 
   test.each([
-    "", " ", "H4", "c#4", "C #4", "C# 4", "C4x", "C###4", "Cbbb4",
+    "", " ", "H4", "c#4", "C #4", "C# 4", "C4x", "C####4", "Cbbbb4", "C𝄪♯4", "C𝄫♭4", "C♯♯♯4", "C♭♭♭4", "C#𝄪4", "Cb𝄫4",
     "Cx4", "C♯♯4", "C♭♭4", "C#b4", "C♮#4", "C4.5", "C1e2", "C+", "C--1",
     "C4\nD4", "C4\0", "C٤", "C−1",
   ])("rejects malformed registered text %s", (text) => {
@@ -51,11 +52,11 @@ describe("note text", () => {
     expect(formatNoteSpelling({ letter: "E", accidental: 0 })).toBe("E");
   });
 
-  test("round trips all 35 spellings in both notations and multiple registers", () => {
-    const expectedAscii = ["bb", "b", "", "#", "##"];
-    const expectedUnicode = ["𝄫", "♭", "", "♯", "𝄪"];
+  test("round trips all 49 spellings in both notations and multiple registers", () => {
+    const expectedAscii = ["bbb", "bb", "b", "", "#", "##", "###"];
+    const expectedUnicode = ["♭𝄫", "𝄫", "♭", "", "♯", "𝄪", "♯𝄪"];
     for (const letter of ["A", "B", "C", "D", "E", "F", "G"] as const satisfies readonly NoteLetter[]) {
-      ([-2, -1, 0, 1, 2] as const).forEach((accidental, index) => {
+      ([-3, -2, -1, 0, 1, 2, 3] as const).forEach((accidental, index) => {
         const spelling: NoteSpelling = { letter, accidental };
         expect(formatNoteSpelling(spelling, "ascii")).toBe(letter + expectedAscii[index]);
         expect(formatNoteSpelling(spelling)).toBe(letter + expectedUnicode[index]);
@@ -68,6 +69,20 @@ describe("note text", () => {
         }
       });
     }
+  });
+
+  test.each([
+    "C####", "Cbbbb", "C𝄪♯", "C𝄫♭", "C♯♯♯", "C♭♭♭", "C#𝄪", "Cb𝄫", "C♯𝄫", "C♭𝄪",
+  ])("rejects unsupported spelling tokens %s", (text) => {
+    expect(() => parseNoteSpelling(text)).toThrow(SyntaxError);
+    expect(() => parseRegisteredNote(text + "4")).toThrow(SyntaxError);
+  });
+
+  test("triple registered text retains safe coordinate limits", () => {
+    const text = "E♯𝄪750599937895082";
+    expect(formatRegisteredNote(parseRegisteredNote(text))).toBe(text);
+    expect(() => parseRegisteredNote("F♯𝄪750599937895082")).toThrow(RangeError);
+    expect(() => parseRegisteredNote("C♭𝄫750599937895083")).toThrow(RangeError);
   });
 
   test("formatting does not mutate frozen input and rejects unsupported numeric register", () => {

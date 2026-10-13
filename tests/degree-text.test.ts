@@ -7,10 +7,11 @@ import { type ScaleDegree } from "../domain/music-theory/scales.js";
 
 const prefixes = [
   ["", 0], ["♮", 0], ["b", -1], ["♭", -1], ["bb", -2], ["♭♭", -2], ["𝄫", -2],
+  ["bbb", -3], ["♭♭♭", -3], ["♭𝄫", -3], ["###", 3], ["♯♯♯", 3], ["♯𝄪", 3],
   ["#", 1], ["♯", 1], ["##", 2], ["♯♯", 2], ["𝄪", 2],
 ] as const;
 const numbers: readonly ScaleDegree[] = [1, 2, 3, 4, 5, 6, 7];
-const canonical = [[-2, "bb", "♭♭"], [-1, "b", "♭"], [0, "", ""], [1, "#", "♯"], [2, "##", "♯♯"]] as const;
+const canonical = [[-3, "bbb", "♭♭♭"], [3, "###", "♯♯♯"], [-2, "bb", "♭♭"], [-1, "b", "♭"], [0, "", ""], [1, "#", "♯"], [2, "##", "♯♯"]] as const;
 
 describe("degree formula text", () => {
   for (const [prefix, alteration] of prefixes) {
@@ -35,8 +36,8 @@ describe("degree formula text", () => {
   }
 
   test.each([
-    "", " ", "3b", "b 3", "b#3", "#b3", "bbb3", "###3", "♭♯3", "♭b3", "#♯3",
-    "♭♭♭3", "♯♯♯3", "𝄫𝄫3", "♮♭3", "x4", "B3", "flat 3", "third", "3rd", "C b3",
+    "", " ", "3b", "b 3", "b#3", "#b3", "bbbb3", "####3", "𝄪♯3", "𝄫♭3", "#𝄪3", "b𝄫3", "♭♯3", "♭b3", "#♯3",
+    "♭♭♭♭3", "♯♯♯♯3", "𝄫𝄫3", "♮♭3", "x4", "B3", "flat 3", "third", "3rd", "C b3",
     "-1", "+3", "3.0", "1e0", "0x3", "٣", "３", "3 4", "1,b3,5", "b3 up", "b\n3", "♮ 3",
   ])("rejects malformed text %j with SyntaxError", (text) => {
     expect(() => parseDegreeFormula(text)).toThrow(SyntaxError);
@@ -50,7 +51,7 @@ describe("degree formula text", () => {
   test.each([
     { number: 0, alteration: 0 }, { number: 8, alteration: 0 }, { number: 1.5, alteration: 0 },
     { number: NaN, alteration: 0 }, { number: Infinity, alteration: 0 },
-    { number: 3, alteration: -3 }, { number: 3, alteration: 3 }, { number: 3, alteration: 0.5 },
+    { number: 3, alteration: -4 }, { number: 3, alteration: 4 }, { number: 3, alteration: 0.5 },
     { number: 3, alteration: NaN }, { number: 3, alteration: Infinity },
     { alteration: 0 }, { number: 3 },
   ])("formatting validates formula %o", (formula) => {

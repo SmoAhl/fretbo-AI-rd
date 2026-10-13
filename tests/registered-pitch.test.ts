@@ -36,16 +36,16 @@ describe("registeredPitchFromNote", () => {
     });
   }
 
-  // Columns are double flat through double sharp at written octave 0.
+  // Columns are triple flat through triple sharp at written octave 0.
   // Negative and above-octave coordinates must not be wrapped.
-  const spellingCases: readonly [NoteLetter, readonly [number, number, number, number, number]][] = [
-    ["C", [-2, -1, 0, 1, 2]], ["D", [0, 1, 2, 3, 4]],
-    ["E", [2, 3, 4, 5, 6]], ["F", [3, 4, 5, 6, 7]],
-    ["G", [5, 6, 7, 8, 9]], ["A", [7, 8, 9, 10, 11]],
-    ["B", [9, 10, 11, 12, 13]],
+  const spellingCases: readonly [NoteLetter, readonly [number, number, number, number, number, number, number]][] = [
+    ["C", [-3, -2, -1, 0, 1, 2, 3]], ["D", [-1, 0, 1, 2, 3, 4, 5]],
+    ["E", [1, 2, 3, 4, 5, 6, 7]], ["F", [2, 3, 4, 5, 6, 7, 8]],
+    ["G", [4, 5, 6, 7, 8, 9, 10]], ["A", [6, 7, 8, 9, 10, 11, 12]],
+    ["B", [8, 9, 10, 11, 12, 13, 14]],
   ];
   for (const [letter, expectedCoordinates] of spellingCases) {
-    ([-2, -1, 0, 1, 2] as const).forEach((accidental, index) => {
+    ([-3, -2, -1, 0, 1, 2, 3] as const).forEach((accidental, index) => {
       test(`maps ${letter} with accidental ${accidental} at octave 0`, () => {
         expect(registeredPitchFromNote({ letter, accidental, octave: 0 }))
           .toBe(expectedCoordinates[index]);
@@ -84,6 +84,29 @@ describe("registeredPitchFromNote", () => {
       .toBe(Number.MAX_SAFE_INTEGER);
     expect(registeredPitchFromNote({ letter: "C", accidental: -2, octave: -largestSafeOctave }))
       .toBe(-9007199254740986);
+  });
+
+  test.each([
+    ["B", 3, 3, 50], ["C", -3, 4, 45],
+    ["B", 3, -1, 2], ["C", -3, 0, -3],
+  ] as const)("retains written octave for %s accidental %i octave %i", (letter, accidental, octave, expected) => {
+    const note = Object.freeze({ letter, accidental, octave });
+    expect(registeredPitchFromNote(note)).toBe(expected);
+    expect(pitchClassFromRegisteredPitch(expected)).toBe((expected % 12 + 12) % 12);
+    expect(note).toEqual({ letter, accidental, octave });
+  });
+
+  test("triple accidentals retain safe final-coordinate and octave-base limits", () => {
+    expect(registeredPitchFromNote({ letter: "E", accidental: 3, octave: largestSafeOctave }))
+      .toBe(Number.MAX_SAFE_INTEGER);
+    expect(registeredPitchFromNote({ letter: "A", accidental: -3, octave: largestSafeOctave }))
+      .toBe(Number.MAX_SAFE_INTEGER - 1);
+    expect(registeredPitchFromNote({ letter: "C", accidental: -3, octave: -largestSafeOctave }))
+      .toBe(-9007199254740987);
+    expect(() => registeredPitchFromNote({ letter: "F", accidental: 3, octave: largestSafeOctave }))
+      .toThrow(RangeError);
+    expect(() => registeredPitchFromNote({ letter: "C", accidental: -3, octave: largestSafeOctave + 1 }))
+      .toThrow(RangeError);
   });
 
   test("rejects unsafe final coordinates from a safe octave base", () => {
@@ -166,5 +189,5 @@ if (false) {
   // @ts-expect-error RegisteredNote retains the supported letter contract.
   registeredPitchFromNote({ letter: "H", accidental: 0, octave: 4 });
   // @ts-expect-error RegisteredNote retains the supported accidental contract.
-  registeredPitchFromNote({ letter: "C", accidental: 3, octave: 4 });
+  registeredPitchFromNote({ letter: "C", accidental: 4, octave: 4 });
 }

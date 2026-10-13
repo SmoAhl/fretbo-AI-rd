@@ -6,15 +6,16 @@ import { type ScaleDegree } from "./scales.js";
 const alterations: Readonly<Record<string, Accidental>> = {
   "": 0, "♮": 0, "b": -1, "♭": -1, "bb": -2, "♭♭": -2, "𝄫": -2,
   "#": 1, "♯": 1, "##": 2, "♯♯": 2, "𝄪": 2,
+  "bbb": -3, "♭♭♭": -3, "♭𝄫": -3, "###": 3, "♯♯♯": 3, "♯𝄪": 3,
 };
 const symbols: Readonly<Record<AccidentalNotation, Readonly<Record<Accidental, string>>>> = {
-  ascii: { [-2]: "bb", [-1]: "b", 0: "", 1: "#", 2: "##" },
-  unicode: { [-2]: "♭♭", [-1]: "♭", 0: "", 1: "♯", 2: "♯♯" },
+  ascii: { [-3]: "bbb", [-2]: "bb", [-1]: "b", 0: "", 1: "#", 2: "##", 3: "###" },
+  unicode: { [-3]: "♭♭♭", [-2]: "♭♭", [-1]: "♭", 0: "", 1: "♯", 2: "♯♯", 3: "♯♯♯" },
 };
 
 /** Parse one simple major-relative formula; outer whitespace and leading zeroes are allowed. */
 export function parseDegreeFormula(text: string): DegreeFormula {
-  const match = /^(bb|##|♭♭|♯♯|b|#|♭|♯|𝄫|𝄪|♮)?([0-9]+)$/u.exec(text.trim());
+  const match = /^(bbb|###|♭♭♭|♯♯♯|♭𝄫|♯𝄪|bb|##|♭♭|♯♯|b|#|♭|♯|𝄫|𝄪|♮)?([0-9]+)$/u.exec(text.trim());
   if (!match) {
     throw new SyntaxError("Expected an optional accidental prefix and an unsigned decimal degree number.");
   }
@@ -27,7 +28,7 @@ export function parseDegreeFormula(text: string): DegreeFormula {
   return formula;
 }
 
-/** Canonical formula text uses repeated Unicode signs for double alterations by default. */
+/** Canonical formula text uses repeated Unicode signs for double/triple alterations by default. */
 export function formatDegreeFormula(
   formula: DegreeFormula,
   notation: AccidentalNotation = "unicode",

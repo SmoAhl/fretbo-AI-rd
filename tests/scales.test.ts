@@ -126,12 +126,12 @@ describe("scaleNoteSpellings", () => {
   }
 
   for (const [type, offsets] of referencePatterns) {
-    test(`checks all 35 tonic spellings against independent ${type} offsets`, () => {
+    test(`checks all 49 tonic spellings against independent ${type} offsets`, () => {
       const naturals = [
         ["C", 0], ["D", 2], ["E", 4], ["F", 5], ["G", 7], ["A", 9], ["B", 11],
       ] as const;
       naturals.forEach(([letter, sourceNatural], sourceIndex) => {
-        for (const accidental of [-2, -1, 0, 1, 2] as const) {
+        for (const accidental of [-3, -2, -1, 0, 1, 2, 3] as const) {
           const tonic = Object.freeze({ letter, accidental });
           const expected = offsets.map((offset, degreeIndex) => {
             const targetIndex = sourceIndex + degreeIndex;
@@ -141,7 +141,7 @@ describe("scaleNoteSpellings", () => {
               accidental: sourceNatural + accidental + offset - targetNatural - (targetIndex >= 7 ? 12 : 0),
             };
           });
-          if (expected.some((note) => note.accidental < -2 || note.accidental > 2)) {
+          if (expected.some((note) => note.accidental < -3 || note.accidental > 3)) {
             expect(() => scaleNoteSpellings(tonic, type)).toThrow(RangeError);
           } else {
             const result = scaleNoteSpellings(tonic, type);
@@ -153,14 +153,23 @@ describe("scaleNoteSpellings", () => {
     });
   }
 
+  test("G-double-sharp major preserves F-triple-sharp as its seventh", () => {
+    const tonic = Object.freeze(parseNoteSpelling("G##"));
+    const notes = scaleNoteSpellings(tonic, "major");
+    expect(notes.map((note) => formatNoteSpelling(note, "ascii")))
+      .toEqual(["G##", "A##", "B##", "C##", "D##", "E##", "F###"]);
+    expect(notes.map(pitchClassFromSpelling)).toEqual([9, 11, 1, 2, 4, 6, 8]);
+    expect(tonic).toEqual(parseNoteSpelling("G##"));
+  });
+
   test.each([
-    ["C##", "lydian"],
-    ["Cbb", "locrian"],
-    ["G##", "major"],
-    ["G##", "harmonic-minor"],
-  ] as const)("rejects %s %s when a triple accidental is required", (text, type) => {
+    ["C###", "lydian"],
+    ["Cbbb", "locrian"],
+    ["G###", "major"],
+    ["G###", "harmonic-minor"],
+  ] as const)("rejects %s %s when a quadruple accidental is required", (text, type) => {
     const tonic = Object.freeze(parseNoteSpelling(text));
-    expect(() => scaleNoteSpellings(tonic, type)).toThrow("Transposition requires an accidental outside -2..2.");
+    expect(() => scaleNoteSpellings(tonic, type)).toThrow("Transposition requires an accidental outside -3..3.");
     expect(() => scaleNoteSpellings(tonic, type)).toThrow(RangeError);
     // Numeric construction remains available without a spelling limit.
     expect(scalePitchClasses(pitchClassFromSpelling(tonic), type)).toHaveLength(7);

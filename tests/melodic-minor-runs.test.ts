@@ -86,11 +86,51 @@ describe("melodic-minor traversal", () => {
     }
   });
 
+  for (const convention of conventions) {
+    for (const direction of ["up", "down"] as const) {
+      test(`${convention} ${direction} spells all 49 tonics against independent letter and pitch coordinates`, () => {
+        const naturals = [["C", 0], ["D", 2], ["E", 4], ["F", 5], ["G", 7], ["A", 9], ["B", 11]] as const;
+        const offsets = direction === "up" ? [0, 2, 3, 5, 7, 9, 11]
+          : convention === "classical-exercise" ? [0, -2, -4, -5, -7, -9, -10]
+            : [0, -1, -3, -5, -7, -9, -10];
+        const sign = direction === "up" ? 1 : -1;
+        for (const [sourceIndex, [letter, natural]] of naturals.entries()) {
+          for (const accidental of [-3, -2, -1, 0, 1, 2, 3] as const) {
+            for (const octave of [-1, 4]) {
+              const tonic = Object.freeze({ letter, accidental, octave });
+              const start = octave * 12 + natural + accidental;
+              for (const includeEndpoint of [false, true]) {
+                const options = Object.freeze({ convention, direction, octaves: 2, includeEndpoint });
+                const expected = Array.from({ length: 14 + Number(includeEndpoint) }, (_, index) => {
+                  const position = sourceIndex + sign * index;
+                  const [targetLetter, targetNatural] = naturals[(position % 7 + 7) % 7]!;
+                  const targetOctave = octave + Math.floor(position / 7);
+                  const pitch = start + sign * 12 * Math.floor(index / 7) + offsets[index % 7]!;
+                  return { letter: targetLetter, accidental: pitch - targetOctave * 12 - targetNatural, octave: targetOctave };
+                });
+                const pitches = expected.map((note) => note.octave * 12 + naturals.find(([candidate]) => candidate === note.letter)![1] + note.accidental);
+                expect(melodicMinorRegisteredPitches(start, options)).toEqual(pitches);
+                if (expected.some((note) => Math.abs(note.accidental) > 3)) {
+                  expect(() => melodicMinorRegisteredNotes(tonic, options)).toThrow(RangeError);
+                } else {
+                  const notes = melodicMinorRegisteredNotes(tonic, options);
+                  expect(notes).toEqual(expected);
+                  expect(notes.map(registeredPitchFromNote)).toEqual(pitches);
+                }
+                expect(tonic).toEqual({ letter, accidental, octave });
+              }
+            }
+          }
+        }
+      });
+    }
+  }
+
   test("validates only the selected leg's spelling", () => {
-    const tonic = parseRegisteredNote("G##4");
+    const tonic = parseRegisteredNote("G###4");
     const options = { ...up, convention: "classical-exercise", direction: "down" } as const;
     expect(format(melodicMinorRegisteredNotes(tonic, options)))
-      .toEqual(["G##4", "F##4", "E#4", "D##4", "C##4", "B#3", "A##3", "G##3"]);
+      .toEqual(["G###4", "F###4", "E##4", "D###4", "C###4", "B##3", "A###3", "G###3"]);
     expect(() => melodicMinorRegisteredNotes(tonic, { ...options, direction: "up" })).toThrow(RangeError);
     expect(() => melodicMinorRegisteredNotes(tonic, { ...options, convention: "fixed-collection" })).toThrow(RangeError);
     expect(melodicMinorRegisteredPitches(registeredPitchFromNote(tonic), up)).toHaveLength(8);

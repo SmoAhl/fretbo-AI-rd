@@ -62,7 +62,8 @@ describe("parseSpelledInterval", () => {
   test("validates intervals independently of a source note's available accidental range", () => {
     const interval = parseSpelledInterval("A1 up");
     expect(interval).toEqual({ number: 1, quality: "augmented", direction: "up" });
-    expect(() => transposeRegisteredNote(parseRegisteredNote("C##4"), interval)).toThrow(RangeError);
+    expect(transposeRegisteredNote(parseRegisteredNote("C##4"), interval)).toEqual(parseRegisteredNote("C###4"));
+    expect(() => transposeRegisteredNote(parseRegisteredNote("C###4"), interval)).toThrow(RangeError);
   });
 
   test("supports exact large compound intervals without using a dummy source note", () => {

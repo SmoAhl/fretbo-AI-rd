@@ -7,18 +7,18 @@ import {
 } from "../domain/music-theory/note-spelling.js";
 import { type PitchClass, transposePitchClass } from "../domain/music-theory/pitch-class.js";
 
-// Columns are double flat, flat, natural, sharp, and double sharp.
+// Columns are triple flat through triple sharp.
 // Expected classes are written independently of the domain lookup/arithmetic.
-const spellingCases: readonly [NoteLetter, readonly [PitchClass, PitchClass, PitchClass, PitchClass, PitchClass]][] = [
-  ["C", [10, 11, 0, 1, 2]],
-  ["D", [0, 1, 2, 3, 4]],
-  ["E", [2, 3, 4, 5, 6]],
-  ["F", [3, 4, 5, 6, 7]],
-  ["G", [5, 6, 7, 8, 9]],
-  ["A", [7, 8, 9, 10, 11]],
-  ["B", [9, 10, 11, 0, 1]],
+const spellingCases: readonly [NoteLetter, readonly [PitchClass, PitchClass, PitchClass, PitchClass, PitchClass, PitchClass, PitchClass]][] = [
+  ["C", [9, 10, 11, 0, 1, 2, 3]],
+  ["D", [11, 0, 1, 2, 3, 4, 5]],
+  ["E", [1, 2, 3, 4, 5, 6, 7]],
+  ["F", [2, 3, 4, 5, 6, 7, 8]],
+  ["G", [4, 5, 6, 7, 8, 9, 10]],
+  ["A", [6, 7, 8, 9, 10, 11, 0]],
+  ["B", [8, 9, 10, 11, 0, 1, 2]],
 ];
-const accidentals = [-2, -1, 0, 1, 2] as const satisfies readonly Accidental[];
+const accidentals = [-3, -2, -1, 0, 1, 2, 3] as const satisfies readonly Accidental[];
 
 describe("pitchClassFromSpelling", () => {
   for (const [letter, expectedClasses] of spellingCases) {
@@ -60,10 +60,10 @@ if (false) {
   pitchClassFromSpelling({ letter: "H", accidental: 0 });
   // @ts-expect-error Lowercase letters are not part of the structured contract.
   pitchClassFromSpelling({ letter: "c", accidental: 0 });
-  // @ts-expect-error Triple flats are outside the supported range.
-  pitchClassFromSpelling({ letter: "C", accidental: -3 });
-  // @ts-expect-error Triple sharps are outside the supported range.
-  pitchClassFromSpelling({ letter: "C", accidental: 3 });
+  // @ts-expect-error Quadruple flats are outside the supported range.
+  pitchClassFromSpelling({ letter: "C", accidental: -4 });
+  // @ts-expect-error Quadruple sharps are outside the supported range.
+  pitchClassFromSpelling({ letter: "C", accidental: 4 });
   // @ts-expect-error Fractional alterations are not supported.
   pitchClassFromSpelling({ letter: "C", accidental: 0.5 });
   // @ts-expect-error An explicit accidental is required, including for naturals.

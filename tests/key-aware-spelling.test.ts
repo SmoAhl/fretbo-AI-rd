@@ -9,7 +9,7 @@ import { type ScaleDegree, scaleNoteSpellings } from "../domain/music-theory/sca
 import { spellingFromPitchClass } from "../domain/music-theory/spelling-selection.js";
 
 const naturals = [["C", 0], ["D", 2], ["E", 4], ["F", 5], ["G", 7], ["A", 9], ["B", 11]] as const;
-const accidentals = [-2, -1, 0, 1, 2] as const;
+const accidentals = [-3, -2, -1, 0, 1, 2, 3] as const;
 const modes = ["major", "minor"] as const;
 const classes: readonly PitchClass[] = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
 // Independent numeric patterns/letter coordinates are the oracle, not domain construction calls.
@@ -47,7 +47,7 @@ describe("key-only signature-baseline selection", () => {
           unresolved++;
         } else {
           const expected = expectedSpelling(sourceIndex, key.tonic.accidental, index + 1, offsets[index]!);
-          if (Math.abs(expected.accidental) > 2) {
+          if (Math.abs(expected.accidental) > 3) {
             expect(() => spellingFromPitchClassInKey(pitchClass, key)).toThrow(RangeError);
             expect(() => spellingFromPitchClassInKey(pitchClass, key, undefined)).toThrow(RangeError);
           } else {
@@ -80,11 +80,11 @@ describe("key-only signature-baseline selection", () => {
     const minor: Key = { tonic: parseNoteSpelling("Cb"), mode: "minor" };
     expect(() => keySignature(minor)).toThrow(RangeError);
     expect(spellingFromPitchClassInKey(2, minor)).toEqual(parseNoteSpelling("Ebb"));
-    const major: Key = { tonic: parseNoteSpelling("B##"), mode: "major" };
+    const major: Key = { tonic: parseNoteSpelling("B###"), mode: "major" };
     expect(() => scaleNoteSpellings(major.tonic, "major")).toThrow(RangeError);
-    expect(spellingFromPitchClassInKey(1, major)).toEqual(parseNoteSpelling("B##"));
-    expect(() => spellingFromPitchClassInKey(5, major)).toThrow(RangeError);
-    expect(spellingFromPitchClassInKey(2, major)).toBeUndefined();
+    expect(spellingFromPitchClassInKey(2, major)).toEqual(parseNoteSpelling("B###"));
+    expect(() => spellingFromPitchClassInKey(6, major)).toThrow(RangeError);
+    expect(spellingFromPitchClassInKey(3, major)).toBeUndefined();
   });
 
   test("preserves the generic sharps/flats selection contract", () => {
@@ -124,15 +124,15 @@ const roles: readonly DegreeFormula[] = ([1, 2, 3, 4, 5, 6, 7] as const).flatMap
 
 describe("explicit major-relative role selection", () => {
   for (const { sourceIndex, key } of keys) {
-    test(`all 35 roles and contradictions in ${formatNoteSpelling(key.tonic, "ascii")} ${key.mode}`, () => {
+    test(`all 49 roles and contradictions in ${formatNoteSpelling(key.tonic, "ascii")} ${key.mode}`, () => {
       const original = { tonic: { ...key.tonic }, mode: key.mode };
-      expect(roles).toHaveLength(35);
+      expect(roles).toHaveLength(49);
       for (const role of roles) {
         const originalRole = { ...role };
         const displacement = naturals[role.number - 1]![1] + role.alteration;
         const pitchClass = wrap(naturals[sourceIndex]![1] + key.tonic.accidental + displacement);
         const expected = expectedSpelling(sourceIndex, key.tonic.accidental, role.number, displacement);
-        if (Math.abs(expected.accidental) > 2) {
+        if (Math.abs(expected.accidental) > 3) {
           expect(() => spellingFromPitchClassInKey(pitchClass, key, role)).toThrow(RangeError);
         } else {
           const result = spellingFromPitchClassInKey(pitchClass, key, role);
@@ -186,11 +186,11 @@ describe("explicit major-relative role selection", () => {
   });
 
   test("an unrepresentable explicit role cannot fall back to an available baseline spelling", () => {
-    const key: Key = { tonic: parseNoteSpelling("F##"), mode: "major" };
-    expect(spellingFromPitchClassInKey(0, key)).toEqual(parseNoteSpelling("B#"));
-    expect(() => spellingFromPitchClassInKey(0, key, { number: 3, alteration: 1 })).toThrow(RangeError);
-    const other: Key = { tonic: parseNoteSpelling("B##"), mode: "major" };
-    expect(() => spellingFromPitchClassInKey(5, other, { number: 3, alteration: 0 })).toThrow(RangeError);
+    const key: Key = { tonic: parseNoteSpelling("F###"), mode: "major" };
+    expect(spellingFromPitchClassInKey(1, key)).toEqual(parseNoteSpelling("B##"));
+    expect(() => spellingFromPitchClassInKey(1, key, { number: 3, alteration: 1 })).toThrow(RangeError);
+    const other: Key = { tonic: parseNoteSpelling("B###"), mode: "major" };
+    expect(() => spellingFromPitchClassInKey(6, other, { number: 3, alteration: 0 })).toThrow(RangeError);
   });
 
   test("matches numerically before checking the role's selected spelling", () => {
@@ -215,7 +215,7 @@ describe("explicit major-relative role selection", () => {
   test.each([
     { number: 0, alteration: 0 }, { number: 8, alteration: 0 }, { number: 1.5, alteration: 0 },
     { number: NaN, alteration: 0 }, { number: Infinity, alteration: 0 },
-    { number: 1, alteration: -3 }, { number: 1, alteration: 3 }, { number: 1, alteration: 0.5 },
+    { number: 1, alteration: -4 }, { number: 1, alteration: 4 }, { number: 1, alteration: 0.5 },
     { number: 1, alteration: NaN }, { number: 1, alteration: Infinity }, { number: 1 }, { alteration: 0 },
   ])("invalid role %o is rejected instead of falling back", (role) => {
     const key: Key = { tonic: parseNoteSpelling("C"), mode: "major" };

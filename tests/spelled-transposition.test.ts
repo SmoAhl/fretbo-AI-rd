@@ -47,7 +47,7 @@ describe("semitonesFromInterval", () => {
     expect(semitonesFromInterval({ number: 22, quality: "diminished", direction: "down" })).toBe(-35);
     const interval = { number: 1, quality: "augmented", direction: "up" } as const;
     expect(semitonesFromInterval(interval)).toBe(1);
-    expect(() => transposeRegisteredNote(parseRegisteredNote("C##4"), interval)).toThrow(RangeError);
+    expect(() => transposeRegisteredNote(parseRegisteredNote("C###4"), interval)).toThrow(RangeError);
   });
 
   test("supports both exact safe-integer limits and rejects displacement overflow", () => {
@@ -128,12 +128,16 @@ describe("spelled transposition", () => {
       .toEqual(parseRegisteredNote("Cb-1"));
   });
 
-  test("supports double-accidental results and rejects triples without respelling", () => {
+  test("supports triple-accidental results and rejects quadruples without respelling", () => {
     expect(transposeNoteSpelling(parseNoteSpelling("C#"), { number: 1, quality: "augmented", direction: "up" }))
       .toEqual(parseNoteSpelling("C##"));
-    expect(() => transposeNoteSpelling(parseNoteSpelling("C##"), { number: 1, quality: "augmented", direction: "up" }))
+    expect(transposeNoteSpelling(parseNoteSpelling("C##"), { number: 1, quality: "augmented", direction: "up" }))
+      .toEqual(parseNoteSpelling("C###"));
+    expect(transposeNoteSpelling(parseNoteSpelling("Dbb"), { number: 1, quality: "augmented", direction: "down" }))
+      .toEqual(parseNoteSpelling("Dbbb"));
+    expect(() => transposeNoteSpelling(parseNoteSpelling("C###"), { number: 1, quality: "augmented", direction: "up" }))
       .toThrow(RangeError);
-    expect(() => transposeNoteSpelling(parseNoteSpelling("Dbb"), { number: 1, quality: "augmented", direction: "down" }))
+    expect(() => transposeNoteSpelling(parseNoteSpelling("Dbbb"), { number: 1, quality: "augmented", direction: "down" }))
       .toThrow(RangeError);
   });
 

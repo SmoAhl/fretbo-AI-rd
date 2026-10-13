@@ -62,12 +62,12 @@ describe("direct minor-derived modes", () => {
       expect(result.map((pitch, index) => (result[(index + 1) % 7]! - pitch + 12) % 12)).toEqual(steps);
     });
 
-    test(`all 35 tonic spellings of ${parent} rotation ${degree}`, () => {
+    test(`all 49 tonic spellings of ${parent} rotation ${degree}`, () => {
       for (const [sourceIndex, [letter]] of naturals.entries()) {
-        for (const accidental of [-2, -1, 0, 1, 2] as const) {
+        for (const accidental of [-3, -2, -1, 0, 1, 2, 3] as const) {
           const tonic = Object.freeze({ letter, accidental });
           const expected = expectedSpellings(sourceIndex, accidental, offsets);
-          if (expected.some((note) => Math.abs(note.accidental) > 2)) {
+          if (expected.some((note) => Math.abs(note.accidental) > 3)) {
             expect(() => minorModeNoteSpellings(tonic, mode)).toThrow(RangeError);
             expect(minorModePitchClasses(pitchClassFromSpelling(tonic), mode)).toHaveLength(7);
           } else {
@@ -107,13 +107,13 @@ describe("relative minor-derived modes", () => {
       }
     });
 
-    test(`preserves exact ${parent} spellings at all 35 parent tonics`, () => {
+    test(`preserves exact ${parent} spellings at all 49 parent tonics`, () => {
       for (const [sourceIndex, [letter]] of naturals.entries()) {
-        for (const accidental of [-2, -1, 0, 1, 2] as const) {
+        for (const accidental of [-3, -2, -1, 0, 1, 2, 3] as const) {
           const tonic = Object.freeze({ letter, accidental });
           const collection = expectedSpellings(sourceIndex, accidental, offsets);
           for (const degree of [1, 2, 3, 4, 5, 6, 7] as const) {
-            if (collection.some((note) => Math.abs(note.accidental) > 2)) {
+            if (collection.some((note) => Math.abs(note.accidental) > 3)) {
               expect(() => relativeMinorModeNoteSpellings(tonic, parent, degree)).toThrow(RangeError);
             } else {
               const expected = collection.map((_, index) => collection[(index + degree - 1) % 7]);
@@ -165,15 +165,15 @@ describe("registered minor-mode runs", () => {
       }
     });
 
-    test(`registered spellings for all 35 tonics of ${parent} rotation ${degree}`, () => {
+    test(`registered spellings for all 49 tonics of ${parent} rotation ${degree}`, () => {
       for (const [sourceIndex, [letter, natural]] of naturals.entries()) {
-        for (const accidental of [-2, -1, 0, 1, 2] as const) {
+        for (const accidental of [-3, -2, -1, 0, 1, 2, 3] as const) {
           const spellings = expectedSpellings(sourceIndex, accidental, offsets);
           for (const octave of [-1, 4]) {
             const tonic = Object.freeze({ letter, accidental, octave });
             for (const direction of ["up", "down"] as const) {
               const options = { direction, octaves: 2, includeEndpoint: true };
-              if (spellings.some((note) => Math.abs(note.accidental) > 2)) {
+              if (spellings.some((note) => Math.abs(note.accidental) > 3)) {
                 expect(() => minorModeRegisteredNotes(tonic, mode, options)).toThrow(RangeError);
                 continue;
               }

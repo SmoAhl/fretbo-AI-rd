@@ -106,7 +106,7 @@ describe("pentatonic spelling", () => {
         ["C", 0], ["D", 2], ["E", 4], ["F", 5], ["G", 7], ["A", 9], ["B", 11],
       ] as const;
       naturals.forEach(([letter, sourceNatural], sourceIndex) => {
-        for (const accidental of [-2, -1, 0, 1, 2] as const) {
+        for (const accidental of [-3, -2, -1, 0, 1, 2, 3] as const) {
           const tonic = Object.freeze({ letter, accidental });
           const expected = offsets.map((offset, ordinalIndex) => {
             const targetIndex = sourceIndex + letterSteps[ordinalIndex]!;
@@ -116,7 +116,7 @@ describe("pentatonic spelling", () => {
               accidental: sourceNatural + accidental + offset - targetNatural - (targetIndex >= 7 ? 12 : 0),
             };
           });
-          if (expected.some((note) => note.accidental < -2 || note.accidental > 2)) {
+          if (expected.some((note) => note.accidental < -3 || note.accidental > 3)) {
             expect(() => scaleNoteSpellings(tonic, type)).toThrow(RangeError);
           } else {
             const result = scaleNoteSpellings(tonic, type);
@@ -131,10 +131,10 @@ describe("pentatonic spelling", () => {
   }
 
   test.each([
-    ["E##", "major-pentatonic"], ["Cbb", "minor-pentatonic"],
-  ] as const)("rejects triple accidental requirements for %s %s", (text, type) => {
+    ["E###", "major-pentatonic"], ["Cbbb", "minor-pentatonic"],
+  ] as const)("rejects quadruple accidental requirements for %s %s", (text, type) => {
     const tonic = parseNoteSpelling(text);
-    expect(() => scaleNoteSpellings(tonic, type)).toThrow("Transposition requires an accidental outside -2..2.");
+    expect(() => scaleNoteSpellings(tonic, type)).toThrow("Transposition requires an accidental outside -3..3.");
     expect(() => scaleNoteSpellings(tonic, type)).toThrow(RangeError);
     expect(scalePitchClasses(pitchClassFromSpelling(tonic), type)).toHaveLength(5);
   });

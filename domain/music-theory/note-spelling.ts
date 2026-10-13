@@ -2,8 +2,8 @@ import { type PitchClass, transposePitchClass } from "./pitch-class.js";
 
 export type NoteLetter = "A" | "B" | "C" | "D" | "E" | "F" | "G";
 
-/** Semitone alteration: double flat, flat, natural, sharp, or double sharp. */
-export type Accidental = -2 | -1 | 0 | 1 | 2;
+/** Semitone alteration from triple flat through triple sharp. */
+export type Accidental = -3 | -2 | -1 | 0 | 1 | 2 | 3;
 
 /** Explicit spelling without register; both fields are required. */
 export type NoteSpelling = Readonly<{

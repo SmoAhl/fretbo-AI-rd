@@ -6,14 +6,15 @@ export type AccidentalNotation = "ascii" | "unicode";
 const accidentals: Readonly<Record<string, Accidental>> = {
   "": 0, "♮": 0, "#": 1, "♯": 1, "b": -1, "♭": -1,
   "##": 2, "𝄪": 2, "bb": -2, "𝄫": -2,
+  "###": 3, "♯𝄪": 3, "bbb": -3, "♭𝄫": -3,
 };
 const symbols: Readonly<Record<AccidentalNotation, Readonly<Record<Accidental, string>>>> = {
-  ascii: { [-2]: "bb", [-1]: "b", 0: "", 1: "#", 2: "##" },
-  unicode: { [-2]: "𝄫", [-1]: "♭", 0: "", 1: "♯", 2: "𝄪" },
+  ascii: { [-3]: "bbb", [-2]: "bb", [-1]: "b", 0: "", 1: "#", 2: "##", 3: "###" },
+  unicode: { [-3]: "♭𝄫", [-2]: "𝄫", [-1]: "♭", 0: "", 1: "♯", 2: "𝄪", 3: "♯𝄪" },
 };
 
 function parseParts(text: string): { spelling: NoteSpelling; octaveText: string | undefined } {
-  const match = /^([A-G])(##|bb|#|b|♯|♭|𝄪|𝄫|♮)?([+-]?\d+)?$/u.exec(text.trim());
+  const match = /^([A-G])(###|bbb|♯𝄪|♭𝄫|##|bb|#|b|♯|♭|𝄪|𝄫|♮)?([+-]?\d+)?$/u.exec(text.trim());
   if (!match) {
     throw new SyntaxError("Expected an uppercase note letter, supported accidental, and optional integer octave.");
   }

@@ -483,3 +483,19 @@ Consequences: Validate runtime classes as integers in 0..11 and key mode through
 Registered output, candidate enumeration, fallback policies, collection-ordinal roles, broader functional/context inference, triple accidentals, structured error infrastructure, UI, AI, and dependencies are outside this increment. The [deferred improvements](ARCHITECTURE.md#deferred-music-theory-improvements) retain their capability-driven triggers. Earlier key-aware exclusions describe preceding increments; this narrow key-and-formula capability is now implemented.
 
 Recorded: 2026-10-12. Authority: User's explicit unresolved-result, DegreeFormula, pitch-class output, and selected-result key-support choices, followed by the approved-plan implementation request.
+
+## D039: Triple accidentals and degree alterations
+
+Status: Accepted. Additive extension of D020/D022/D023 and the spelling limits inherited by D028-D038. Previous decisions and completed plans describe their original increments.
+
+Decision: Extend Accidental to integer -3..3, shared by NoteSpelling, RegisteredNote, and DegreeFormula.alteration. Existing public function signatures remain unchanged. Widen runtime formula validation and derived note-spelling guards to the same range. Preserve exact letter roles and reject results beyond it with RangeError without respelling.
+
+Text contract: Note parsing accepts ###/bbb and ♯𝄪/♭𝄫; Unicode formatting uses single sign followed by double sign for triples and retains dedicated double signs. Reversed composites, repeated Unicode triples, mixed ASCII/Unicode tokens, and quadruples remain SyntaxError. Degree parsing additionally accepts ♯♯♯/♭♭♭; degree formatting retains repeated Unicode signs for doubles and triples. Existing whitespace, octave, degree-number, and notation validation rules are unchanged.
+
+Rationale: Previously representable theoretical key identities could have relative keys or selected degree spellings requiring triples. Widening the existing spelling foundation makes these operations available without enharmonic substitution or a parallel spelling algorithm. A formula alteration remains distinct from the final note accidental; only the combined result determines spelling representability.
+
+Consequences: Support 49 spellings, 49 simple formulas, and 98 major/minor identities. All previous double-accidental identities now have representable relative keys; 92 of the expanded identities have representable relative results and six require quadruples. Conventional signatures remain zero through seven single sharps/flats, supporting the same 30 identities. Scale/mode/run and key-aware operations reuse the widened capabilities, preserving selected-result validation, typed note-input boundaries, readonly outputs/input isolation, safe arithmetic/octave bases, explicit traversal, and the 10,000-note cap. Generic spelling policies and interval-quality semantics remain unchanged.
+
+The triple-accidental TODO is completed; the deferred error-classification TODO remains open. Theoretical signatures, accidentals beyond ±3, new interval qualities, registered key-aware output, structured errors, UI, AI, dependencies, and broader inference remain outside this increment. Current capabilities and evidence are recorded in [Architecture](ARCHITECTURE.md) and the [triple-accidental effort](../plans/triple-accidentals.md).
+
+Recorded: 2026-10-13. Authority: User's explicit triple-formula and composite note-notation selections, followed by approval and implementation request for the triple-accidental plan.

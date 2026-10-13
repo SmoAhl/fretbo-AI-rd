@@ -59,10 +59,10 @@ describe("relative modes", () => {
       }
     });
 
-    test(`preserves exact spellings across all 35 tonic spellings of ${parent}`, () => {
+    test(`preserves exact spellings across all 49 tonic spellings of ${parent}`, () => {
       const naturals = [["C", 0], ["D", 2], ["E", 4], ["F", 5], ["G", 7], ["A", 9], ["B", 11]] as const;
       for (const [letterIndex, [letter, natural]] of naturals.entries()) {
-        for (const accidental of [-2, -1, 0, 1, 2] as const) {
+        for (const accidental of [-3, -2, -1, 0, 1, 2, 3] as const) {
           const tonic = Object.freeze({ letter, accidental });
           const expectedParent = offsets.map((offset, index) => {
             const targetIndex = letterIndex + index;
@@ -70,7 +70,7 @@ describe("relative modes", () => {
             const alteration = natural + accidental + offset - targetNatural - 12 * Math.floor(targetIndex / 7);
             return { letter: targetLetter, accidental: alteration };
           });
-          const supported = expectedParent.every((note) => Math.abs(note.accidental) <= 2);
+          const supported = expectedParent.every((note) => Math.abs(note.accidental) <= 3);
           for (const degree of degrees) {
             if (!supported) {
               expect(() => relativeModeNoteSpellings(tonic, parent, degree)).toThrow(RangeError);

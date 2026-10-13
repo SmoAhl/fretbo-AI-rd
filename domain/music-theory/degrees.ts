@@ -16,8 +16,8 @@ function validateFormula(formula: DegreeFormula): void {
   if (!Number.isInteger(formula.number) || formula.number < 1 || formula.number > 7) {
     throw new RangeError("Degree formula number must be an integer in 1..7.");
   }
-  if (!Number.isInteger(formula.alteration) || formula.alteration < -2 || formula.alteration > 2) {
-    throw new RangeError("Degree formula alteration must be an integer in -2..2.");
+  if (!Number.isInteger(formula.alteration) || formula.alteration < -3 || formula.alteration > 3) {
+    throw new RangeError("Degree formula alteration must be an integer in -3..3.");
   }
 }
 
@@ -37,8 +37,8 @@ export function noteSpellingFromDegreeFormula(tonic: NoteSpelling, formula: Degr
     direction: "up",
   });
   const accidental = reference.accidental + tonic.accidental + formula.alteration;
-  if (accidental < -2 || accidental > 2) {
-    throw new RangeError("Degree formula requires an accidental outside -2..2.");
+  if (accidental < -3 || accidental > 3) {
+    throw new RangeError("Degree formula requires an accidental outside -3..3.");
   }
   return { letter: reference.letter, accidental: accidental as Accidental };
 }

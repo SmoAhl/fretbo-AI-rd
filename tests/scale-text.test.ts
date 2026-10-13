@@ -75,7 +75,9 @@ describe("parseScaleType", () => {
     const notes = scaleNoteSpellings(parseNoteSpelling("G#"), type);
     expect(notes.map((note) => formatNoteSpelling(note, "ascii")))
       .toEqual(["G#", "A#", "B", "C#", "D#", "E", "F##"]);
-    const unsupportedTonic = parseNoteSpelling("G##");
+    expect(scaleNoteSpellings(parseNoteSpelling("G##"), type).map((note) => formatNoteSpelling(note, "ascii")))
+      .toEqual(["G##", "A##", "B#", "C##", "D##", "E#", "F###"]);
+    const unsupportedTonic = parseNoteSpelling("G###");
     expect(() => scaleNoteSpellings(unsupportedTonic, type)).toThrow(RangeError);
     expect(parseScaleType("harmonic minor")).toBe(type);
   });

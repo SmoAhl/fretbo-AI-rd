@@ -10,7 +10,7 @@ import { scaleNoteSpellings } from "../domain/music-theory/scales.js";
 import { parseScaleType } from "../domain/music-theory/scale-text.js";
 
 const letters = ["C", "D", "E", "F", "G", "A", "B"] as const;
-const accidentals = [-2, -1, 0, 1, 2] as const;
+const accidentals = [-3, -2, -1, 0, 1, 2, 3] as const;
 const modes = ["major", "minor"] as const;
 const identities: readonly (readonly [NoteSpelling, KeyMode])[] = letters.flatMap((letter) =>
   accidentals.flatMap((accidental) => modes.map((mode) => [Object.freeze({ letter, accidental }), mode] as const)));
@@ -90,13 +90,13 @@ describe("conventional key signatures", () => {
     });
   }
 
-  test("fixtures cover exactly 30 of the 70 identities", () => {
+  test("fixtures cover exactly 30 of the 98 identities", () => {
     expect(signatureCases).toHaveLength(30);
-    expect(identities).toHaveLength(70);
+    expect(identities).toHaveLength(98);
     const supported = identities.filter(([tonic, mode]) => signatureCases.some((candidate) => candidate.mode === mode
       && candidate.tonic.letter === tonic.letter && candidate.tonic.accidental === tonic.accidental));
     expect(supported).toHaveLength(30);
-    expect(identities.length - supported.length).toBe(40);
+    expect(identities.length - supported.length).toBe(68);
   });
 
   test("preserves six-sharp/six-flat signatures for enharmonic major keys", () => {
@@ -165,7 +165,7 @@ describe("relative and parallel key relationships", () => {
     test(`${name} relative preserves spelling or rejects an unrepresentable tonic`, () => {
       const key = Object.freeze({ tonic, mode });
       const expected = expectedRelative(tonic, mode);
-      if (Math.abs(expected.tonic.accidental) > 2) {
+      if (Math.abs(expected.tonic.accidental) > 3) {
         expect(() => relativeKey(key)).toThrow(RangeError);
       } else {
         const result = relativeKey(key);
@@ -193,11 +193,11 @@ describe("relative and parallel key relationships", () => {
     expect(keySignature(majorKey)).toEqual(keySignature(minorKey));
   });
 
-  test("64 representable relationships and six representation failures match independent expectations", () => {
-    const unsupported = identities.filter(([tonic, mode]) => Math.abs(expectedRelative(tonic, mode).tonic.accidental) > 2);
-    expect(identities.length - unsupported.length).toBe(64);
+  test("92 representable relationships and six representation failures match independent expectations", () => {
+    const unsupported = identities.filter(([tonic, mode]) => Math.abs(expectedRelative(tonic, mode).tonic.accidental) > 3);
+    expect(identities.length - unsupported.length).toBe(92);
     expect(unsupported.map(([tonic, mode]) => `${formatNoteSpelling(tonic, "ascii")} ${mode}`))
-      .toEqual(["Cbb minor", "E## major", "Fbb minor", "Gbb minor", "A## major", "B## major"]);
+      .toEqual(["Cbbb minor", "E### major", "Fbbb minor", "Gbbb minor", "A### major", "B### major"]);
   });
 
   test("parallel C-flat minor exists even though its signature is unsupported", () => {
@@ -217,10 +217,21 @@ describe("relative and parallel key relationships", () => {
     expect(() => keySignature(minor)).toThrow(RangeError);
   });
 
-  test("relative B-double-sharp major remains a representation-limit RangeError", () => {
-    const major = createKey(parseNoteSpelling("B##"), "major");
+  test.each([
+    ["B##", "major", "G###", "minor"],
+    ["Cbb", "minor", "Ebbb", "major"],
+  ] as const)("relative %s %s now supports %s %s", (tonic, mode, relativeTonic, relativeMode) => {
+    const key = Object.freeze(createKey(Object.freeze(parseNoteSpelling(tonic)), mode));
+    const result = relativeKey(key);
+    expect(result).toEqual(createKey(parseNoteSpelling(relativeTonic), relativeMode));
+    expect(relativeKey(result)).toEqual(key);
+    expect(() => keySignature(result)).toThrow(RangeError);
+  });
+
+  test("relative B-triple-sharp major exceeds the representation limit", () => {
+    const major = createKey(parseNoteSpelling("B###"), "major");
     expect(() => relativeKey(major)).toThrow(RangeError);
-    expect(() => relativeKey(major)).toThrow("accidental outside -2..2");
+    expect(() => relativeKey(major)).toThrow("accidental outside -3..3");
   });
 
   test("relationship results do not alias each other or the source key", () => {
@@ -263,8 +274,8 @@ if (false) {
   createKey({ letter: "C" }, "major");
   // @ts-expect-error A fixed collection is not a minor-key identity.
   createKey({ letter: "C", accidental: 0 }, "harmonic-minor");
-  // @ts-expect-error Triple accidentals remain deferred.
-  createKey({ letter: "C", accidental: 3 }, "major");
+  // @ts-expect-error Quadruple accidentals remain unsupported.
+  createKey({ letter: "C", accidental: 4 }, "major");
   const key: Key = createKey({ letter: "C", accidental: 0 }, "major");
   // @ts-expect-error Key identity is readonly.
   key.mode = "minor";

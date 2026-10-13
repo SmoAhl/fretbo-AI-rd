@@ -156,8 +156,8 @@ export function transposeRegisteredNote(
   const naturalClass = pitchClassFromSpelling({ letter, accidental: 0 });
   const naturalPitch = targetOctave * 12n + BigInt(naturalClass);
   const accidental = BigInt(targetPitch) - naturalPitch;
-  if (accidental < -2n || accidental > 2n) {
-    throw new RangeError("Transposition requires an accidental outside -2..2.");
+  if (accidental < -3n || accidental > 3n) {
+    throw new RangeError("Transposition requires an accidental outside -3..3.");
   }
 
   const result: RegisteredNote = {

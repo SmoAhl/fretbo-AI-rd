@@ -57,9 +57,9 @@ describe("registered scale runs", () => {
       }
     });
 
-    test(`preserves ${type} spellings at all 35 tonics and negative/positive written octaves`, () => {
+    test(`preserves ${type} spellings at all 49 tonics and negative/positive written octaves`, () => {
       for (const [letterIndex, [letter, natural]] of naturals.entries()) {
-        for (const accidental of [-2, -1, 0, 1, 2] as const) {
+        for (const accidental of [-3, -2, -1, 0, 1, 2, 3] as const) {
           const expectedPattern = offsets.map((offset, index) => {
             const targetIndex = letterIndex + letterSteps[index]!;
             const [targetLetter, targetNatural] = naturals[targetIndex % 7]!;
@@ -70,7 +70,7 @@ describe("registered scale runs", () => {
             const tonic = Object.freeze({ letter, accidental, octave });
             for (const direction of ["up", "down"] as const) {
               const options = { direction, octaves: 2, includeEndpoint: true } as const;
-              if (expectedPattern.some((note) => Math.abs(note.accidental) > 2)) {
+              if (expectedPattern.some((note) => Math.abs(note.accidental) > 3)) {
                 expect(() => scaleRegisteredNotes(tonic, type, options)).toThrow(RangeError);
                 continue;
               }
@@ -178,7 +178,7 @@ describe("registered scale runs", () => {
   });
 
   test("rejects unsupported accidentals without restricting numeric runs", () => {
-    const tonic = parseRegisteredNote("G##4");
+    const tonic = parseRegisteredNote("G###4");
     expect(() => scaleRegisteredNotes(tonic, "major", up)).toThrow(RangeError);
     expect(scaleRegisteredPitches(registeredPitchFromNote(tonic), "major", up)).toHaveLength(8);
   });

@@ -20,7 +20,7 @@ import {
 } from "../domain/music-theory/scales.js";
 
 const naturals = [["C", 0], ["D", 2], ["E", 4], ["F", 5], ["G", 7], ["A", 9], ["B", 11]] as const;
-const alterations = [-2, -1, 0, 1, 2] as const;
+const alterations = [-3, -2, -1, 0, 1, 2, 3] as const;
 const tonics: readonly PitchClass[] = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
 const formulas: readonly DegreeFormula[] = [1, 2, 3, 4, 5, 6, 7].flatMap((number) =>
   alterations.map((alteration) => ({ number: number as ScaleDegree, alteration })));
@@ -40,13 +40,13 @@ describe("degree formula conversion", () => {
       expect(pitchClassFromDegreeFormula(tonic, Object.freeze(formula))).toBe(((tonic + displacement) % 12 + 12) % 12);
     });
 
-    test(`all 35 tonic spellings for number ${formula.number}, alteration ${formula.alteration}`, () => {
+    test(`all 49 tonic spellings for number ${formula.number}, alteration ${formula.alteration}`, () => {
       for (const [index, [letter]] of naturals.entries()) {
         for (const accidental of alterations) {
           const tonic = Object.freeze({ letter, accidental });
           const expected = expectedSpelling(index, accidental, formula);
           const numeric = pitchClassFromDegreeFormula(pitchClassFromSpelling(tonic), formula);
-          if (Math.abs(expected.accidental) > 2) {
+          if (Math.abs(expected.accidental) > 3) {
             expect(() => noteSpellingFromDegreeFormula(tonic, formula)).toThrow(RangeError);
           } else {
             const result = noteSpellingFromDegreeFormula(tonic, formula);
@@ -93,7 +93,7 @@ describe("degree formula conversion", () => {
       expect(() => noteSpellingFromDegreeFormula({ letter: "C", accidental: 0 }, formula)).toThrow(RangeError);
     });
 
-  test.each([-3, 3, 0.5, NaN, Infinity, -Infinity, Number.MAX_SAFE_INTEGER, undefined])(
+  test.each([-4, 4, 0.5, NaN, Infinity, -Infinity, Number.MAX_SAFE_INTEGER, undefined])(
     "rejects invalid formula alteration %s", (alteration) => {
       const formula = { number: 3, alteration } as DegreeFormula;
       expect(() => pitchClassFromDegreeFormula(0, formula)).toThrow(RangeError);
@@ -179,14 +179,14 @@ describe("shared collection degree queries", () => {
       }
     });
 
-    test(`${name} queries at all 35 tonic spellings`, () => {
+    test(`${name} queries at all 49 tonic spellings`, () => {
       for (const [sourceIndex, [letter]] of naturals.entries()) {
         for (const accidental of alterations) {
           const tonic = Object.freeze({ letter, accidental });
           const expected = expectedFormulas.map((formula) => expectedSpelling(sourceIndex, accidental, formula));
           for (const [index, note] of expected.entries()) {
             const ordinal = (index + 1) as ScaleDegree;
-            if (Math.abs(note.accidental) > 2) {
+            if (Math.abs(note.accidental) > 3) {
               expect(() => noteSpellingAtCollectionDegree(tonic, collection, ordinal)).toThrow(RangeError);
             } else {
               const result = noteSpellingAtCollectionDegree(tonic, collection, ordinal);
@@ -194,7 +194,7 @@ describe("shared collection degree queries", () => {
               expect(pitchClassFromSpelling(result)).toBe((pitchClassFromSpelling(tonic) + offsets[index]!) % 12);
             }
           }
-          if (expected.every((note) => Math.abs(note.accidental) <= 2)) {
+          if (expected.every((note) => Math.abs(note.accidental) <= 3)) {
             const constructed = typeof collection === "string"
               ? scaleNoteSpellings(tonic, collection) : minorModeNoteSpellings(tonic, collection);
             expect(constructed).toEqual(expected);
@@ -233,13 +233,13 @@ describe("shared collection degree queries", () => {
     expect(collectionDegreeOfPitchClass(0, "major", 3)).toBeUndefined();
   });
 
-  test("spells the selected member even when unrelated collection members need triple accidentals", () => {
-    const tonic = Object.freeze(parseNoteSpelling("B##"));
+  test("spells the selected member even when unrelated collection members need quadruple accidentals", () => {
+    const tonic = Object.freeze(parseNoteSpelling("B###"));
     expect(() => scaleNoteSpellings(tonic, "major")).toThrow(RangeError);
     expect(noteSpellingAtCollectionDegree(tonic, "major", 1)).toEqual(tonic);
-    expect(formatNoteSpelling(noteSpellingAtCollectionDegree(tonic, "major", 4), "ascii")).toBe("E##");
+    expect(formatNoteSpelling(noteSpellingAtCollectionDegree(tonic, "major", 4), "ascii")).toBe("E###");
     expect(() => noteSpellingAtCollectionDegree(tonic, "major", 3)).toThrow(RangeError);
-    expect(pitchClassAtCollectionDegree(1, "major", 3)).toBe(5);
+    expect(pitchClassAtCollectionDegree(2, "major", 3)).toBe(6);
   });
 
   test("arrays, formulas, membership results, and spellings are independent between calls", () => {
@@ -307,8 +307,8 @@ if (false) {
   pitchClassFromDegreeFormula(0, { alteration: 0 });
   // @ts-expect-error Compound formulas are deferred.
   pitchClassFromDegreeFormula(0, { number: 9, alteration: -1 });
-  // @ts-expect-error Alterations are limited to -2..2.
-  pitchClassFromDegreeFormula(0, { number: 3, alteration: 3 });
+  // @ts-expect-error Alterations are limited to -3..3.
+  pitchClassFromDegreeFormula(0, { number: 3, alteration: 4 });
   // @ts-expect-error Numeric conversion takes a pitch class, not a spelling.
   pitchClassFromDegreeFormula({ letter: "C", accidental: 0 }, { number: 3, alteration: 0 });
   // @ts-expect-error Spelled conversion requires a spelling, not text.
