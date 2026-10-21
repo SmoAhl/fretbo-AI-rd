@@ -499,3 +499,17 @@ Consequences: Support 49 spellings, 49 simple formulas, and 98 major/minor ident
 The triple-accidental TODO is completed; the deferred error-classification TODO remains open. Theoretical signatures, accidentals beyond ±3, new interval qualities, registered key-aware output, structured errors, UI, AI, dependencies, and broader inference remain outside this increment. Current capabilities and evidence are recorded in [Architecture](ARCHITECTURE.md) and the [triple-accidental effort](../plans/triple-accidentals.md).
 
 Recorded: 2026-10-13. Authority: User's explicit triple-formula and composite note-notation selections, followed by approval and implementation request for the triple-accidental plan.
+
+## D040: Basic triads from explicit root and quality
+
+Status: Accepted. Additive capability using the degree conversion in D036 and spelling range in D039.
+
+Decision: Export TriadQuality (major/minor/diminished/augmented), triadPitchClasses(root: PitchClass, quality: TriadQuality): readonly PitchClass[], and triadNoteSpellings(root: NoteSpelling, quality: TriadQuality): readonly NoteSpelling[] from a separate portable triads module. Require both arguments. Return exactly three tones in root-third-fifth role order, without bass, register, or inversion semantics. Numeric results wrap modulo twelve without sorting.
+
+Rationale: The four supported qualities are explicit musical constructions, independent of a key, selected scale, voicing, or fingering. One internal DegreeFormula table uses 1/3/5, 1/flat-3/5, 1/flat-3/flat-5, and 1/3/sharp-5 for both outputs through existing converters. This preserves letter roles without another spelling algorithm or rejecting a valid triad because an unrelated scale tone cannot be spelled. For example, G-triple-sharp major's triad fits the current range even though its full scale does not.
+
+Consequences: Retain typed numeric/spelled root boundaries. Unsupported runtime qualities, including aliases and inherited-property names, throw RangeError. Spelling preserves exact accidentals through +/-3; any unrepresentable required tone throws RangeError without fallback, omissions, or partial output. Numeric output is independent of spelling limits. Each call returns fresh readonly-by-type arrays and spelling objects without runtime freezing or input mutation. Existing public contracts remain unchanged, with sibling-only domain dependencies.
+
+Seventh chords, symbol parsing, chord identification, scale harmonization, registered output, inversions, voicing, Fretboard, Playability, UI, AI, and new dependencies remain outside this increment. The deferred error-classification improvement remains open. Earlier chord exclusions describe preceding increments; construction of these four triad qualities is now implemented.
+
+Recorded: 2026-10-21. Authority: User's selection of numeric and spelled output, approval of the basic-triad plan, and explicit implementation request. See the [triad effort](../plans/basic-triad-construction.md).
