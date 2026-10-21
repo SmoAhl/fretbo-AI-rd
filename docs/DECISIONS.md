@@ -513,3 +513,19 @@ Consequences: Retain typed numeric/spelled root boundaries. Unsupported runtime 
 Seventh chords, symbol parsing, chord identification, scale harmonization, registered output, inversions, voicing, Fretboard, Playability, UI, AI, and new dependencies remain outside this increment. The deferred error-classification improvement remains open. Earlier chord exclusions describe preceding increments; construction of these four triad qualities is now implemented.
 
 Recorded: 2026-10-21. Authority: User's selection of numeric and spelled output, approval of the basic-triad plan, and explicit implementation request. See the [triad effort](../plans/basic-triad-construction.md).
+
+## D041: Seventh chords from explicit root and quality
+
+Status: Accepted. Additive capability composing D040 triads and D036 degree conversion within D039's spelling range.
+
+Decision: Export SeventhChordQuality, seventhChordPitchClasses(root: PitchClass, quality: SeventhChordQuality): readonly PitchClass[], and seventhChordNoteSpellings(root: NoteSpelling, quality: SeventhChordQuality): readonly NoteSpelling[] from a separate portable seventh-chords module. Require both arguments and return exactly four tones in root-third-fifth-seventh role order, without bass, register, inversion, or voicing semantics. Numeric results wrap modulo twelve without sorting.
+
+Catalog: Exact identifiers are major-seventh, dominant-seventh, minor-seventh, half-diminished-seventh, diminished-seventh, minor-major-seventh, augmented-major-seventh, and augmented-seventh. They combine major/major-7, major/minor-7, minor/minor-7, diminished/minor-7, diminished/diminished-7, minor/major-7, augmented/major-7, and augmented/minor-7 respectively. Here the first term names the triad quality; the seventh is a root-relative role, retaining its letter even when enharmonic to another interval. No symbols, aliases, or implicit seventh convention are accepted.
+
+Rationale: One private definition table composes existing triad constructors and a seventh DegreeFormula, avoiding duplicated triad/spelling rules and unrelated scale constraints. C diminished seventh retains B-double-flat rather than A; the two augmented variants explicitly distinguish major and minor sevenths. Some representable triads require an unsupported seventh: G-triple-sharp major seventh and C-double-flat diminished seventh are rejected, while G-triple-sharp dominant seventh fits without requiring a whole major scale.
+
+Consequences: Preserve typed numeric/spelled root boundaries and existing public signatures. Unknown qualities, including inherited-property names, and required accidentals beyond +/-3 throw RangeError without fallback, omission, or partial output. Numeric output is independent of spelling limits. Return fresh readonly-by-type arrays and note objects without runtime freezing or input mutation, using only sibling domain dependencies. Existing triad implementation and completed plans remain unchanged.
+
+Broader chord extensions, symbol parsing, identification, harmonization, registered output, inversions, voicing, Fretboard, Playability, UI, AI, and dependencies remain outside this increment. The deferred error-classification trigger remains open. Earlier seventh-chord exclusions describe preceding increments; these eight constructions are now implemented.
+
+Recorded: 2026-10-21. Authority: User's eight-quality selection, approval of the seventh-chord plan, and explicit implementation request. See the [seventh-chord effort](../plans/seventh-chord-construction.md).

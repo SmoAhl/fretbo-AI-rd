@@ -104,6 +104,8 @@ A chord's **root** anchors its construction and need not be the lowest sounding 
 | Half-diminished seventh | 1 ♭3 ♭5 ♭7 | 0, 3, 6, 10 | Cm7(♭5), Cø7 |
 | Diminished seventh | 1 ♭3 ♭5 ♭♭7 | 0, 3, 6, 9 | Cdim7, C°7 |
 | Minor-major seventh | 1 ♭3 5 7 | 0, 3, 7, 11 | Cm(maj7) |
+| Augmented-major seventh | 1 3 ♯5 7 | 0, 4, 8, 11 | Caug(maj7) |
+| Augmented seventh | 1 3 ♯5 ♭7 | 0, 4, 8, 10 | Caug7, C7(♯5) |
 
 Spell tones by their interval roles. C diminished seventh is C–E♭–G♭–B𝄫; A sounds the same as B𝄫 but does not spell the seventh. Additional qualities can be derived by combining the required triad and seventh rather than treating this table as exhaustive.
 
