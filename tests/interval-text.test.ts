@@ -1,12 +1,12 @@
 import { describe, expect, test } from "vitest";
-import { formatSpelledInterval, parseSpelledInterval } from "../domain/music-theory/interval-text.js";
-import { formatRegisteredNote, parseRegisteredNote } from "../domain/music-theory/note-text.js";
+import { formatSpelledInterval, parseSpelledInterval } from "../domain/music-theory/intervals-and-transposition/interval-text.js";
+import { formatRegisteredNote, parseRegisteredNote } from "../domain/music-theory/pitch-pitch-classes-and-spelling/note-text.js";
 import {
   type IntervalQuality,
   type SpelledInterval,
   transposeRegisteredNote,
   validateSpelledInterval,
-} from "../domain/music-theory/spelled-transposition.js";
+} from "../domain/music-theory/intervals-and-transposition/spelled-transposition.js";
 
 describe("parseSpelledInterval", () => {
   test.each([

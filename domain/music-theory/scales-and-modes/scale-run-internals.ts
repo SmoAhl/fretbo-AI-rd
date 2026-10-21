@@ -1,11 +1,11 @@
-import { type NoteSpelling, pitchClassFromSpelling } from "./note-spelling.js";
+import { type NoteSpelling, pitchClassFromSpelling } from "../pitch-pitch-classes-and-spelling/note-spelling.js";
 import {
   type RegisteredNote,
   type RegisteredPitch,
   registeredPitchFromNote,
   transposeRegisteredPitch,
-} from "./registered-pitch.js";
-import { type IntervalDirection } from "./spelled-transposition.js";
+} from "../pitch-pitch-classes-and-spelling/registered-pitch.js";
+import { type IntervalDirection } from "../intervals-and-transposition/spelled-transposition.js";
 
 export type ScaleRunOptions = Readonly<{
   direction: IntervalDirection;

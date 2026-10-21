@@ -1,6 +1,6 @@
 import { noteSpellingFromDegreeFormula } from "./degrees.js";
-import { type NoteLetter, type NoteSpelling } from "./note-spelling.js";
-import { scaleNoteSpellings } from "./scales.js";
+import { type NoteLetter, type NoteSpelling } from "../pitch-pitch-classes-and-spelling/note-spelling.js";
+import { scaleNoteSpellings } from "../scales-and-modes/scales.js";
 
 export type KeyMode = "major" | "minor";
 /** Tonal identity, independent of signature availability or a selected scale collection. */

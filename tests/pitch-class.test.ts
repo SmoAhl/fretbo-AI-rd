@@ -2,7 +2,7 @@ import { describe, expect, test } from "vitest";
 import {
   type PitchClass,
   transposePitchClass,
-} from "../domain/music-theory/pitch-class.js";
+} from "../domain/music-theory/pitch-pitch-classes-and-spelling/pitch-class.js";
 
 const pitchClasses: readonly PitchClass[] = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
 

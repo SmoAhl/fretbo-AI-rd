@@ -1,9 +1,9 @@
 import { expect, test } from "vitest";
-import { pitchClassFromSpelling } from "../domain/music-theory/note-spelling.js";
-import { parseNoteSpelling, formatRegisteredNote } from "../domain/music-theory/note-text.js";
-import { type PitchClass } from "../domain/music-theory/pitch-class.js";
-import { registeredPitchFromNote } from "../domain/music-theory/registered-pitch.js";
-import { spellingFromPitchClass, noteFromRegisteredPitch } from "../domain/music-theory/spelling-selection.js";
+import { pitchClassFromSpelling } from "../domain/music-theory/pitch-pitch-classes-and-spelling/note-spelling.js";
+import { parseNoteSpelling, formatRegisteredNote } from "../domain/music-theory/pitch-pitch-classes-and-spelling/note-text.js";
+import { type PitchClass } from "../domain/music-theory/pitch-pitch-classes-and-spelling/pitch-class.js";
+import { registeredPitchFromNote } from "../domain/music-theory/pitch-pitch-classes-and-spelling/registered-pitch.js";
+import { spellingFromPitchClass, noteFromRegisteredPitch } from "../domain/music-theory/pitch-pitch-classes-and-spelling/spelling-selection.js";
 
 const expectedSharps = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
 const expectedFlats = ["C", "Db", "D", "Eb", "E", "F", "Gb", "G", "Ab", "A", "Bb", "B"];

@@ -1,10 +1,10 @@
-import { type Accidental, type NoteSpelling, pitchClassFromSpelling } from "./note-spelling.js";
+import { type Accidental, type NoteSpelling, pitchClassFromSpelling } from "../pitch-pitch-classes-and-spelling/note-spelling.js";
 import {
   type RegisteredNote,
   registeredPitchFromNote,
   semitoneDistance,
   transposeRegisteredPitch,
-} from "./registered-pitch.js";
+} from "../pitch-pitch-classes-and-spelling/registered-pitch.js";
 
 export type IntervalQuality = "perfect" | "major" | "minor" | "augmented" | "diminished";
 export type IntervalDirection = "up" | "down";

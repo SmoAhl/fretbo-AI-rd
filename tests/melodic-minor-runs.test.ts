@@ -4,10 +4,10 @@ import {
   type MelodicMinorRunOptions,
   melodicMinorRegisteredNotes,
   melodicMinorRegisteredPitches,
-} from "../domain/music-theory/melodic-minor-runs.js";
-import { formatRegisteredNote, parseRegisteredNote } from "../domain/music-theory/note-text.js";
-import { type RegisteredNote, registeredPitchFromNote } from "../domain/music-theory/registered-pitch.js";
-import { MAX_SCALE_RUN_NOTES, scaleRegisteredNotes } from "../domain/music-theory/scale-runs.js";
+} from "../domain/music-theory/scales-and-modes/melodic-minor-runs.js";
+import { formatRegisteredNote, parseRegisteredNote } from "../domain/music-theory/pitch-pitch-classes-and-spelling/note-text.js";
+import { type RegisteredNote, registeredPitchFromNote } from "../domain/music-theory/pitch-pitch-classes-and-spelling/registered-pitch.js";
+import { MAX_SCALE_RUN_NOTES, scaleRegisteredNotes } from "../domain/music-theory/scales-and-modes/scale-runs.js";
 
 const conventions = ["fixed-collection", "classical-exercise"] as const;
 const up: MelodicMinorRunOptions = {

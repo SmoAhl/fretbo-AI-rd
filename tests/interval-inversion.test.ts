@@ -1,11 +1,11 @@
 import { describe, expect, test } from "vitest";
-import { parseSpelledInterval } from "../domain/music-theory/interval-text.js";
+import { parseSpelledInterval } from "../domain/music-theory/intervals-and-transposition/interval-text.js";
 import {
   type IntervalQuality,
   type SpelledInterval,
   invertSimpleInterval,
   transposeRegisteredNote,
-} from "../domain/music-theory/spelled-transposition.js";
+} from "../domain/music-theory/intervals-and-transposition/spelled-transposition.js";
 
 // Explicit complementary pairs cover all 26 invertible quality/number combinations.
 const pairs: readonly [number, IntervalQuality, number, IntervalQuality][] = [

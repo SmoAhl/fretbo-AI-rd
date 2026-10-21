@@ -1,11 +1,11 @@
 import { describe, expect, test } from "vitest";
-import { type NoteLetter } from "../domain/music-theory/note-spelling.js";
+import { type NoteLetter } from "../domain/music-theory/pitch-pitch-classes-and-spelling/note-spelling.js";
 import {
   type RegisteredNote,
   pitchClassFromRegisteredPitch,
   registeredPitchFromNote,
   transposeRegisteredPitch,
-} from "../domain/music-theory/registered-pitch.js";
+} from "../domain/music-theory/pitch-pitch-classes-and-spelling/registered-pitch.js";
 
 const invalidNumbers = [
   0.5, -0.5, NaN, Infinity, -Infinity,

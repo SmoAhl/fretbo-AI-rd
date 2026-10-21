@@ -1,11 +1,11 @@
-import { type NoteSpelling } from "./note-spelling.js";
-import { type PitchClass, transposePitchClass } from "./pitch-class.js";
+import { type NoteSpelling } from "../pitch-pitch-classes-and-spelling/note-spelling.js";
+import { type PitchClass, transposePitchClass } from "../pitch-pitch-classes-and-spelling/pitch-class.js";
 import {
   type IntervalQuality,
   type SpelledInterval,
   semitonesFromInterval,
   transposeNoteSpelling,
-} from "./spelled-transposition.js";
+} from "../intervals-and-transposition/spelled-transposition.js";
 
 export type ScaleType =
   | "major"

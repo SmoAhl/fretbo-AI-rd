@@ -3,7 +3,7 @@ import {
   type RegisteredPitch,
   registeredPitchFromNote,
   transposeRegisteredPitch,
-} from "./registered-pitch.js";
+} from "../pitch-pitch-classes-and-spelling/registered-pitch.js";
 import { type ScaleType, scaleNoteSpellings, scalePitchClasses } from "./scales.js";
 import { type ScaleRunOptions, registeredRunNotes, registeredRunPitches } from "./scale-run-internals.js";
 

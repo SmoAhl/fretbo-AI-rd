@@ -5,8 +5,8 @@ import {
   pitchClassFromDegreeFormula,
 } from "./degrees.js";
 import { type Key, createKey } from "./keys.js";
-import { type NoteSpelling, pitchClassFromSpelling } from "./note-spelling.js";
-import { type PitchClass } from "./pitch-class.js";
+import { type NoteSpelling, pitchClassFromSpelling } from "../pitch-pitch-classes-and-spelling/note-spelling.js";
+import { type PitchClass } from "../pitch-pitch-classes-and-spelling/pitch-class.js";
 
 /** An explicit role determines spelling; otherwise select the baseline or leave the pitch unresolved. */
 export function spellingFromPitchClassInKey(

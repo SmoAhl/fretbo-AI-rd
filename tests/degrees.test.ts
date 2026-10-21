@@ -9,15 +9,15 @@ import {
   noteSpellingFromDegreeFormula,
   pitchClassAtCollectionDegree,
   pitchClassFromDegreeFormula,
-} from "../domain/music-theory/degrees.js";
-import { type MinorModeParent, minorModeNoteSpellings } from "../domain/music-theory/minor-modes.js";
-import { type Accidental, type NoteSpelling, pitchClassFromSpelling } from "../domain/music-theory/note-spelling.js";
-import { formatNoteSpelling, parseNoteSpelling } from "../domain/music-theory/note-text.js";
-import { type PitchClass } from "../domain/music-theory/pitch-class.js";
+} from "../domain/music-theory/degrees-keys-and-spelling/degrees.js";
+import { type MinorModeParent, minorModeNoteSpellings } from "../domain/music-theory/scales-and-modes/minor-modes.js";
+import { type Accidental, type NoteSpelling, pitchClassFromSpelling } from "../domain/music-theory/pitch-pitch-classes-and-spelling/note-spelling.js";
+import { formatNoteSpelling, parseNoteSpelling } from "../domain/music-theory/pitch-pitch-classes-and-spelling/note-text.js";
+import { type PitchClass } from "../domain/music-theory/pitch-pitch-classes-and-spelling/pitch-class.js";
 import {
   type ScaleDegree, type ScaleType,
   pitchClassAtScaleDegree, scaleDegreeOfPitchClass, scaleNoteSpellings,
-} from "../domain/music-theory/scales.js";
+} from "../domain/music-theory/scales-and-modes/scales.js";
 
 const naturals = [["C", 0], ["D", 2], ["E", 4], ["F", 5], ["G", 7], ["A", 9], ["B", 11]] as const;
 const alterations = [-3, -2, -1, 0, 1, 2, 3] as const;

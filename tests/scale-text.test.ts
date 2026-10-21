@@ -1,9 +1,9 @@
 import { describe, expect, test } from "vitest";
-import { formatNoteSpelling, parseNoteSpelling, parseRegisteredNote } from "../domain/music-theory/note-text.js";
-import { registeredPitchFromNote } from "../domain/music-theory/registered-pitch.js";
-import { scaleRegisteredNotes, scaleRegisteredPitches } from "../domain/music-theory/scale-runs.js";
-import { parseScaleType } from "../domain/music-theory/scale-text.js";
-import { type ScaleType, scaleNoteSpellings, scalePitchClasses } from "../domain/music-theory/scales.js";
+import { formatNoteSpelling, parseNoteSpelling, parseRegisteredNote } from "../domain/music-theory/pitch-pitch-classes-and-spelling/note-text.js";
+import { registeredPitchFromNote } from "../domain/music-theory/pitch-pitch-classes-and-spelling/registered-pitch.js";
+import { scaleRegisteredNotes, scaleRegisteredPitches } from "../domain/music-theory/scales-and-modes/scale-runs.js";
+import { parseScaleType } from "../domain/music-theory/scales-and-modes/scale-text.js";
+import { type ScaleType, scaleNoteSpellings, scalePitchClasses } from "../domain/music-theory/scales-and-modes/scales.js";
 
 // Independent catalog expectations cover every supported identifier.
 const names = [

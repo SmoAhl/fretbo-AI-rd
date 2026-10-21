@@ -8,13 +8,13 @@ import {
   minorModeRegisteredPitches,
   relativeMinorModeNoteSpellings,
   relativeMinorModePitchClasses,
-} from "../domain/music-theory/minor-modes.js";
-import { type Accidental, type NoteSpelling, pitchClassFromSpelling } from "../domain/music-theory/note-spelling.js";
-import { formatNoteSpelling, formatRegisteredNote, parseNoteSpelling, parseRegisteredNote } from "../domain/music-theory/note-text.js";
-import { type PitchClass } from "../domain/music-theory/pitch-class.js";
-import { registeredPitchFromNote } from "../domain/music-theory/registered-pitch.js";
-import { type ScaleRunOptions, MAX_SCALE_RUN_NOTES } from "../domain/music-theory/scale-runs.js";
-import { type ScaleDegree } from "../domain/music-theory/scales.js";
+} from "../domain/music-theory/scales-and-modes/minor-modes.js";
+import { type Accidental, type NoteSpelling, pitchClassFromSpelling } from "../domain/music-theory/pitch-pitch-classes-and-spelling/note-spelling.js";
+import { formatNoteSpelling, formatRegisteredNote, parseNoteSpelling, parseRegisteredNote } from "../domain/music-theory/pitch-pitch-classes-and-spelling/note-text.js";
+import { type PitchClass } from "../domain/music-theory/pitch-pitch-classes-and-spelling/pitch-class.js";
+import { registeredPitchFromNote } from "../domain/music-theory/pitch-pitch-classes-and-spelling/registered-pitch.js";
+import { type ScaleRunOptions, MAX_SCALE_RUN_NOTES } from "../domain/music-theory/scales-and-modes/scale-runs.js";
+import { type ScaleDegree } from "../domain/music-theory/scales-and-modes/scales.js";
 
 // Independent fixtures specify every tonic-relative collection and its closing steps.
 const modes = [

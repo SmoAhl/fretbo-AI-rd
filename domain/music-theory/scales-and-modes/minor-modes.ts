@@ -1,6 +1,6 @@
-import { type NoteSpelling } from "./note-spelling.js";
-import { type PitchClass, transposePitchClass } from "./pitch-class.js";
-import { type RegisteredNote, type RegisteredPitch, registeredPitchFromNote } from "./registered-pitch.js";
+import { type NoteSpelling } from "../pitch-pitch-classes-and-spelling/note-spelling.js";
+import { type PitchClass, transposePitchClass } from "../pitch-pitch-classes-and-spelling/pitch-class.js";
+import { type RegisteredNote, type RegisteredPitch, registeredPitchFromNote } from "../pitch-pitch-classes-and-spelling/registered-pitch.js";
 import { registeredRunNotes, registeredRunPitches } from "./scale-run-internals.js";
 import { type ScaleRunOptions } from "./scale-runs.js";
 import { type ScaleDegree, scaleNoteSpellings, scalePitchClasses } from "./scales.js";
@@ -9,7 +9,7 @@ import {
   identifySpelledInterval,
   semitonesFromInterval,
   transposeNoteSpelling,
-} from "./spelled-transposition.js";
+} from "../intervals-and-transposition/spelled-transposition.js";
 
 export type MinorModeParent = "harmonic-minor" | "melodic-minor-ascending";
 export type MinorMode = Readonly<{ parent: MinorModeParent; degree: ScaleDegree }>;

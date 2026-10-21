@@ -1,9 +1,9 @@
 import { describe, expect, test } from "vitest";
-import { type Accidental, type NoteLetter } from "../domain/music-theory/note-spelling.js";
-import { formatRegisteredNote, parseRegisteredNote } from "../domain/music-theory/note-text.js";
-import { type RegisteredNote, registeredPitchFromNote } from "../domain/music-theory/registered-pitch.js";
-import { MAX_SCALE_RUN_NOTES, type ScaleRunOptions, scaleRegisteredNotes, scaleRegisteredPitches } from "../domain/music-theory/scale-runs.js";
-import { type ScaleType } from "../domain/music-theory/scales.js";
+import { type Accidental, type NoteLetter } from "../domain/music-theory/pitch-pitch-classes-and-spelling/note-spelling.js";
+import { formatRegisteredNote, parseRegisteredNote } from "../domain/music-theory/pitch-pitch-classes-and-spelling/note-text.js";
+import { type RegisteredNote, registeredPitchFromNote } from "../domain/music-theory/pitch-pitch-classes-and-spelling/registered-pitch.js";
+import { MAX_SCALE_RUN_NOTES, type ScaleRunOptions, scaleRegisteredNotes, scaleRegisteredPitches } from "../domain/music-theory/scales-and-modes/scale-runs.js";
+import { type ScaleType } from "../domain/music-theory/scales-and-modes/scales.js";
 
 // Independent reference offsets, including pentatonic skipped degrees and aliases.
 const patterns = [

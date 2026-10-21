@@ -1,8 +1,8 @@
 import { describe, expect, test } from "vitest";
-import { type NoteLetter, type NoteSpelling } from "../domain/music-theory/note-spelling.js";
+import { type NoteLetter, type NoteSpelling } from "../domain/music-theory/pitch-pitch-classes-and-spelling/note-spelling.js";
 import {
   formatNoteSpelling, formatRegisteredNote, parseNoteSpelling, parseRegisteredNote,
-} from "../domain/music-theory/note-text.js";
+} from "../domain/music-theory/pitch-pitch-classes-and-spelling/note-text.js";
 
 describe("note text", () => {
   test.each([

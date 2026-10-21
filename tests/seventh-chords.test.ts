@@ -1,14 +1,14 @@
 import { describe, expect, test } from "vitest";
-import { type Accidental, type NoteSpelling, pitchClassFromSpelling } from "../domain/music-theory/note-spelling.js";
-import { formatNoteSpelling, parseNoteSpelling } from "../domain/music-theory/note-text.js";
-import { type PitchClass } from "../domain/music-theory/pitch-class.js";
-import { scaleNoteSpellings } from "../domain/music-theory/scales.js";
+import { type Accidental, type NoteSpelling, pitchClassFromSpelling } from "../domain/music-theory/pitch-pitch-classes-and-spelling/note-spelling.js";
+import { formatNoteSpelling, parseNoteSpelling } from "../domain/music-theory/pitch-pitch-classes-and-spelling/note-text.js";
+import { type PitchClass } from "../domain/music-theory/pitch-pitch-classes-and-spelling/pitch-class.js";
+import { scaleNoteSpellings } from "../domain/music-theory/scales-and-modes/scales.js";
 import {
   type SeventhChordQuality,
   seventhChordNoteSpellings,
   seventhChordPitchClasses,
-} from "../domain/music-theory/seventh-chords.js";
-import { triadNoteSpellings, triadPitchClasses } from "../domain/music-theory/triads.js";
+} from "../domain/music-theory/chords-symbols-and-realization/seventh-chords.js";
+import { triadNoteSpellings, triadPitchClasses } from "../domain/music-theory/chords-symbols-and-realization/triads.js";
 
 // Independent sounding offsets and natural-letter coordinates supply the expected results.
 const fixtures = [

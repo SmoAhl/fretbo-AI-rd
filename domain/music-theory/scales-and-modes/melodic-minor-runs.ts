@@ -1,4 +1,4 @@
-import { type RegisteredNote, type RegisteredPitch } from "./registered-pitch.js";
+import { type RegisteredNote, type RegisteredPitch } from "../pitch-pitch-classes-and-spelling/registered-pitch.js";
 import {
   type ScaleRunOptions,
   scaleRegisteredNotes,

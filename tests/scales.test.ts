@@ -1,7 +1,7 @@
 import { describe, expect, test } from "vitest";
-import { type NoteSpelling, pitchClassFromSpelling } from "../domain/music-theory/note-spelling.js";
-import { formatNoteSpelling, parseNoteSpelling } from "../domain/music-theory/note-text.js";
-import { type PitchClass } from "../domain/music-theory/pitch-class.js";
+import { type NoteSpelling, pitchClassFromSpelling } from "../domain/music-theory/pitch-pitch-classes-and-spelling/note-spelling.js";
+import { formatNoteSpelling, parseNoteSpelling } from "../domain/music-theory/pitch-pitch-classes-and-spelling/note-text.js";
+import { type PitchClass } from "../domain/music-theory/pitch-pitch-classes-and-spelling/pitch-class.js";
 import {
   type ScaleDegree,
   type ScaleType,
@@ -9,7 +9,7 @@ import {
   scaleDegreeOfPitchClass,
   scaleNoteSpellings,
   scalePitchClasses,
-} from "../domain/music-theory/scales.js";
+} from "../domain/music-theory/scales-and-modes/scales.js";
 
 // Expected offsets and closing steps are independent of the domain's interval definitions.
 const referencePatterns = [

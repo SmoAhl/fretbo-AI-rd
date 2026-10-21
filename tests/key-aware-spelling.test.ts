@@ -1,12 +1,12 @@
 import { describe, expect, test } from "vitest";
-import { type DegreeFormula } from "../domain/music-theory/degrees.js";
-import { spellingFromPitchClassInKey } from "../domain/music-theory/key-aware-spelling.js";
-import { type Key, type KeyMode, keySignature } from "../domain/music-theory/keys.js";
-import { type Accidental, type NoteSpelling, pitchClassFromSpelling } from "../domain/music-theory/note-spelling.js";
-import { formatNoteSpelling, parseNoteSpelling } from "../domain/music-theory/note-text.js";
-import { type PitchClass } from "../domain/music-theory/pitch-class.js";
-import { type ScaleDegree, scaleNoteSpellings } from "../domain/music-theory/scales.js";
-import { spellingFromPitchClass } from "../domain/music-theory/spelling-selection.js";
+import { type DegreeFormula } from "../domain/music-theory/degrees-keys-and-spelling/degrees.js";
+import { spellingFromPitchClassInKey } from "../domain/music-theory/degrees-keys-and-spelling/key-aware-spelling.js";
+import { type Key, type KeyMode, keySignature } from "../domain/music-theory/degrees-keys-and-spelling/keys.js";
+import { type Accidental, type NoteSpelling, pitchClassFromSpelling } from "../domain/music-theory/pitch-pitch-classes-and-spelling/note-spelling.js";
+import { formatNoteSpelling, parseNoteSpelling } from "../domain/music-theory/pitch-pitch-classes-and-spelling/note-text.js";
+import { type PitchClass } from "../domain/music-theory/pitch-pitch-classes-and-spelling/pitch-class.js";
+import { type ScaleDegree, scaleNoteSpellings } from "../domain/music-theory/scales-and-modes/scales.js";
+import { spellingFromPitchClass } from "../domain/music-theory/pitch-pitch-classes-and-spelling/spelling-selection.js";
 
 const naturals = [["C", 0], ["D", 2], ["E", 4], ["F", 5], ["G", 7], ["A", 9], ["B", 11]] as const;
 const accidentals = [-3, -2, -1, 0, 1, 2, 3] as const;

@@ -1,7 +1,7 @@
 import { type DegreeFormula, pitchClassFromDegreeFormula } from "./degrees.js";
-import { type Accidental } from "./note-spelling.js";
-import { type AccidentalNotation } from "./note-text.js";
-import { type ScaleDegree } from "./scales.js";
+import { type Accidental } from "../pitch-pitch-classes-and-spelling/note-spelling.js";
+import { type AccidentalNotation } from "../pitch-pitch-classes-and-spelling/note-text.js";
+import { type ScaleDegree } from "../scales-and-modes/scales.js";
 
 const alterations: Readonly<Record<string, Accidental>> = {
   "": 0, "♮": 0, "b": -1, "♭": -1, "bb": -2, "♭♭": -2, "𝄫": -2,

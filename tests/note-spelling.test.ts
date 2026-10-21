@@ -4,8 +4,8 @@ import {
   type NoteLetter,
   type NoteSpelling,
   pitchClassFromSpelling,
-} from "../domain/music-theory/note-spelling.js";
-import { type PitchClass, transposePitchClass } from "../domain/music-theory/pitch-class.js";
+} from "../domain/music-theory/pitch-pitch-classes-and-spelling/note-spelling.js";
+import { type PitchClass, transposePitchClass } from "../domain/music-theory/pitch-pitch-classes-and-spelling/pitch-class.js";
 
 // Columns are triple flat through triple sharp.
 // Expected classes are written independently of the domain lookup/arithmetic.

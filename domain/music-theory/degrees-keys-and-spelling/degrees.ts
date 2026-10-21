@@ -1,8 +1,8 @@
-import { type MinorMode, minorModeNoteSpellings } from "./minor-modes.js";
-import { type Accidental, type NoteSpelling } from "./note-spelling.js";
-import { type PitchClass, transposePitchClass } from "./pitch-class.js";
-import { type ScaleDegree, type ScaleType, scaleNoteSpellings } from "./scales.js";
-import { transposeNoteSpelling } from "./spelled-transposition.js";
+import { type MinorMode, minorModeNoteSpellings } from "../scales-and-modes/minor-modes.js";
+import { type Accidental, type NoteSpelling } from "../pitch-pitch-classes-and-spelling/note-spelling.js";
+import { type PitchClass, transposePitchClass } from "../pitch-pitch-classes-and-spelling/pitch-class.js";
+import { type ScaleDegree, type ScaleType, scaleNoteSpellings } from "../scales-and-modes/scales.js";
+import { transposeNoteSpelling } from "../intervals-and-transposition/spelled-transposition.js";
 
 /** Major/perfect reference role and semitone alteration, rather than ordinal position. */
 export type DegreeFormula = Readonly<{ number: ScaleDegree; alteration: Accidental }>;

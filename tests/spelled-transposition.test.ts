@@ -1,13 +1,13 @@
 import { describe, expect, test } from "vitest";
-import { pitchClassFromSpelling } from "../domain/music-theory/note-spelling.js";
-import { formatRegisteredNote, parseNoteSpelling, parseRegisteredNote } from "../domain/music-theory/note-text.js";
-import { transposePitchClass } from "../domain/music-theory/pitch-class.js";
-import { registeredPitchFromNote } from "../domain/music-theory/registered-pitch.js";
+import { pitchClassFromSpelling } from "../domain/music-theory/pitch-pitch-classes-and-spelling/note-spelling.js";
+import { formatRegisteredNote, parseNoteSpelling, parseRegisteredNote } from "../domain/music-theory/pitch-pitch-classes-and-spelling/note-text.js";
+import { transposePitchClass } from "../domain/music-theory/pitch-pitch-classes-and-spelling/pitch-class.js";
+import { registeredPitchFromNote } from "../domain/music-theory/pitch-pitch-classes-and-spelling/registered-pitch.js";
 import {
   type IntervalQuality, type SpelledInterval,
   semitonesFromInterval,
   transposeNoteSpelling, transposeRegisteredNote,
-} from "../domain/music-theory/spelled-transposition.js";
+} from "../domain/music-theory/intervals-and-transposition/spelled-transposition.js";
 
 // Expected C4 upward results and chromatic distances are explicit musical examples.
 const intervals: readonly [number, IntervalQuality, number, string][] = [

@@ -1,5 +1,5 @@
-import { type NoteSpelling } from "./note-spelling.js";
-import { type PitchClass } from "./pitch-class.js";
+import { type NoteSpelling } from "../pitch-pitch-classes-and-spelling/note-spelling.js";
+import { type PitchClass } from "../pitch-pitch-classes-and-spelling/pitch-class.js";
 import { type ScaleDegree, scaleNoteSpellings, scalePitchClasses } from "./scales.js";
 
 const modes = ["ionian", "dorian", "phrygian", "lydian", "mixolydian", "aeolian", "locrian"] as const;

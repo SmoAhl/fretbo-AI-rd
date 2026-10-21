@@ -1,9 +1,9 @@
 import { describe, expect, test } from "vitest";
-import { formatDegreeFormula, parseDegreeFormula } from "../domain/music-theory/degree-text.js";
-import { type DegreeFormula, noteSpellingFromDegreeFormula, pitchClassFromDegreeFormula } from "../domain/music-theory/degrees.js";
-import { type Accidental } from "../domain/music-theory/note-spelling.js";
-import { formatNoteSpelling, parseNoteSpelling, type AccidentalNotation } from "../domain/music-theory/note-text.js";
-import { type ScaleDegree } from "../domain/music-theory/scales.js";
+import { formatDegreeFormula, parseDegreeFormula } from "../domain/music-theory/degrees-keys-and-spelling/degree-text.js";
+import { type DegreeFormula, noteSpellingFromDegreeFormula, pitchClassFromDegreeFormula } from "../domain/music-theory/degrees-keys-and-spelling/degrees.js";
+import { type Accidental } from "../domain/music-theory/pitch-pitch-classes-and-spelling/note-spelling.js";
+import { formatNoteSpelling, parseNoteSpelling, type AccidentalNotation } from "../domain/music-theory/pitch-pitch-classes-and-spelling/note-text.js";
+import { type ScaleDegree } from "../domain/music-theory/scales-and-modes/scales.js";
 
 const prefixes = [
   ["", 0], ["♮", 0], ["b", -1], ["♭", -1], ["bb", -2], ["♭♭", -2], ["𝄫", -2],

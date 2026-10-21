@@ -2,9 +2,9 @@ import {
   type DegreeFormula,
   noteSpellingFromDegreeFormula,
   pitchClassFromDegreeFormula,
-} from "./degrees.js";
-import { type NoteSpelling } from "./note-spelling.js";
-import { type PitchClass } from "./pitch-class.js";
+} from "../degrees-keys-and-spelling/degrees.js";
+import { type NoteSpelling } from "../pitch-pitch-classes-and-spelling/note-spelling.js";
+import { type PitchClass } from "../pitch-pitch-classes-and-spelling/pitch-class.js";
 import { type TriadQuality, triadNoteSpellings, triadPitchClasses } from "./triads.js";
 
 export type SeventhChordQuality =

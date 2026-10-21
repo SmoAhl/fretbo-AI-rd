@@ -1,4 +1,4 @@
-import { type PitchClass, transposePitchClass } from "./pitch-class.js";
+import { type PitchClass, transposePitchClass } from "../pitch-pitch-classes-and-spelling/pitch-class.js";
 
 /** Twelve classes in ascending semitone order from the tonic, without octave repetition. */
 export function chromaticPitchClasses(tonic: PitchClass): readonly PitchClass[] {

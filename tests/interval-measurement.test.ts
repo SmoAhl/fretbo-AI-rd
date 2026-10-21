@@ -1,11 +1,11 @@
 import { describe, expect, test } from "vitest";
-import { semitoneDistance } from "../domain/music-theory/registered-pitch.js";
-import { parseRegisteredNote } from "../domain/music-theory/note-text.js";
+import { semitoneDistance } from "../domain/music-theory/pitch-pitch-classes-and-spelling/registered-pitch.js";
+import { parseRegisteredNote } from "../domain/music-theory/pitch-pitch-classes-and-spelling/note-text.js";
 import {
   type IntervalQuality,
   identifySpelledInterval,
   transposeRegisteredNote,
-} from "../domain/music-theory/spelled-transposition.js";
+} from "../domain/music-theory/intervals-and-transposition/spelled-transposition.js";
 
 describe("semitoneDistance", () => {
   test.each([

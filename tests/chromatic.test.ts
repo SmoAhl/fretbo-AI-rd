@@ -1,6 +1,6 @@
 import { describe, expect, test } from "vitest";
-import { chromaticPitchClasses } from "../domain/music-theory/chromatic.js";
-import { type PitchClass } from "../domain/music-theory/pitch-class.js";
+import { chromaticPitchClasses } from "../domain/music-theory/scales-and-modes/chromatic.js";
+import { type PitchClass } from "../domain/music-theory/pitch-pitch-classes-and-spelling/pitch-class.js";
 
 const tonics: readonly PitchClass[] = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
 

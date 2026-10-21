@@ -1,9 +1,9 @@
 import { describe, expect, test } from "vitest";
-import { type Accidental, type NoteSpelling, pitchClassFromSpelling } from "../domain/music-theory/note-spelling.js";
-import { formatNoteSpelling, parseNoteSpelling } from "../domain/music-theory/note-text.js";
-import { type PitchClass } from "../domain/music-theory/pitch-class.js";
-import { scaleNoteSpellings } from "../domain/music-theory/scales.js";
-import { type TriadQuality, triadNoteSpellings, triadPitchClasses } from "../domain/music-theory/triads.js";
+import { type Accidental, type NoteSpelling, pitchClassFromSpelling } from "../domain/music-theory/pitch-pitch-classes-and-spelling/note-spelling.js";
+import { formatNoteSpelling, parseNoteSpelling } from "../domain/music-theory/pitch-pitch-classes-and-spelling/note-text.js";
+import { type PitchClass } from "../domain/music-theory/pitch-pitch-classes-and-spelling/pitch-class.js";
+import { scaleNoteSpellings } from "../domain/music-theory/scales-and-modes/scales.js";
+import { type TriadQuality, triadNoteSpellings, triadPitchClasses } from "../domain/music-theory/chords-symbols-and-realization/triads.js";
 
 // Independent musical fixtures, rather than the production formula table or degree converters.
 const fixtures = [

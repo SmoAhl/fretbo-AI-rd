@@ -1,13 +1,13 @@
 import { describe, expect, test } from "vitest";
-import { degreeFormulas } from "../domain/music-theory/degrees.js";
+import { degreeFormulas } from "../domain/music-theory/degrees-keys-and-spelling/degrees.js";
 import {
   type Key, type KeyMode, type KeySignatureAccidental,
   createKey, keySignature, parallelKey, relativeKey,
-} from "../domain/music-theory/keys.js";
-import { type Accidental, type NoteSpelling, pitchClassFromSpelling } from "../domain/music-theory/note-spelling.js";
-import { formatNoteSpelling, parseNoteSpelling } from "../domain/music-theory/note-text.js";
-import { scaleNoteSpellings } from "../domain/music-theory/scales.js";
-import { parseScaleType } from "../domain/music-theory/scale-text.js";
+} from "../domain/music-theory/degrees-keys-and-spelling/keys.js";
+import { type Accidental, type NoteSpelling, pitchClassFromSpelling } from "../domain/music-theory/pitch-pitch-classes-and-spelling/note-spelling.js";
+import { formatNoteSpelling, parseNoteSpelling } from "../domain/music-theory/pitch-pitch-classes-and-spelling/note-text.js";
+import { scaleNoteSpellings } from "../domain/music-theory/scales-and-modes/scales.js";
+import { parseScaleType } from "../domain/music-theory/scales-and-modes/scale-text.js";
 
 const letters = ["C", "D", "E", "F", "G", "A", "B"] as const;
 const accidentals = [-3, -2, -1, 0, 1, 2, 3] as const;
