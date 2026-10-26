@@ -159,6 +159,8 @@ The **bass** is the lowest sounding registered pitch. A triad is in root positio
 
 Slash notation specifies chord/bass: C/E is first-inversion C major; C/F♯ specifies a non-chord bass and is not a C-triad inversion.
 
+A specified bass without an octave expresses a constraint for later realization; it does not identify the actual lowest sounding registered pitch. Leaving bass unspecified does not establish root position. A specified bass remains separate from the chord's root-relative construction formula.
+
 A **voicing** specifies tone selection, register, spacing, distribution, and doubling. Preserve required bass, register, and repeated tones when realizing it. Context may permit omissions, but practical fingering difficulty does not authorize deleting required notes.
 
 Pitch-class membership alone does not determine bass, inversion, register, doubling, or a unique chord name: C–E–G–A can be interpreted as C6 or Am7. Describing a known chord and inferring harmony from notes are different questions. Choosing strings and fingers belongs to Fretboard and Playability.

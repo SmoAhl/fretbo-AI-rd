@@ -1,6 +1,10 @@
 import { type NoteSpelling } from "../pitch-pitch-classes-and-spelling/note-spelling.js";
 import { type PitchClass } from "../pitch-pitch-classes-and-spelling/pitch-class.js";
-import { type ChordDegreeFormula, type ChordFormula, chordNoteSpellings, chordPitchClasses } from "./chord-formulas.js";
+import { type ChordDegreeFormula, type ChordFormula } from "./chord-formulas.js";
+import {
+  createPitchClassChordDescription, createSpelledChordDescription,
+  chordDescriptionPitchClasses, chordDescriptionNoteSpellings,
+} from "./chord-descriptions.js";
 import { type SeventhChordQuality, seventhChordFormula } from "./seventh-chords.js";
 
 type UnalteredExtendedChordQuality =
@@ -63,10 +67,10 @@ export function extendedChordFormula(quality: ExtendedChordQuality): ChordFormul
 
 /** Formula role order, without prescribing octave placement, bass or voicing. */
 export function extendedChordPitchClasses(root: PitchClass, quality: ExtendedChordQuality): readonly PitchClass[] {
-  return chordPitchClasses(root, extendedChordFormula(quality));
+  return chordDescriptionPitchClasses(createPitchClassChordDescription(root, extendedChordFormula(quality)));
 }
 
 /** Preserve every required role's exact spelling within the triple-accidental limit. */
 export function extendedChordNoteSpellings(root: NoteSpelling, quality: ExtendedChordQuality): readonly NoteSpelling[] {
-  return chordNoteSpellings(root, extendedChordFormula(quality));
+  return chordDescriptionNoteSpellings(createSpelledChordDescription(root, extendedChordFormula(quality)));
 }

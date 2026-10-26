@@ -1,4 +1,8 @@
-import { type ChordDegreeFormula, type ChordFormula, chordNoteSpellings, chordPitchClasses } from "./chord-formulas.js";
+import { type ChordDegreeFormula, type ChordFormula } from "./chord-formulas.js";
+import {
+  createPitchClassChordDescription, createSpelledChordDescription,
+  chordDescriptionPitchClasses, chordDescriptionNoteSpellings,
+} from "./chord-descriptions.js";
 import { type NoteSpelling } from "../pitch-pitch-classes-and-spelling/note-spelling.js";
 import { type PitchClass } from "../pitch-pitch-classes-and-spelling/pitch-class.js";
 import { type TriadQuality, triadFormula } from "./triads.js";
@@ -48,7 +52,7 @@ export function seventhChordPitchClasses(
   root: PitchClass,
   quality: SeventhChordQuality,
 ): readonly PitchClass[] {
-  return chordPitchClasses(root, seventhChordFormula(quality));
+  return chordDescriptionPitchClasses(createPitchClassChordDescription(root, seventhChordFormula(quality)));
 }
 
 /** Preserve each role's exact spelling; reject any required tone beyond triple accidentals. */
@@ -56,5 +60,5 @@ export function seventhChordNoteSpellings(
   root: NoteSpelling,
   quality: SeventhChordQuality,
 ): readonly NoteSpelling[] {
-  return chordNoteSpellings(root, seventhChordFormula(quality));
+  return chordDescriptionNoteSpellings(createSpelledChordDescription(root, seventhChordFormula(quality)));
 }

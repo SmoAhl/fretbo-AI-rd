@@ -8,7 +8,11 @@ import { type Accidental, type NoteSpelling } from "../pitch-pitch-classes-and-s
 import { type PitchClass } from "../pitch-pitch-classes-and-spelling/pitch-class.js";
 import { type MinorMode } from "../scales-and-modes/minor-modes.js";
 import { type ScaleDegree, type ScaleType } from "../scales-and-modes/scales.js";
-import { type ChordFormula, chordNoteSpellings, chordPitchClasses } from "./chord-formulas.js";
+import { type ChordFormula } from "./chord-formulas.js";
+import {
+  createPitchClassChordDescription, createSpelledChordDescription,
+  chordDescriptionPitchClasses, chordDescriptionNoteSpellings,
+} from "./chord-descriptions.js";
 import { type SeventhChordQuality, seventhChordFormula } from "./seventh-chords.js";
 import { type TriadQuality, triadFormula } from "./triads.js";
 
@@ -97,7 +101,8 @@ export function harmonizedChordPitchClassesAtDegree(
 ): HarmonizedPitchClassChord {
   const result = harmonizedChordFormulaAtDegree(collection, degree, kind);
   const root = pitchClassAtCollectionDegree(tonic, collection, degree);
-  return { ...result, root, pitchClasses: chordPitchClasses(root, result.formula) };
+  const description = createPitchClassChordDescription(root, result.formula);
+  return { ...result, root, pitchClasses: chordDescriptionPitchClasses(description) };
 }
 
 /** Spell only the selected chord's tones; unrelated collection spellings impose no limit. */
@@ -109,7 +114,8 @@ export function harmonizedChordNoteSpellingsAtDegree(
 ): HarmonizedSpelledChord {
   const result = harmonizedChordFormulaAtDegree(collection, degree, kind);
   const root = noteSpellingAtCollectionDegree(tonic, collection, degree);
-  return { ...result, root, noteSpellings: chordNoteSpellings(root, result.formula) };
+  const description = createSpelledChordDescription(root, result.formula);
+  return { ...result, root, noteSpellings: chordDescriptionNoteSpellings(description) };
 }
 
 /** Return seven independent formulas in collection-degree order. */

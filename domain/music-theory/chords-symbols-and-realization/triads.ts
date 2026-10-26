@@ -1,4 +1,8 @@
-import { type ChordFormula, chordNoteSpellings, chordPitchClasses } from "./chord-formulas.js";
+import { type ChordFormula } from "./chord-formulas.js";
+import {
+  createPitchClassChordDescription, createSpelledChordDescription,
+  chordDescriptionPitchClasses, chordDescriptionNoteSpellings,
+} from "./chord-descriptions.js";
 import { type NoteSpelling } from "../pitch-pitch-classes-and-spelling/note-spelling.js";
 import { type PitchClass } from "../pitch-pitch-classes-and-spelling/pitch-class.js";
 
@@ -48,10 +52,10 @@ export function triadFormula(quality: TriadQuality): ChordFormula {
 
 /** Root-third-fifth for tertian qualities; suspended roles replace the third. No register, bass or inversion. */
 export function triadPitchClasses(root: PitchClass, quality: TriadQuality): readonly PitchClass[] {
-  return chordPitchClasses(root, triadFormula(quality));
+  return chordDescriptionPitchClasses(createPitchClassChordDescription(root, triadFormula(quality)));
 }
 
 /** Preserve each role's exact spelling; reject a required tone beyond triple accidentals. */
 export function triadNoteSpellings(root: NoteSpelling, quality: TriadQuality): readonly NoteSpelling[] {
-  return chordNoteSpellings(root, triadFormula(quality));
+  return chordDescriptionNoteSpellings(createSpelledChordDescription(root, triadFormula(quality)));
 }

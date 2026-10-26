@@ -10,24 +10,27 @@ import { type PitchClass } from "../pitch-pitch-classes-and-spelling/pitch-class
 export type ChordDegreeFormula = Readonly<{ number: number; alteration: Accidental }>;
 export type ChordFormula = readonly ChordDegreeFormula[];
 
-function simpleFormulas(formula: ChordFormula): readonly DegreeFormula[] {
+/** Validate role structure without resolving a root or requiring representable spellings. */
+export function validateChordFormula(formula: ChordFormula): void {
   if (!Array.isArray(formula) || formula.length === 0) {
     throw new RangeError("Chord formula must be a nonempty array of degree roles.");
   }
   // Iteration includes sparse entries, which must reject rather than silently omit tones.
-  const result: DegreeFormula[] = [];
   for (const role of formula) {
     if (role === null || typeof role !== "object"
       || !Number.isSafeInteger(role.number) || role.number < 1
       || !Number.isInteger(role.alteration) || role.alteration < -3 || role.alteration > 3) {
       throw new RangeError("Chord degree roles require a positive safe-integer number and alteration in -3..3.");
     }
-    result.push({
-      number: ((role.number - 1) % 7 + 1) as DegreeFormula["number"],
-      alteration: role.alteration,
-    });
   }
-  return result;
+}
+
+function simpleFormulas(formula: ChordFormula): readonly DegreeFormula[] {
+  validateChordFormula(formula);
+  return formula.map((role) => ({
+    number: ((role.number - 1) % 7 + 1) as DegreeFormula["number"],
+    alteration: role.alteration,
+  }));
 }
 
 /** Preserve formula order and multiplicity, discarding spelling and register. */

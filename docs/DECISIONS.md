@@ -613,3 +613,17 @@ Rationale: Alternate collection positions with octave continuation determine thi
 Consequences: Return seven entries in collection-degree order for full sequences. Minor-mode descriptors use their own supplied tonic and distinguish rotation degree from chord degree. Ascending melodic-minor collections stay fixed. Selected spelling checks only requested chord tones; full spelling rejects any unavailable required tone without partial output. Preserve +/-3 accidental limits, numeric independence, typed tonic boundaries, RangeError for invalid selectors/degrees/kinds or unrepresentable required output, and fresh readonly-by-type unfrozen results. No symbols, Roman numerals, harmonic function, custom/pentatonic harmonization, register, inversions, guitar rules, UI, AI or dependencies are introduced.
 
 Recorded: 2026-10-26. Authority: User selected both query forms and formula/quality output, then explicitly requested implementation of the approved plan. See the [harmonization effort](../plans/scale-harmonization.md).
+
+## D049: Structured chord descriptions with specified bass
+
+Status: Accepted. Additive contract using D042, integrated with D043-D048.
+
+Decision: Export readonly numeric and spelled chord descriptions containing required root/formula and optional specified bass. `createPitchClassChordDescription` and `createSpelledChordDescription` validate and copy formulas and supplied spellings without resolving derived tones. `chordDescriptionPitchClasses` accepts either representation; `chordDescriptionNoteSpellings` requires spelled input. Both resolve only formula tones through existing low-level capabilities, preserving order, compound roles, duplicates and enharmonic roles. Named constructors and harmonization use these descriptions internally with unchanged APIs and returned values.
+
+Rationale: A small root/formula contract connects existing construction to later symbols and realization without making a quality label, registered bass, voicing or fingering part of musical identity. Optional bass expresses intent: missing bass means unspecified, and explicit root bass or non-chord bass is retained separately without changing the construction formula.
+
+Consequences: Export shared `validateChordFormula(formula): void` from the formula module, preserving its nonempty-array, positive safe-integer role-number, +/-3 alteration and sparse/malformed-input RangeError rules. Root and bass retain typed input boundaries. Factories omit bass for undefined arguments, copy all musical fields and return unfrozen readonly-by-type descriptions. Derived spelling limits apply only during spelled tone resolution; numeric resolution of spelled descriptions remains independent of those limits. Do not infer or append bass, reorder tones, normalize roles, infer qualities, or select register/voicing. Dependency direction is named construction to descriptions to low-level formulas, without reverse imports or new dependencies.
+
+Symbols, inversion/bass-membership analysis, registered realization, omissions, identification, guitar rules, UI and AI remain outside this increment. Actual sounding bass continues to mean lowest registered pitch.
+
+Recorded: 2026-10-26. Authority: User selected both representations, the shared construction path and deferred derived spelling checks, then explicitly requested implementation of the approved plan. See the [description effort](../plans/structured-chord-descriptions.md).

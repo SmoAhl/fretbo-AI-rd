@@ -1,6 +1,10 @@
 import { type NoteSpelling } from "../pitch-pitch-classes-and-spelling/note-spelling.js";
 import { type PitchClass } from "../pitch-pitch-classes-and-spelling/pitch-class.js";
-import { type ChordFormula, chordNoteSpellings, chordPitchClasses } from "./chord-formulas.js";
+import { type ChordFormula } from "./chord-formulas.js";
+import {
+  createPitchClassChordDescription, createSpelledChordDescription,
+  chordDescriptionPitchClasses, chordDescriptionNoteSpellings,
+} from "./chord-descriptions.js";
 import { type TriadQuality, triadFormula } from "./triads.js";
 
 export type AddedToneChordQuality =
@@ -35,10 +39,10 @@ export function addedToneChordFormula(quality: AddedToneChordQuality): ChordForm
 
 /** Formula-defined role order, without bass, register or inversion information. */
 export function addedToneChordPitchClasses(root: PitchClass, quality: AddedToneChordQuality): readonly PitchClass[] {
-  return chordPitchClasses(root, addedToneChordFormula(quality));
+  return chordDescriptionPitchClasses(createPitchClassChordDescription(root, addedToneChordFormula(quality)));
 }
 
 /** Preserve exact role spelling; reject required tones beyond triple accidentals. */
 export function addedToneChordNoteSpellings(root: NoteSpelling, quality: AddedToneChordQuality): readonly NoteSpelling[] {
-  return chordNoteSpellings(root, addedToneChordFormula(quality));
+  return chordDescriptionNoteSpellings(createSpelledChordDescription(root, addedToneChordFormula(quality)));
 }
