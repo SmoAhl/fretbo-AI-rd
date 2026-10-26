@@ -5,6 +5,7 @@ import { type PitchClass } from "../domain/music-theory/pitch-pitch-classes-and-
 import { scaleNoteSpellings } from "../domain/music-theory/scales-and-modes/scales.js";
 import {
   type SeventhChordQuality,
+  seventhChordFormula,
   seventhChordNoteSpellings,
   seventhChordPitchClasses,
 } from "../domain/music-theory/chords-symbols-and-realization/seventh-chords.js";
@@ -20,6 +21,8 @@ const fixtures = [
   ["minor-major-seventh", [0, 3, 7, 11]],
   ["augmented-major-seventh", [0, 4, 8, 11]],
   ["augmented-seventh", [0, 4, 8, 10]],
+  ["dominant-seventh-sus2", [0, 2, 7, 10]],
+  ["dominant-seventh-sus4", [0, 5, 7, 10]],
 ] as const satisfies readonly (readonly [SeventhChordQuality, readonly number[]])[];
 const pitchClasses: readonly PitchClass[] = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
 const naturals = [["C", 0], ["D", 2], ["E", 4], ["F", 5], ["G", 7], ["A", 9], ["B", 11]] as const;
@@ -31,8 +34,9 @@ function wrap(pitch: number): PitchClass {
   return ((pitch % 12 + 12) % 12) as PitchClass;
 }
 
-function expectedSpellings(rootIndex: number, accidental: number, offsets: readonly number[]) {
-  const letterSteps = [0, 2, 4, 6];
+function expectedSpellings(rootIndex: number, accidental: number, offsets: readonly number[], quality: SeventhChordQuality) {
+  const letterSteps = quality === "dominant-seventh-sus2" ? [0, 1, 4, 6]
+    : quality === "dominant-seventh-sus4" ? [0, 3, 4, 6] : [0, 2, 4, 6];
   return offsets.map((offset, position) => {
     const targetIndex = rootIndex + letterSteps[position]!;
     const [letter, natural] = naturals[targetIndex % 7]!;
@@ -81,7 +85,7 @@ describe("seventhChordNoteSpellings", () => {
   for (const [quality, offsets] of fixtures) {
     test.each(spelledRoots)(`${quality} at $root.letter ($root.accidental)`, (fixture) => {
       const root = Object.freeze({ ...fixture.root });
-      const expected = expectedSpellings(fixture.index, root.accidental, offsets);
+      const expected = expectedSpellings(fixture.index, root.accidental, offsets, quality);
       const rootClass = wrap(naturals[fixture.index]![1] + root.accidental);
       const numeric = offsets.map((offset) => wrap(rootClass + offset));
       // Numeric output remains available even when the required exact spelling exceeds the limit.
@@ -115,6 +119,9 @@ describe("seventhChordNoteSpellings", () => {
     ["F#", "major-seventh", ["F#", "A#", "C#", "E#"]],
     ["G##", "augmented-major-seventh", ["G##", "B##", "D###", "F###"]],
     ["F###", "minor-major-seventh", ["F###", "A##", "C###", "E###"]],
+    ["C", "dominant-seventh-sus2", ["C", "D", "G", "Bb"]],
+    ["C", "dominant-seventh-sus4", ["C", "F", "G", "Bb"]],
+    ["F#", "dominant-seventh-sus4", ["F#", "B", "C#", "E"]],
   ] as const)("%s %s preserves %o through parse/construct/format", (text, quality, expected) => {
     const result = seventhChordNoteSpellings(parseNoteSpelling(text), quality);
     expect(result.map((note) => formatNoteSpelling(note, "ascii"))).toEqual(expected);
@@ -198,9 +205,41 @@ test.each([
   expect(() => seventhChordPitchClasses(0, quality as SeventhChordQuality)).toThrow(RangeError);
   expect(() => seventhChordNoteSpellings({ letter: "C", accidental: 0 }, quality as SeventhChordQuality))
     .toThrow(RangeError);
+  expect(() => seventhChordFormula(quality as SeventhChordQuality)).toThrow(RangeError);
+});
+
+test.each([
+  ["major-seventh", [[1, 0], [3, 0], [5, 0], [7, 0]]],
+  ["dominant-seventh", [[1, 0], [3, 0], [5, 0], [7, -1]]],
+  ["minor-seventh", [[1, 0], [3, -1], [5, 0], [7, -1]]],
+  ["half-diminished-seventh", [[1, 0], [3, -1], [5, -1], [7, -1]]],
+  ["diminished-seventh", [[1, 0], [3, -1], [5, -1], [7, -2]]],
+  ["minor-major-seventh", [[1, 0], [3, -1], [5, 0], [7, 0]]],
+  ["augmented-major-seventh", [[1, 0], [3, 0], [5, 1], [7, 0]]],
+  ["augmented-seventh", [[1, 0], [3, 0], [5, 1], [7, -1]]],
+  ["dominant-seventh-sus2", [[1, 0], [2, 0], [5, 0], [7, -1]]],
+  ["dominant-seventh-sus4", [[1, 0], [4, 0], [5, 0], [7, -1]]],
+] as const)("%s returns independent composed roles", (quality, roles) => {
+  const expected = roles.map(([number, alteration]) => ({ number, alteration }));
+  const first = seventhChordFormula(quality);
+  const second = seventhChordFormula(quality);
+  expect(first).toEqual(expected);
+  expect(first).not.toBe(second);
+  expect(Object.isFrozen(first)).toBe(false);
+  first.forEach((role, index) => {
+    expect(role).not.toBe(second[index]);
+    expect(Object.isFrozen(role)).toBe(false);
+    (role as { alteration: number }).alteration = 3;
+  });
+  expect(second).toEqual(expected);
+  expect(seventhChordFormula(quality)).toEqual(expected);
 });
 
 if (false) {
+  // @ts-expect-error Formula quality is required.
+  seventhChordFormula();
+  // @ts-expect-error Formula roles are readonly.
+  seventhChordFormula("dominant-seventh-sus2")[1]!.number = 9;
   // @ts-expect-error Numeric construction requires an explicit quality.
   seventhChordPitchClasses(0);
   // @ts-expect-error Spelled construction requires an explicit quality.

@@ -97,6 +97,8 @@ A chord's **root** anchors its construction and need not be the lowest sounding 
 | Major triad | 1 3 5 | 0, 4, 7 | C |
 | Minor triad | 1 ♭3 5 | 0, 3, 7 | Cm |
 | Diminished triad | 1 ♭3 ♭5 | 0, 3, 6 | Cdim |
+| Suspended second | 1 2 5 | 0, 2, 7 | Csus2 |
+| Suspended fourth | 1 4 5 | 0, 5, 7 | Csus4 |
 | Augmented triad | 1 3 ♯5 | 0, 4, 8 | Caug |
 | Major seventh | 1 3 5 7 | 0, 4, 7, 11 | Cmaj7 |
 | Dominant seventh | 1 3 5 ♭7 | 0, 4, 7, 10 | C7 |
@@ -105,7 +107,11 @@ A chord's **root** anchors its construction and need not be the lowest sounding 
 | Diminished seventh | 1 ♭3 ♭5 ♭♭7 | 0, 3, 6, 9 | Cdim7, C°7 |
 | Minor-major seventh | 1 ♭3 5 7 | 0, 3, 7, 11 | Cm(maj7) |
 | Augmented-major seventh | 1 3 ♯5 7 | 0, 4, 8, 11 | Caug(maj7) |
+| Suspended second dominant seventh | 1 2 5 ♭7 | 0, 2, 7, 10 | C7sus2 |
+| Suspended fourth dominant seventh | 1 4 5 ♭7 | 0, 5, 7, 10 | C7sus4 |
 | Augmented seventh | 1 3 ♯5 ♭7 | 0, 4, 8, 10 | Caug7, C7(♯5) |
+
+Suspended three-tone structures replace the third with a second or fourth; they need not be described as tertian triads.
 
 Spell tones by their interval roles. C diminished seventh is C–E♭–G♭–B𝄫; A sounds the same as B𝄫 but does not spell the seventh. Additional qualities can be derived by combining the required triad and seventh rather than treating this table as exhaustive.
 
@@ -118,6 +124,9 @@ In common jazz/pop symbols, a bare root denotes major, m denotes minor, and an u
 | Symbol | Construction in this convention |
 | --- | --- |
 | C9 | C–E–G–B♭–D; includes a seventh |
+| Cadd2 | C–E–G–D; retains role 2 without prescribing register |
+| Cmadd9 | C–E♭–G–D; no seventh implied |
+| Cadd11 | C–E–G–F; retains the third and adds role 11 |
 | Cadd9 | C–E–G–D; no seventh implied |
 | Csus2 | C–D–G; second replaces third |
 | Csus4 / Csus | C–F–G; fourth replaces third |
@@ -125,6 +134,24 @@ In common jazz/pop symbols, a bare root denotes major, m denotes minor, and an u
 | C6/9 | C–E–G–A–D; no seventh implied |
 
 Extensions 9, 11, and 13 correspond to compound 2, 4, and 6. Their common unaltered forms are major ninth, perfect eleventh, and major thirteenth; ♭ or ♯ alters the interval. D7(♯11), for example, adds G♯. Actual extended-chord voicings may omit intermediate tones; required and optional tones depend on the musical context. Add2/add9 usage does not universally fix register.
+
+Complete theoretical extension formulas retain the third and all intermediate extensions. For these constructions, major extensions use a major seventh; minor and dominant extensions use a minor seventh. These formulas do not require every tone in every practical voicing.
+
+| Quality family | Ninth | Eleventh | Thirteenth |
+| --- | --- | --- | --- |
+| Dominant | 1 3 5 ♭7 9 | 1 3 5 ♭7 9 11 | 1 3 5 ♭7 9 11 13 |
+| Major | 1 3 5 7 9 | 1 3 5 7 9 11 | 1 3 5 7 9 11 13 |
+| Minor | 1 ♭3 5 ♭7 9 | 1 ♭3 5 ♭7 9 11 | 1 ♭3 5 ♭7 9 11 13 |
+
+An altered extension retains its written degree role. The following complete constructions replace the corresponding natural extension; they do not require its natural counterpart as an additional tone.
+
+| Construction | Complete formula |
+| --- | --- |
+| Dominant flat ninth | 1 3 5 ♭7 ♭9 |
+| Dominant sharp ninth | 1 3 5 ♭7 ♯9 |
+| Dominant sharp eleventh | 1 3 5 ♭7 9 ♯11 |
+| Dominant flat thirteenth | 1 3 5 ♭7 9 11 ♭13 |
+| Major sharp eleventh | 1 3 5 7 9 ♯11 |
 
 ### Identity, inversion, and voicing
 

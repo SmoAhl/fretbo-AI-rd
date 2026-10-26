@@ -3,7 +3,7 @@ import { type Accidental, type NoteSpelling, pitchClassFromSpelling } from "../d
 import { formatNoteSpelling, parseNoteSpelling } from "../domain/music-theory/pitch-pitch-classes-and-spelling/note-text.js";
 import { type PitchClass } from "../domain/music-theory/pitch-pitch-classes-and-spelling/pitch-class.js";
 import { scaleNoteSpellings } from "../domain/music-theory/scales-and-modes/scales.js";
-import { type TriadQuality, triadNoteSpellings, triadPitchClasses } from "../domain/music-theory/chords-symbols-and-realization/triads.js";
+import { type TriadQuality, triadFormula, triadNoteSpellings, triadPitchClasses } from "../domain/music-theory/chords-symbols-and-realization/triads.js";
 
 // Independent musical fixtures, rather than the production formula table or degree converters.
 const fixtures = [
@@ -11,6 +11,8 @@ const fixtures = [
   ["minor", [0, 3, 7]],
   ["diminished", [0, 3, 6]],
   ["augmented", [0, 4, 8]],
+  ["sus2", [0, 2, 7]],
+  ["sus4", [0, 5, 7]],
 ] as const satisfies readonly (readonly [TriadQuality, readonly number[]])[];
 const pitchClasses: readonly PitchClass[] = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
 const naturals = [["C", 0], ["D", 2], ["E", 4], ["F", 5], ["G", 7], ["A", 9], ["B", 11]] as const;
@@ -22,8 +24,8 @@ function wrap(pitch: number): PitchClass {
   return ((pitch % 12 + 12) % 12) as PitchClass;
 }
 
-function expectedSpellings(rootIndex: number, accidental: number, offsets: readonly number[]) {
-  const letterSteps = [0, 2, 4];
+function expectedSpellings(rootIndex: number, accidental: number, offsets: readonly number[], quality: TriadQuality) {
+  const letterSteps = quality === "sus2" ? [0, 1, 4] : quality === "sus4" ? [0, 3, 4] : [0, 2, 4];
   return offsets.map((offset, position) => {
     const targetIndex = rootIndex + letterSteps[position]!;
     const [letter, natural] = naturals[targetIndex % 7]!;
@@ -68,7 +70,7 @@ describe("triadNoteSpellings", () => {
   for (const [quality, offsets] of fixtures) {
     test.each(spelledRoots)(`${quality} at $root.letter ($root.accidental)`, (fixture) => {
       const root = Object.freeze({ ...fixture.root });
-      const expected = expectedSpellings(fixture.index, root.accidental, offsets);
+      const expected = expectedSpellings(fixture.index, root.accidental, offsets, quality);
       const rootClass = wrap(naturals[fixture.index]![1] + root.accidental);
       const numeric = offsets.map((offset) => wrap(rootClass + offset));
       // Numeric construction remains usable even if the exact spelling cannot be represented.
@@ -98,6 +100,9 @@ describe("triadNoteSpellings", () => {
     ["B", "augmented", ["B", "D#", "F##"]],
     ["G##", "augmented", ["G##", "B##", "D###"]],
     ["F###", "diminished", ["F###", "A##", "C##"]],
+    ["C", "sus2", ["C", "D", "G"]],
+    ["C", "sus4", ["C", "F", "G"]],
+    ["F#", "sus4", ["F#", "B", "C#"]],
   ] as const)("%s %s preserves %o through parse/construct/format", (text, quality, expected) => {
     const result = triadNoteSpellings(parseNoteSpelling(text), quality);
     expect(result.map((note) => formatNoteSpelling(note, "ascii"))).toEqual(expected);
@@ -150,15 +155,43 @@ describe("triadNoteSpellings", () => {
 });
 
 test.each([
-  "", "maj", "min", "dim", "aug", "MAJOR", "Major", "major-seventh", "sus4",
+  "", "maj", "min", "dim", "aug", "MAJOR", "Major", "major-seventh", "sus",
   "major-pentatonic", "toString", "constructor", "__proto__", "hasOwnProperty",
   undefined, null, 0,
 ])("rejects unsupported runtime triad quality %s in both constructors", (quality) => {
   expect(() => triadPitchClasses(0, quality as TriadQuality)).toThrow(RangeError);
   expect(() => triadNoteSpellings({ letter: "C", accidental: 0 }, quality as TriadQuality)).toThrow(RangeError);
+  expect(() => triadFormula(quality as TriadQuality)).toThrow(RangeError);
+});
+
+test.each([
+  ["major", [[1, 0], [3, 0], [5, 0]]],
+  ["minor", [[1, 0], [3, -1], [5, 0]]],
+  ["diminished", [[1, 0], [3, -1], [5, -1]]],
+  ["augmented", [[1, 0], [3, 0], [5, 1]]],
+  ["sus2", [[1, 0], [2, 0], [5, 0]]],
+  ["sus4", [[1, 0], [4, 0], [5, 0]]],
+] as const)("%s returns an independent formula", (quality, roles) => {
+  const expected = roles.map(([number, alteration]) => ({ number, alteration }));
+  const first = triadFormula(quality);
+  const second = triadFormula(quality);
+  expect(first).toEqual(expected);
+  expect(first).not.toBe(second);
+  expect(Object.isFrozen(first)).toBe(false);
+  first.forEach((role, index) => {
+    expect(role).not.toBe(second[index]);
+    expect(Object.isFrozen(role)).toBe(false);
+    (role as { number: number }).number = 99;
+  });
+  expect(second).toEqual(expected);
+  expect(triadFormula(quality)).toEqual(expected);
 });
 
 if (false) {
+  // @ts-expect-error Formula quality is required.
+  triadFormula();
+  // @ts-expect-error Formula roles are readonly.
+  triadFormula("sus2")[1]!.number = 9;
   // @ts-expect-error Numeric construction requires an explicit quality.
   triadPitchClasses(0);
   // @ts-expect-error Spelled construction requires an explicit quality.

@@ -502,7 +502,7 @@ Recorded: 2026-10-13. Authority: User's explicit triple-formula and composite no
 
 ## D040: Basic triads from explicit root and quality
 
-Status: Accepted. Additive capability using the degree conversion in D036 and spelling range in D039.
+Status: Superseded by [D043](#d043-triad-formulas-and-suspended-structures). Historical contract retained below.
 
 Decision: Export TriadQuality (major/minor/diminished/augmented), triadPitchClasses(root: PitchClass, quality: TriadQuality): readonly PitchClass[], and triadNoteSpellings(root: NoteSpelling, quality: TriadQuality): readonly NoteSpelling[] from a separate portable triads module. Require both arguments. Return exactly three tones in root-third-fifth role order, without bass, register, or inversion semantics. Numeric results wrap modulo twelve without sorting.
 
@@ -516,7 +516,7 @@ Recorded: 2026-10-21. Authority: User's selection of numeric and spelled output,
 
 ## D041: Seventh chords from explicit root and quality
 
-Status: Accepted. Additive capability composing D040 triads and D036 degree conversion within D039's spelling range.
+Status: Superseded by [D044](#d044-seventh-formulas-and-suspended-structures). Historical contract retained below.
 
 Decision: Export SeventhChordQuality, seventhChordPitchClasses(root: PitchClass, quality: SeventhChordQuality): readonly PitchClass[], and seventhChordNoteSpellings(root: NoteSpelling, quality: SeventhChordQuality): readonly NoteSpelling[] from a separate portable seventh-chords module. Require both arguments and return exactly four tones in root-third-fifth-seventh role order, without bass, register, inversion, or voicing semantics. Numeric results wrap modulo twelve without sorting.
 
@@ -529,3 +529,75 @@ Consequences: Preserve typed numeric/spelled root boundaries and existing public
 Broader chord extensions, symbol parsing, identification, harmonization, registered output, inversions, voicing, Fretboard, Playability, UI, AI, and dependencies remain outside this increment. The deferred error-classification trigger remains open. Earlier seventh-chord exclusions describe preceding increments; these eight constructions are now implemented.
 
 Recorded: 2026-10-21. Authority: User's eight-quality selection, approval of the seventh-chord plan, and explicit implementation request. See the [seventh-chord effort](../plans/seventh-chord-construction.md).
+
+## D042: Shared chord formulas with unregistered compound roles
+
+Status: Accepted. Additive foundation using D036 conversion and D039 accidental limits.
+
+Decision: `chordPitchClasses(root, formula)` and `chordNoteSpellings(root, formula)` resolve nonempty custom `ChordFormula` arrays. Each readonly role has a positive safe-integer `number` and an `Accidental` alteration (-3..3). Compound numbers remain distinct in formulas but reduce to simple roles only for resolution through existing degree converters; 2 and 9 therefore share pitch class and spelling without specifying octaves. Preserve order, duplicate roles and enharmonic collisions, with no root or third requirement. Malformed formulas and unrepresentable required spellings throw `RangeError`. Numeric construction remains independent of spelling limits; inputs are preserved and outputs are independent and readonly by type, without runtime freezing.
+
+Rationale: Role identity is distinct from register and sounding equivalence. A chord-specific number supports arbitrary compound roles without widening DegreeFormula or duplicating pitch and spelling rules. No named catalog or universal chord representation is required for custom formulas.
+
+Consequences: Export ChordDegreeFormula, ChordFormula and the two resolvers from the existing chord folder. Keep simple-degree APIs and notation unchanged. Root inputs retain their typed boundary; role arrays and fields receive runtime validation. No parsing, identification, omissions, realization or instrument/application integration is added.
+
+Recorded: 2026-10-26. Authority: User approval and explicit implementation request for the shared chord roadmap. See the [foundation effort](../plans/shared-chord-formulas.md).
+
+## D043: Triad formulas and suspended structures
+
+Status: Accepted. Replaces D040; preserves its four qualities, constructors, typed roots, exact spelling/error behavior and output isolation.
+
+Decision: Add triadFormula(quality): ChordFormula returning independent arrays and role objects. TriadQuality includes major, minor, diminished, augmented, sus2 (1/2/5) and sus4 (1/4/5). Suspended entries are three-tone structures rather than tertian triads; no third is required. Both existing constructors resolve the selected formula through D042.
+
+Rationale: One formula catalog supports direct inspection and composition by later chord families, without category-specific arithmetic or spelling.
+
+Consequences: Retain unsupported-quality RangeError, exact spellings through +/-3, numeric independence, no input mutation, readonly-by-type results and no runtime freezing. Preserve current folders and historical plans. No realization, symbols, inference or dependencies are added.
+
+Recorded: 2026-10-26. Authority: Approved chord roadmap and explicit implementation request. See the [triad adaptation](../plans/triad-formulas-and-suspensions.md).
+
+## D044: Seventh formulas and suspended structures
+
+Status: Accepted. Replaces D041 while retaining all eight previous quality identifiers, constructor signatures, typed roots, error/spelling rules and output isolation.
+
+Decision: Add seventhChordFormula(quality): ChordFormula, composing independent triadFormula roles and a copied seventh role. Add dominant-seventh-sus2 (1/2/5/flat-7) and dominant-seventh-sus4 (1/4/5/flat-7). Both constructors resolve the formula through D042 instead of composing constructed tones.
+
+Rationale: Shared role composition avoids parallel construction logic and preserves suspended letter identity.
+
+Consequences: Ten qualities return four formula-ordered tones, with no bass, register or voicing semantics. Preserve readonly-by-type independent results, numeric independence, RangeError and exact spellings within +/-3. No parsing, inference or dependencies are added.
+
+Recorded: 2026-10-26. Authority: Approved chord roadmap and explicit implementation request. See the [seventh adaptation](../plans/seventh-formulas-and-suspensions.md).
+
+## D045: Added-tone and sixth chord formulas
+
+Status: Accepted. Additive catalog using D042/D043.
+
+Decision: `added-tone-chords.ts` exports `AddedToneChordQuality`, `addedToneChordFormula`, `addedToneChordPitchClasses` and `addedToneChordNoteSpellings`. Seven qualities are major-add2 (1/3/5/2), major-add9 (1/3/5/9), minor-add9 (1/flat-3/5/9), major-add11 (1/3/5/11), major-sixth (1/3/5/6), minor-sixth (1/flat-3/5/6) and major-sixth-ninth (1/3/5/6/9). Compose independent triad formulas with copied added roles; all actual pitch/spelling construction uses D042. No seventh is implied, and add2/add9 retain distinct role numbers without implying register.
+
+Rationale: Added tones retain the underlying third, distinguishing additions from suspensions, and omit the seventh present in named extensions.
+
+Consequences: Preserve typed roots, independent readonly-by-type unfrozen formulas and outputs, exact spelling through +/-3, numeric independence and RangeError for unknown qualities or required unrepresentable spellings. No symbol parser, inference, omissions or realization is introduced.
+
+Recorded: 2026-10-26. Authority: Approved chord roadmap and explicit implementation request. See the [added-tone effort](../plans/added-tone-chord-construction.md).
+
+## D046: Complete named extended chord formulas
+
+Status: Accepted. Additive catalog using D042 and D044.
+
+Decision: `extended-chords.ts` exports `ExtendedChordQuality`, `extendedChordFormula`, `extendedChordPitchClasses` and `extendedChordNoteSpellings`. Dominant, major and minor ninth/eleventh/thirteenth qualities compose their corresponding seventh formulas with roles 9, 9/11, or 9/11/13. These are complete theoretical constructions, retaining the third and natural eleventh rather than applying voicing omissions. Formula roles do not specify register; formula retrieval and constructed outputs remain independent and readonly by type.
+
+Rationale: Shared seventh-role composition makes complete chord identity inspectable independently of practical tone selection and guitar realization. Major extensions use major triads and major sevenths; minor extensions use minor triads and minor sevenths; all unaltered ninths/elevenths/thirteenths are major/perfect-relative.
+
+Consequences: Preserve all existing root/quality and spelling/error conventions, including +/-3 final accidentals, numeric independence, no partial output, no input mutation and no runtime freezing. No symbol parsing, omission rules, register, voicing or new dependencies are added.
+
+Recorded: 2026-10-26. Authority: Approved chord roadmap and explicit implementation request. See the [extended-chord effort](../plans/extended-chord-construction.md).
+
+## D047: Five selected altered extended constructions
+
+Status: Accepted. Additive extension of D046.
+
+Decision: Five selected alterations extend the same ExtendedChordQuality catalog: dominant-flat-ninth (1/3/5/flat-7/flat-9), dominant-sharp-ninth (1/3/5/flat-7/sharp-9), dominant-sharp-eleventh (1/3/5/flat-7/9/sharp-11), dominant-flat-thirteenth (1/3/5/flat-7/9/11/flat-13), and major-sharp-eleventh (1/3/5/7/9/sharp-11). Each private definition replaces one extension in an existing complete formula, without retaining its natural counterpart. Dominant-flat-thirteenth retains natural 11. All fourteen extended qualities share the same three public APIs and D042 tone resolver; no public alteration-composition API is added.
+
+Rationale: A small named catalog handles the selected constructions while custom formulas independently support arbitrary valid roles and alterations. Deriving each altered formula from a base avoids duplicated seventh and extension definitions.
+
+Consequences: Preserve complete formula order, exact role letters, +/-3 final accidental limits, typed roots, independent readonly-by-type outputs and numeric independence. No natural counterpart is silently appended, and no omission or realization rule is inferred. Invalid selectors and required unrepresentable spellings retain RangeError behavior.
+
+Recorded: 2026-10-26. Authority: User-confirmed five formulas, approved chord roadmap and explicit implementation request. See the [altered-extension effort](../plans/altered-extended-chord-construction.md).

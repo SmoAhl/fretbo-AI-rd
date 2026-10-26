@@ -1,14 +1,11 @@
-import {
-  type DegreeFormula,
-  noteSpellingFromDegreeFormula,
-  pitchClassFromDegreeFormula,
-} from "../degrees-keys-and-spelling/degrees.js";
+import { type ChordFormula, chordNoteSpellings, chordPitchClasses } from "./chord-formulas.js";
 import { type NoteSpelling } from "../pitch-pitch-classes-and-spelling/note-spelling.js";
 import { type PitchClass } from "../pitch-pitch-classes-and-spelling/pitch-class.js";
 
-export type TriadQuality = "major" | "minor" | "diminished" | "augmented";
+/** Includes suspended three-tone structures as well as tertian triads. */
+export type TriadQuality = "major" | "minor" | "diminished" | "augmented" | "sus2" | "sus4";
 
-const formulas: Readonly<Record<TriadQuality, readonly DegreeFormula[]>> = {
+const formulas: Readonly<Record<TriadQuality, ChordFormula>> = {
   major: [
     { number: 1, alteration: 0 },
     { number: 3, alteration: 0 },
@@ -29,21 +26,32 @@ const formulas: Readonly<Record<TriadQuality, readonly DegreeFormula[]>> = {
     { number: 3, alteration: 0 },
     { number: 5, alteration: 1 },
   ],
+  sus2: [
+    { number: 1, alteration: 0 },
+    { number: 2, alteration: 0 },
+    { number: 5, alteration: 0 },
+  ],
+  sus4: [
+    { number: 1, alteration: 0 },
+    { number: 4, alteration: 0 },
+    { number: 5, alteration: 0 },
+  ],
 };
 
-function formulasFor(quality: TriadQuality): readonly DegreeFormula[] {
+/** Return independent role objects without exposing the catalog's definitions. */
+export function triadFormula(quality: TriadQuality): ChordFormula {
   if (!Object.hasOwn(formulas, quality)) {
     throw new RangeError("Unsupported triad quality.");
   }
-  return formulas[quality];
+  return formulas[quality].map((role) => ({ ...role }));
 }
 
-/** Root-third-fifth role order, without register, bass, or inversion information. */
+/** Root-third-fifth for tertian qualities; suspended roles replace the third. No register, bass or inversion. */
 export function triadPitchClasses(root: PitchClass, quality: TriadQuality): readonly PitchClass[] {
-  return formulasFor(quality).map((formula) => pitchClassFromDegreeFormula(root, formula));
+  return chordPitchClasses(root, triadFormula(quality));
 }
 
 /** Preserve each role's exact spelling; reject a required tone beyond triple accidentals. */
 export function triadNoteSpellings(root: NoteSpelling, quality: TriadQuality): readonly NoteSpelling[] {
-  return formulasFor(quality).map((formula) => noteSpellingFromDegreeFormula(root, formula));
+  return chordNoteSpellings(root, triadFormula(quality));
 }
