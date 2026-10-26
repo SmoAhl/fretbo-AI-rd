@@ -22,9 +22,9 @@ Music Theory modules are grouped under `domain/music-theory/` using the subject 
 | `intervals-and-transposition/` | Spelled intervals, measurement, inversion, transposition, and interval text. |
 | `scales-and-modes/` | Named scales, chromatic collections, modes, registered runs, shared run internals, and scale text. |
 | `degrees-keys-and-spelling/` | Degree formulas and text, keys and signatures, and key-aware spelling. |
-| `chords-symbols-and-realization/` | Custom chord formulas, structured chord descriptions, triads, sevenths, added-tone and extended chords, and seven-note collection harmonization. |
+| `chords-symbols-and-realization/` | Custom chord formulas, structured chord descriptions, chord symbols, triads, sevenths, added-tone and extended chords, and seven-note collection harmonization. |
 
-These folders organize one engine by subject; they do not introduce separate packages or new dependency boundaries. Parsers and internal helpers stay with their musical subject. Modules use direct relative imports within and across these folders; exported names, signatures, and musical behavior are unchanged. The chord folder name follows the reference and does not imply that symbols or realization are implemented. Completed ExecPlans retain their historical file paths; the paths below describe the current layout.
+These folders organize one engine by subject; they do not introduce separate packages or new dependency boundaries. Parsers and internal helpers stay with their musical subject. Modules use direct relative imports within and across these folders; the folder organization preserves existing exported names, signatures, and musical behavior. The chord folder name follows the reference; bounded chord symbols are now implemented, while registered realization remains deferred. Completed ExecPlans retain their historical file paths; the paths below describe the current layout.
 
 `domain/music-theory/pitch-pitch-classes-and-spelling/pitch-class.ts` provides the first minimal Music Theory capability: `PitchClass` represents numeric classes `0..11`, and `transposePitchClass` transposes a typed pitch class by a signed safe-integer semitone offset, wrapping into `0..11`. Unsupported offsets throw `RangeError`. Reducing the offset before addition preserves precision at the safe-integer limits. The module has no imports or framework, Node API, or UI dependencies. `tests/pitch-class.test.ts` covers all twelve classes, octave equivalence, positive and negative wrapping, large offsets, and invalid offsets. The project's named origin is now C = 0; a numeric class still carries no spelling or register.
 
@@ -107,6 +107,58 @@ Harmonization retains formula role order without bass, register or inversion sem
 No other domain capabilities, React product controls, SVG fretboard visualization, server APIs, persistence, audio, or AI integration exist yet. The [original Playability Reference plan](../plans/playability-reference.md) is historical documentation context. The [current reference refactoring](../plans/domain-reference-simplification.md) changes guidance, not engine behavior. The components below describe responsibilities that later implementation must preserve.
 
 Triple accidentals and degree alterations are supported under [D039](DECISIONS.md#d039-triple-accidentals-and-degree-alterations). G-double-sharp major retains F-triple-sharp as its seventh. Derived spellings beyond ±3 still throw `RangeError` without respelling; conventional signatures remain limited to single accidentals. See the [completed triple-accidental effort](../plans/triple-accidentals.md).
+
+### Chord-symbol grammar
+
+`domain/music-theory/chords-symbols-and-realization/chord-symbols.ts` exports `parseChordSymbol(text: string): SpelledChordDescription` and `formatChordSymbol(description: SpelledChordDescription, notation: AccidentalNotation = "unicode"): string`. Private exhaustive family suffix tables reference existing catalog formula getters; parser aliases point to canonical entries and formatting uses the same entries. No musical formulas are duplicated in the notation layer, and existing construction, description and harmonization APIs remain unchanged. See [D050](DECISIONS.md#d050-bounded-chord-symbol-grammar-and-canonical-formatting) and the [effort](../plans/chord-symbols.md).
+
+The grammar is root + complete suffix, optionally followed by /bass. Root/bass use uppercase A-G and the existing note accidental tokens: #/b, ##/bb, ###/bbb, ♯/♭, 𝄪/𝄫, ♯𝄪/♭𝄫, or ♮, with no octave. Omitted accidental means natural. Trim outer whitespace and reject all internal whitespace. Suffixes are case-sensitive; the following table lists the complete canonical ASCII vocabulary. Unicode output replaces suffix accidental signs with ♭/♯; parsing accepts either form independently of root/bass notation.
+
+| Quality | Canonical suffix |
+| --- | --- |
+| major | empty |
+| minor | `m` |
+| diminished | `dim` |
+| augmented | `aug` |
+| sus2 | `sus2` |
+| sus4 | `sus4` |
+| major-seventh | `maj7` |
+| dominant-seventh | `7` |
+| minor-seventh | `m7` |
+| half-diminished-seventh | `m7(b5)` |
+| diminished-seventh | `dim7` |
+| minor-major-seventh | `m(maj7)` |
+| augmented-major-seventh | `aug(maj7)` |
+| augmented-seventh | `aug7` |
+| dominant-seventh-sus2 | `7sus2` |
+| dominant-seventh-sus4 | `7sus4` |
+| major-add2 | `add2` |
+| major-add9 | `add9` |
+| minor-add9 | `madd9` |
+| major-add11 | `add11` |
+| major-sixth | `6` |
+| minor-sixth | `m6` |
+| major-sixth-ninth | `6/9` |
+| dominant-ninth | `9` |
+| major-ninth | `maj9` |
+| minor-ninth | `m9` |
+| dominant-eleventh | `11` |
+| major-eleventh | `maj11` |
+| minor-eleventh | `m11` |
+| dominant-thirteenth | `13` |
+| major-thirteenth | `maj13` |
+| minor-thirteenth | `m13` |
+| dominant-flat-ninth | `7(b9)` |
+| dominant-sharp-ninth | `7(#9)` |
+| dominant-sharp-eleventh | `9(#11)` |
+| dominant-flat-thirteenth | `13(b13)` |
+| major-sharp-eleventh | `maj9(#11)` |
+
+Only additional aliases are `sus` → `sus4`, `7sus` → `7sus4`, `°` → `dim`, `°7` → `dim7`, `ø7` → `m7(b5)`, and `7(#5)` → `aug7` (also `7(♯5)`). All other suffixes, arbitrary alteration combinations, polychords, omissions and Roman numerals are unsupported. In particular, min, -, +, M7, Δ7, unparenthesized alterations and 7(#11) are outside this grammar. These are parser conventions, not claims that other notation is musically invalid; the reference's broader examples do not expand this vocabulary.
+
+A terminal slash introduces bass only when the entire remainder is a supported note spelling. Thus `C6/9` has no bass, `C6/9/E` is a sixth-ninth chord with E bass, `C6/E` is a sixth chord with E bass, and `C/E` is a major triad with E bass. Root, chord-tone and non-chord basses are allowed. Preserve spelling and explicit bass, including `/C` on C; absence means unspecified. Digits are recognized suffix components, not octave text: C6 is a sixth chord, while C4 and C/E4 are rejected. Malformed or unsupported whole symbols throw `SyntaxError`, without partial parsing.
+
+Formatting validates the formula and matches ordered numbers and alterations exactly, preserving the distinction between add2/add9. It does not sort, deduplicate, reduce compound roles or match merely enharmonic pitch classes. Malformed or unmatched formulas and invalid notation selections throw `RangeError`. Preserve root/bass letter and accidental, normalize explicit natural tokens away, emit canonical suffixes and append specified bass. Numeric-only descriptions require an external explicit spelling choice. Parsing creates copied, independent, unfrozen readonly-by-type descriptions; formatting does not mutate inputs. Neither operation resolves derived tones: G###maj7 can be parsed/formatted even though later spelled tone resolution requires an unsupported accidental. This layer adds no register, inversion, voicing, fingering, UI or AI behavior. `tests/chord-symbols.test.ts` verifies independent role fixtures, all roots/both notations, all bass spellings with representative symbols, aliases, slash distinctions, round trips, unsupported syntax/formulas, input/output isolation and type boundaries.
 
 ## Accepted technology foundation
 

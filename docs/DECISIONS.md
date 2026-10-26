@@ -627,3 +627,17 @@ Consequences: Export shared `validateChordFormula(formula): void` from the formu
 Symbols, inversion/bass-membership analysis, registered realization, omissions, identification, guitar rules, UI and AI remain outside this increment. Actual sounding bass continues to mean lowest registered pitch.
 
 Recorded: 2026-10-26. Authority: User selected both representations, the shared construction path and deferred derived spelling checks, then explicitly requested implementation of the approved plan. See the [description effort](../plans/structured-chord-descriptions.md).
+
+## D050: Bounded chord-symbol grammar and canonical formatting
+
+Status: Accepted. Additive notation adapter over D042-D049.
+
+Decision: Export parseChordSymbol(text): SpelledChordDescription and formatChordSymbol(description, notation = unicode) from chord-symbols.ts. Use private exhaustive suffix tables backed by existing formula getters for all 37 named qualities, with the six aliases documented in the [complete grammar](ARCHITECTURE.md#chord-symbol-grammar). Root/bass reuse existing uppercase note spelling and accidental tokens, suffixes are case-sensitive, outer whitespace is trimmed and internal whitespace rejected. Support optional terminal note slash bass while retaining 6/9 as a complete suffix.
+
+Rationale: A bounded notation vocabulary connects musician-readable symbols to existing structured intent without adding musical construction rules or a general alteration language. Canonical 9(#11)/maj9(#11) makes the catalog's included ninth explicit. Exact ordered formula matching preserves compound-role, duplicate and enharmonic distinctions rather than inferring identity from pitch classes.
+
+Consequences: Parse canonical suffixes and only sus, 7sus, °, °7, ø7 and 7(#5) aliases, including Unicode single accidentals in the defined suffix positions. Unicode output is default; ASCII is explicit. Preserve root/bass spelling and explicit root/non-chord bass, normalize aliases and natural tokens, and keep bass separate from formula tones. Parsing and formatting do not resolve tones or impose derived spelling limits. Unsupported/malformed input symbols throw SyntaxError. Formatting malformed/unmatched formulas or invalid notation throws RangeError; supplied spellings retain typed boundaries and numeric-only descriptions are excluded. No public suffix registry, new dependencies, changed constructors or harmonization APIs, or reverse dependencies are introduced.
+
+Arbitrary custom symbols/alterations, omissions, polychords, Roman numerals, register, inversion analysis, voicing, identification, guitar behavior, UI and AI remain outside this increment. Reference examples illustrate broader conventions and do not implicitly expand the parser grammar.
+
+Recorded: 2026-10-26. Authority: User selected small aliases, Unicode default, exact formulas and canonical sharp-eleventh symbols, then explicitly requested implementation of the approved plan. See the [symbol effort](../plans/chord-symbols.md).
