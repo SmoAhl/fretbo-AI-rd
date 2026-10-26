@@ -601,3 +601,15 @@ Rationale: A small named catalog handles the selected constructions while custom
 Consequences: Preserve complete formula order, exact role letters, +/-3 final accidental limits, typed roots, independent readonly-by-type outputs and numeric independence. No natural counterpart is silently appended, and no omission or realization rule is inferred. Invalid selectors and required unrepresentable spellings retain RangeError behavior.
 
 Recorded: 2026-10-26. Authority: User-confirmed five formulas, approved chord roadmap and explicit implementation request. See the [altered-extension effort](../plans/altered-extended-chord-construction.md).
+
+## D048: Seven-note collection harmonization
+
+Status: Accepted. Additive capability using D036 and D042-D044.
+
+Decision: Derive tertian triads and seventh chords on one degree or all seven degrees of existing seven-note collections. `HarmonizableCollection` excludes the two pentatonic identifiers and includes existing `MinorMode` descriptors. Require an explicit triad/seventh kind. Export formula, numeric and spelled selected-degree helpers plus full-sequence counterparts from `scale-harmonization.ts`. Results carry degree, kind, exact root-relative formula and a required quality field containing an existing triad/seventh identifier or undefined. Numeric/spelled results additionally carry root and ordered tones; discriminated kinds narrow quality types.
+
+Rationale: Alternate collection positions with octave continuation determine third/fifth/seventh roles independently of a named chord catalog. Existing degree helpers supply collection roles and roots, while shared chord resolvers own tone construction. Exact catalog-formula matching supplies useful labels without making names a prerequisite or introducing general chord identification.
+
+Consequences: Return seven entries in collection-degree order for full sequences. Minor-mode descriptors use their own supplied tonic and distinguish rotation degree from chord degree. Ascending melodic-minor collections stay fixed. Selected spelling checks only requested chord tones; full spelling rejects any unavailable required tone without partial output. Preserve +/-3 accidental limits, numeric independence, typed tonic boundaries, RangeError for invalid selectors/degrees/kinds or unrepresentable required output, and fresh readonly-by-type unfrozen results. No symbols, Roman numerals, harmonic function, custom/pentatonic harmonization, register, inversions, guitar rules, UI, AI or dependencies are introduced.
+
+Recorded: 2026-10-26. Authority: User selected both query forms and formula/quality output, then explicitly requested implementation of the approved plan. See the [harmonization effort](../plans/scale-harmonization.md).
