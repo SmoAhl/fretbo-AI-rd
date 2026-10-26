@@ -641,3 +641,17 @@ Consequences: Parse canonical suffixes and only sus, 7sus, °, °7, ø7 and 7(#5
 Arbitrary custom symbols/alterations, omissions, polychords, Roman numerals, register, inversion analysis, voicing, identification, guitar behavior, UI and AI remain outside this increment. Reference examples illustrate broader conventions and do not implicitly expand the parser grammar.
 
 Recorded: 2026-10-26. Authority: User selected small aliases, Unicode default, exact formulas and canonical sharp-eleventh symbols, then explicitly requested implementation of the approved plan. See the [symbol effort](../plans/chord-symbols.md).
+
+## D051: Explicit registered voicings and root-position realization
+
+Status: Accepted. Additive realization capability using D021, D036, D042 and D049.
+
+Decision: Export numeric/spelled voicing records containing explicit nonempty registered tone lists, with validating copy factories. Preserve supplied order, repeated tones, enharmonic spellings and negative registers. Add rootPositionChordRegisteredPitches(description, root) and rootPositionChordRegisteredNotes(description, root), requiring an explicit registered root matching the description, an unaltered formula role 1, and no formula tone below the anchor. Preserve full role distances, formula order and duplicates; do not insert a missing root, sort output or adjust octave placement. Numeric construction accepts either description representation; spelled construction requires exact root spelling.
+
+Rationale: Supplied musical data and a narrow deterministic construction provide registered pitches for later analysis and realization without selecting arbitrary voicings or instrument policies. Root-relative role 2 and compound 9 share pitch class but map to different registers. Written octave belongs to the note letter, preserving B-sharp/C-flat crossings and exact diminished-seventh roles.
+
+Consequences: Reject incompatible specified bass rather than ignore it or generate an inversion. Numeric bass comparison uses pitch classes; spelled comparison requires exact root spelling. C/B-sharp can therefore succeed numerically and reject in spelled construction. Reuse formula/degree/register/spelling capabilities, with exact BigInt intermediate arithmetic and safe displacement/coordinate/octave checks. Numeric realization remains independent of derived spelling limits; spelled realization verifies its coordinates against numeric output. Invalid/empty/sparse voicings, malformed or unsupported root-position formulas, root/bass mismatches and representation limits throw RangeError. Supplied note letters/accidentals retain typed boundaries; arrays and every note are independently copied, readonly by type and unfrozen.
+
+Voicing records do not infer chord identity or validate coverage, omissions, inversion, bass, fingering or playability. Existing constructors, descriptions, symbols and harmonization remain unchanged. Arbitrary voicing generation, richer voicing representations, analysis, identification, Fretboard, Playability, UI, audio and AI remain deferred.
+
+Recorded: 2026-10-26. Authority: User selected explicit nonempty tone lists, both representations, restrictive root-position handling and exact spelled bass matching, then explicitly requested implementation of the approved plan. See the [realization effort](../plans/registered-chord-realization.md).
