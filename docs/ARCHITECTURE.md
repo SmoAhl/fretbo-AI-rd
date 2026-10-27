@@ -192,6 +192,12 @@ Specified bass is not appended or ignored. Numeric construction permits only roo
 
 Compound distances reuse simple unaltered degree conversion and add complete twelve-semitone cycles plus the original alteration. BigInt intermediates preserve exact role arithmetic and coordinate sums, with safe-integer displacement/result checks before Number conversion. Spelled realization reuses description tone spelling, continues written letter positions to determine octaves, validates registered notes and verifies agreement with numeric output. It does not translate arbitrary formula alterations through the narrower interval-quality vocabulary. No existing lower-level module, catalog, description, symbol or harmonization API changes. This module adds no arbitrary voicing generation, inversion/bass analysis, omission policy, identification, instrument rules, UI, audio or AI. See [D051](DECISIONS.md#d051-explicit-registered-voicings-and-root-position-realization), the [effort](../plans/registered-chord-realization.md), and `tests/registered-chords.test.ts` for independent catalog/register/spelling fixtures, compound and enharmonic boundaries, root/bass restrictions, exact numeric limits, ownership and type checks.
 
+## Music Theory v1 readiness
+
+The bounded Music Theory v1 scope has a dedicated [supported-contract and Fretboard handoff guide](MUSIC_THEORY_V1.md). It describes how existing classes, spellings, formula roles, specified bass, explicit registered voicings and optional-tone policy can be retained together by a future consumer without adding a shared request schema. In particular, chord-tone coverage and exact-set identification are lossy views, not proof that a requested registered voicing and its multiplicity have been preserved. Fretboard mapping and Playability remain future work.
+
+`tests/music-theory-readiness.test.ts` exercises representative cross-module paths through all five subject folders. The [readiness review](../plans/music-theory-v1-readiness.md) records actual verification, limits and findings. This review adds no public domain API or musical convention; D052's inversion limits, the open extended-inversion naming decision, and candidate-generation ownership remain unchanged.
+
 ## Accepted technology foundation
 
 Next.js is the selected full-stack application framework, React is the UI library, and TypeScript 7.x is the implementation language. The intended generic UI stack is shadcn/ui with Base UI primitives where applicable and Tailwind CSS for styling. The custom fretboard visualization uses React and SVG. These choices support the existing domain-first architecture; they do not change its construction order.
@@ -304,7 +310,7 @@ These are capability-driven TODOs, not scheduled milestones. They remain separat
 
 1. **Error handling:** Distinguish invalid inputs from valid musical operations that exceed the domain's supported representation limits. Provide clearer, more specific errors for UI and AI tool integration, using structured error codes where appropriate. **Revisit before exposing Music Theory operations through UI or AI agent tools.**
 
-The current spelling and degree-alteration limit is ±3 and the existing `RangeError` contracts remain in force. Key text parsing, theoretical signatures, signature-to-key inference, registered key-aware output, broader spelling-context inference, candidate enumeration, and fallback policies remain deferred; their narrow contracts must be agreed when those capabilities are requested.
+The current spelling and degree-alteration limit is ±3 and the existing `RangeError` contracts remain in force. Key text parsing, theoretical signatures, signature-to-key inference, registered key-aware output, broader spelling-context inference, key-aware spelling candidate enumeration, and fallback policies remain deferred; their narrow contracts must be agreed when those capabilities are requested. Exact catalog chord identification is separately implemented under D053.
 
 ## Deferred technology choices
 

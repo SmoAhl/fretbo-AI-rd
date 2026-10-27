@@ -1,0 +1,60 @@
+# Music Theory Engine v1: supported contracts and Fretboard handoff
+
+This guide describes the bounded deterministic engine reviewed in milestone 7. It is a consumer guide to existing contracts, not a new API or a complete account of music theory. [Architecture](ARCHITECTURE.md#current-implementation) describes the implementation, [accepted decisions](DECISIONS.md) own persistent contracts, and the [Music Theory Reference](MUSIC_THEORY_REFERENCE.md) supplies musical definitions. Review evidence lives in the [readiness ExecPlan](../plans/music-theory-v1-readiness.md).
+
+## Supported capabilities
+
+| Area | Implemented v1 boundary |
+| --- | --- |
+| Pitch and notation | Numeric classes 0..11 with C=0; non-wrapping registered semitone coordinates with C0=0; explicitly spelled and registered notes; ASCII/Unicode note parsing/formatting; reverse spelling with a required sharps/flats policy. |
+| Intervals | Explicit numbered, qualified up/down intervals; spelled and registered transposition, signed semitone measurement, spelled identification, formatting, and supported simple-interval inversion. Compound distance is preserved by registered operations. |
+| Scales and modes | Existing major/minor collections, seven major-scale modes, pentatonics, numeric chromatic collection, fixed modes of harmonic/ascending melodic minor, and bounded registered runs. Melodic-minor traversal explicitly selects fixed-collection or classical-exercise behavior. |
+| Degrees and keys | Collection ordinals versus major-relative formula roles; major/minor key identity, conventional signatures, relative/parallel keys, and explicit key-aware spelling. A chromatic class outside the signature baseline remains unresolved unless a matching role is supplied. |
+| Chord content | Nonempty custom formulas with positive safe-integer role numbers and alterations through +/-3; 37 named qualities; selected-degree or full seven-note collection triad/seventh harmonization. Unnamed derived formulas remain representable. |
+| Descriptions and symbols | Numeric/spelled root, ordered formula, optional specified bass; the [bounded symbol grammar](ARCHITECTURE.md#chord-symbol-grammar) with documented aliases/canonical forms and slash bass. Custom formulas need not have symbols. |
+| Registered chords | Explicit nonempty numeric/spelled voicings retaining supplied order and repeated tones; narrow root-position realization at an explicit matching registered root, preserving full compound-role distances. |
+| Known-chord analysis | [D052](DECISIONS.md#d052-known-chord-bass-inversion-and-voicing-analysis) coverage, explicit required/optional omissions, doubling, bass, specified-bass agreement and spacing. Conventional inversion numbering covers only supported 1/3/5 and 1/3/5/7 structures, independently of sounding-note count. |
+| Identification | [D053](DECISIONS.md#d053-exact-catalog-chord-identification) returns all exact complete pitch-class matches, preserving alternatives without ranking or selecting spelling. Registered inputs add observed bass evidence, not inversion status or specified-bass intent. |
+
+These are portable modules under `domain/music-theory/`, imported directly using relative `.js` specifiers. They have no framework, rendering, audio, instrument or network prerequisites. Existing public entry points and their representation-specific details are listed in Architecture; this review adds no public interface.
+
+## Information to retain at the Fretboard boundary
+
+Music Theory determines musical content. Fretboard will map target classes or registered pitches to identified strings/frets using explicit registered tuning and fret bounds, as described in the [Fretboard Reference](FRETBOARD_REFERENCE.md). No Fretboard implementation or request schema is established here.
+
+| Mapping need | Existing data to retain | Meaning for the consumer |
+| --- | --- | --- |
+| Any octave of a target class | Numeric pitch classes plus original collection tonic, ordinal/formula roles and spellings where supplied | A class does not choose register, spelling or a simultaneous grip. Scales/melodies currently require note locations only. |
+| Exact registered targets | `RegisteredPitchVoicing.pitches`, or `RegisteredNoteVoicing.notes` converted with `registeredPitchFromNote` | Keep every occurrence and its original index. C4 and C5 are distinct; two C4 occurrences still express multiplicity. Do not deduplicate a requested voicing. |
+| Musical chord identity | Original chord description: root, complete ordered formula and supplied spelling | Roles 2/9, 4/11 and 6/13 may share pitch class but remain different roles. Retain formula positions when associating coverage/omission data. |
+| Required bass | Description's optional unregistered `bass`; observed bass evidence from a supplied realization is separate | No specified bass means unspecified, not root position. A specified non-chord bass stays outside formula coverage. Any exact registered-bass requirement must also retain the original voicing/register. |
+| Allowed omissions | The caller's `optionalFormulaIndices`, alongside the unchanged description/formula | Every unlisted position is required. Missing required tones must not become optional because locations or fingers are inconvenient. |
+| Interpretation alternatives | Identification candidates together with the original notes/voicing | C6/Am7 and symmetric roots remain alternatives. Numeric identification does not replace the original spelling, register, multiplicity or creative intent. |
+
+These data already exist in separate contracts; keep them together when relevant rather than projecting every request into a set of pitch classes. The same exact registered pitch can have multiple string/fret locations; Fretboard must retain those location identities. Availability of individual locations does not establish that the notes can sound simultaneously or that a fingering is playable. [Playability](PLAYABILITY_REFERENCE.md) evaluates proposed grips without silently changing the musical request.
+
+## Composition rules and deliberate information loss
+
+Numeric conversion discards spelling. Pitch-class conversion also discards register. D053 matching ignores duplicate occurrences; it returns complete named identities, not the supplied voicing. D052 coverage tests role membership using pitch class or exact spelling independently of octave. It reports doubling, but a positive coverage result does not prove that a requested registered multiset has been realized: an octave move or removed doubling can preserve coverage. A future realization consumer must check the original exact pitches and occurrence requirements separately when those were requested; this review does not add such a validator.
+
+Root-position construction is a specific convention: explicit matching root, an unaltered formula role 1, no below-root formula tone, and no incompatible specified bass. It preserves formula order rather than sorting. Cadd2 at C4 ends on D4, while Cadd9 ends on D5. Arbitrary supplied voicings need not follow that placement. Incompatible slash bass is rejected by this constructor; use an explicitly supplied voicing for analysis instead of expecting inversion generation.
+
+Spelled analysis requires exact letter/accidental membership and exact specified-bass agreement; numeric analysis accepts enharmonic class equality. For example, A can match B-double-flat numerically but does not spell C diminished seventh's seventh. Consumers must choose the analysis representation deliberately.
+
+`parseScaleType` returns a union including pentatonics. Narrow out those two types before passing a parsed value to seven-note harmonization; the narrower harmonization contract is intentional. Key identity is separate from selected minor collections: choosing harmonic minor does not change the natural-minor signature. Relative-mode operations return a new tonic; use it rather than the parent's tonic for subsequent degree queries or runs.
+
+## Limits and deferred work
+
+- Exact derived spellings are limited to accidentals -3..3. Numeric construction may succeed when spelled output cannot be represented. Symbols/descriptions do not eagerly validate all derived spellings; request the relevant resolver before promising spelled realization.
+- Registered coordinates, displacements, written octaves and applicable intermediate bases obey existing safe-integer limits. A valid pair of endpoints can still have an unsupported distance. Scale runs require explicit direction, positive octave extent and endpoint inclusion, with at most 10,000 emitted notes; this is an allocation limit, not an instrument range.
+- Input validation is capability-specific. Parsers validate their documented grammars; typed root/letter/accidental inputs are not a universal untrusted-data boundary. Malformed text uses existing `SyntaxError` contracts, while semantic/representation limits generally use `RangeError`. The capability-driven [error-classification TODO](ARCHITECTURE.md#deferred-music-theory-improvements) remains open; no structured-error system is introduced.
+- Symbols cover the existing named formulas, not every possible spelling convention or custom formula. Harmonization covers triads/sevenths of supported seven-note collections, not arbitrary/pentatonic harmonization. Conventional key signatures exclude theoretical signatures requiring more than uniform single sharps/flats.
+- Suspended, extended and other unsupported formula structures retain bass/membership analysis without conventional inversion numbering. Naming inversions of C9/C11/C13 remains an [open decision](ARCHITECTURE.md#open-architectural-questions); triad/seventh numbering does not automatically extend to them.
+- Identification requires complete catalog pitch-class equality. Optional omissions in D052 do not authorize approximate identification, missing-root inference or invented non-chord slash-bass matches. Contextual ranking, harmonic function, Roman numerals and key detection are deferred.
+- Exhaustive catalogs, automatic voicing generation, voice leading, progression recommendations, contextual respelling, rhythm, audio/MIDI, engraving, guitar-specific omissions, string selection and finger assignments remain outside v1. Candidate-generation ownership and concrete playability policies remain open.
+
+## Readiness evidence and next boundary
+
+`tests/music-theory-readiness.test.ts` verifies representative paths across all five subject folders: key/degree/scale through harmonization, symbol, realization, analysis and identification; harmonic-minor seventh spelling and symmetric alternatives; interval/scale enharmonic octave crossings; relative modes and melodic-minor traversal; slash bass and repeated tones; explicit optional omissions; compound-role placement; and numeric success alongside unsupported spelling/notation. Existing unit/catalog suites cover the broader input matrices and numerical boundaries. Actual run results and review findings are recorded in the ExecPlan, avoiding a duplicate test-count history here.
+
+Passing this review establishes the bounded Music Theory input foundation for starting Fretboard work. It does not verify an unimplemented Fretboard consumer, freeze all future interfaces, or guarantee simultaneous location availability or playability. The next engine can consume the existing class/registered targets while retaining the musical metadata above; any new consumer requirement should drive a narrow explicit contract change.
