@@ -50,6 +50,8 @@ Verify behavior in proportion to risk. Prefer focused deterministic tests for do
 
 Review the changes and relevant Git status before reporting completion. Inspect newly created files directly because an ordinary unstaged diff omits untracked files. Report what changed, what was actually checked, the results, and remaining uncertainty. Do not report an unrun check as passing.
 
+When reporting completed repository changes, include a concise suggested commit message in a fenced text block without waiting for the user to ask. Base it on the reviewed changes from the current task, including documentation-only work, and follow the repository's existing commit-message style. Do not include unrelated user changes or claim unimplemented behavior. Suggesting a message does not authorize staging or committing changes.
+
 ## Documentation and continuation
 
 - This file owns working instructions and the ExecPlan threshold.
