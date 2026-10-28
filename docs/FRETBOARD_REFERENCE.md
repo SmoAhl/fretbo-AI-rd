@@ -10,7 +10,11 @@ FretboAIrd models a discrete fretboard: identified strings, registered open-stri
 
 Each string has a stable identity. String count determines which strings exist; retuning changes pitches without changing string identities.
 
+Strings also have a physical order across the neck. This order determines which strings are adjacent and which lie between two others; it does not require measured distances. Retuning changes neither this order nor adjacency. Identity, physical order, pitch order and screen orientation are separate concepts.
+
 On a conventionally numbered six-string guitar, string 1 is the high E string and string 6 is the low E string in standard tuning. String numbers are distinct from array indices and screen positions. Alternative tunings need not preserve ascending pitch order across strings, so pitch order must not determine string identity.
+
+Describe physical order from the designated first-string edge toward the opposite edge. On a conventional guitar this proceeds from the standard high-E string toward the standard low-E string. These edge names describe the conventional reference tuning, not a requirement that the current tuning be monotonic. Mirroring a drawing or using a left-handed instrument does not reverse the instrument-relative first-string convention.
 
 ## Tuning and register
 

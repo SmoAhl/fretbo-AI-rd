@@ -681,3 +681,29 @@ Rationale: Exact equality provides a bounded deterministic identification capabi
 Consequences: Enumerate all 37 qualities at twelve roots using private exhaustive identifier tables and existing formula getters, without a public registry or symbol-layer refactor. Return candidates ordered by numeric root, then family triad/seventh/added-tone/extended, then alphabetic quality identifier, without confidence ranking. Registered adapters validate through existing voicing factories and compare coordinates without computing spacing. Empty/non-array/sparse/missing-entry collections, invalid numeric classes and existing registered limits throw `RangeError`; valid unmatched input returns no candidates while retaining registered bass evidence. Preserve typed spelling boundaries, fresh independently copied readonly-by-type unfrozen results, and all existing APIs. No inferred missing roots, optional omissions, approximate/custom-catalog matching, non-chord slash-bass inference, automatic spelling, inversion status/generation, extended-inversion naming, instrument behavior, UI, AI or dependencies are added. Earlier identification exclusions describe preceding increments.
 
 Recorded: 2026-10-26. Authority: User selected all four input forms, numeric identities and registered bass evidence only, then explicitly requested implementation of the approved plan. See the [identification effort](../plans/chord-identification.md).
+
+## D054: Explicit fretboard and bounded pitch-location searches
+
+Status: Accepted. Implements the discrete mapping boundary in D019 using existing Music Theory pitch primitives.
+
+Extended by [D055](#d055-explicit-physical-string-positions): string records now also require physical position. The original pitch mapping, identity and canonical result-order contracts below remain in force.
+
+Decision: Represent a board with explicit, unique positive safe-integer string IDs, registered open pitches and a common nonnegative safe-integer fret count. Frets 0 through that count are available. Export board construction, direct registered-pitch lookup, exact registered-pitch search and pitch-class search from `domain/fretboard/fretboard.ts`. Regions strictly restrict existing strings and inclusive available fret bounds. Search results are complete alternatives ordered by string ID then fret, capped at 10,000 locations; larger results throw `RangeError` before output allocation.
+
+Rationale: Stable identities and explicit tuning support ordinary alternative tunings and string counts without assumptions about array order, presentation or pitch order. Separate exact-pitch and pitch-class queries preserve the register distinction. Strict bounds expose invalid requests, while a result cap bounds allocation independently of valid coordinate size.
+
+Consequences: Validate structural boards and complete requests at runtime, including empty selections; preserve safe registered endpoints with checked Music Theory arithmetic and exact internal BigInt differences/counts. The factory and queries return independently copied, readonly-by-type unfrozen outputs. Callers retain original musical spelling, roles, specified bass, omission policy, register and every occurrence alongside locations. No default instrument configuration, musical-request schema, chord assignment, fingering, ranking or playability guarantee is introduced. Candidate-generation ownership and all deferred instrument/application capabilities remain open.
+
+Recorded: 2026-10-28. Authority: User selected numeric string identities, strict regions and the 10,000-result cap, then explicitly requested implementation of all five milestones in the [approved Fretboard plan](../plans/fretboard-engine-v1.md).
+
+## D055: Explicit physical string positions
+
+Status: Accepted. Extends D054's instrument model with required physical string order.
+
+Decision: Add readonly `position: number` to each `FretboardString`. A board's positions must cover 1 through its string count exactly once. Position 1 identifies the designated first-string edge, conventionally the standard high-E edge of a guitar; increasing positions traverse adjacent strings toward the opposite edge. This instrument-relative convention is independent of actual tuning, stable string IDs, input array order, handedness and display orientation. Keep factory records and search results ordered by ID, preserving the previous deterministic ordering contract.
+
+Rationale: String identity and tuning alone cannot describe adjacency. A required position per string records that missing instrument fact without a second list of IDs, measured geometry or assumptions about pitch order. Retuning preserves identity and position; lookup continues to use stable IDs.
+
+Consequences: All public operations validate positions through the shared board validator, including structural boards and empty search selections. Missing, duplicate, noninteger and out-of-range positions throw `RangeError`; there is no fallback to ID or array order. Callers must supply the new required field. The factory independently copies positions with IDs and tuning, readonly by type and unfrozen. Existing pitch arithmetic, locations, regions, search-result ordering and allocation limits remain unchanged. This does not implement barre contacts, fingerings, candidate generation, Playability or UI geometry.
+
+Recorded: 2026-10-28. Authority: User requested implementation of the missing string ordering after discussing explicit order separate from identity. The implementation selects per-string positions from the discussed representation alternatives. See the [string-ordering effort](../plans/fretboard-string-ordering.md).

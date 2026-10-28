@@ -3,7 +3,7 @@
 
 This ExecPlan follows [.agent/PLANS.md](../.agent/PLANS.md). Its progress, discoveries, decisions, and outcomes must remain current.
 
-The current task authorizes saving and reviewing this document only. All implementation milestones remain not started; implementation requires a subsequent explicit request.
+The current task authorizes implementing milestones 1–5 sequentially, with milestone verification and final regression, type checking, and diff review. Do not stage or commit changes. The earlier documentation-only authorization is retained below as historical evidence.
 
 
 ## Purpose / Big Picture
@@ -15,7 +15,7 @@ Success is observable through deterministic tests, initially using standard tuni
 
 Music Theory determines musical content. Fretboard determines available locations. Playability will validate and rank proposed fingerings. Matching locations are alternatives, not a simultaneous chord grip.
 
-This effort excludes fingering algorithms, chord-voicing candidate generation, ergonomic scoring, UI, AI, audio, instrument geometry, dependencies, and unrelated refactoring. The current task ends after saving and reviewing this plan; it does not start milestone 1.
+This effort excludes fingering algorithms, chord-voicing candidate generation, ergonomic scoring, UI, AI, audio, instrument geometry, dependencies, and unrelated refactoring.
 
 
 ## Progress
@@ -27,15 +27,17 @@ This effort excludes fingering algorithms, chord-voicing candidate generation, e
 - [x] 2026-10-27T09:12:37Z: Checked reference calculations, existing document paths, milestone dependencies, acceptance criteria, and deferred scope. Git status remained clean; git diff --check passed. The draft was not saved because Plan mode prohibited writes.
 - [x] 2026-10-27T12:36:58Z: Reconfirmed clean Git status at the same HEAD, absence of the target plan, current repository instructions, and the complete ExecPlan protocol before persistence.
 - [x] 2026-10-27T12:40:17Z: Saved and read the complete ExecPlan; verified required sections, milestone acceptance and ordering, deferred scope, heading spacing, references, and whitespace. Git status contains only this new plan. Stopped after documentation review.
-- [ ] Milestone 1 — Implement and verify explicit board contracts. Not started.
-- [ ] Milestone 2 — Implement and verify location-to-pitch mapping. Not started.
-- [ ] Milestone 3 — Implement and verify restricted exact-pitch searches. Not started.
-- [ ] Milestone 4 — Implement and verify pitch-class searches. Not started.
-- [ ] Milestone 5 — Verify Music Theory integration and document the implemented boundary. Not started.
+- [x] 2026-10-28T07:35:57Z: Milestone 1 — Explicit board contracts implemented and reviewed. 48 focused tests pass; npm run typecheck passes.
+- [x] 2026-10-28T07:36:46Z: Milestone 2 — Location mapping implemented and reviewed. All 114 focused tests and npm run typecheck pass.
+- [x] 2026-10-28T07:38:54Z: Milestone 3 — Exact-pitch searches implemented and reviewed. All 201 focused tests and npm run typecheck pass.
+- [x] 2026-10-28T07:42:02Z: Milestone 4 — Pitch-class searches implemented and reviewed. All 312 focused tests and npm run typecheck pass.
+- [x] 2026-10-28T07:51:32Z: Milestone 5 — Integration and documentation complete; 327 focused tests across three suites pass. Final regression passes 17,613 tests in 36 suites; TypeScript checking and Git diff checks pass. Reviewed all new files, documentation, domain imports and deferred scope. No changes staged or committed.
 
 
 ## Surprises & Discoveries
 
+
+Implementation findings: Initial milestone 1 type checking caught an unknown record property and an overly narrow mutable test fixture. Explicit numeric narrowing and a mutable numeric fixture resolved both; the same focused tests and type checking then passed. No scope change was needed. Milestone 3 initially exposed generic Object.freeze callback inference in a test; an explicit callback restored the intended structural type and both checks then passed.
 
 The working tree was clean at both planning and persistence inspection. HEAD was ee65ca5, the Music Theory readiness and Fretboard handoff commit. No Fretboard implementation or existing target plan was found.
 
@@ -44,6 +46,8 @@ The completed readiness plan records 17,295 passing tests in 34 suites and passi
 Music Theory already supplies registered coordinates, explicit spellings, collection roles, registered voicings, and omission-analysis inputs. No shared musical-request schema is needed for v1 mapping. Coverage analysis and exact-set identification are deliberately lossy views: neither proves preservation of a requested registered voicing and its repeated occurrences.
 
 Safe coordinate endpoints do not imply that their difference is a safe Number. Searches must handle distant valid targets without rounded arithmetic or unnecessary errors. Pitch-class searches must calculate match counts before enumeration, rather than walk every fret of a potentially enormous valid board.
+
+Milestone 5 reproduced the sandbox SSR-cache ENOENT while importing the new integration suite: 321 tests in the other two suites passed. The identical three-suite command outside the sandbox passed all 327 tests. The final full suite similarly failed to load 35 suites in the sandbox (only two bootstrap tests ran); the identical npm test outside the sandbox passed all 36 suites and 17,613 tests. No source, dependency or runner changes were made to address either environment failure.
 
 The existing test runner reproduced the documented sandbox SSR-cache ENOENT during planning. The registered-pitch suite passed there, but readiness failed during module loading. The identical command outside the sandbox passed both suites without source or configuration changes.
 
@@ -67,17 +71,29 @@ The existing test runner reproduced the documented sandbox SSR-cache ENOENT duri
 
 2026-10-27, user, persistence clarification: "Save and review the ExecPlan only." The request to persist the plan does not authorize any of its five implementation milestones.
 
-These are choices for this effort, not automatic additions to docs/DECISIONS.md. No unresolved product or architectural decision blocks the five milestones under these contracts. Deferred questions below must remain unresolved until their capabilities are authorized.
+2026-10-28, implementation author: optional region fields explicitly include undefined in their TypeScript types to honor the approved omitted-value semantics under exactOptionalPropertyTypes. Shared validation rejects null, sparse arrays and invalid requests before empty results; all production dependencies remain one-way to Music Theory.
+
+2026-10-28, implementation author under the user-approved plan: recorded the now-implemented persistent mapping contract as D054 and updated Architecture and the Music Theory handoff guide. No deferred decision was resolved.
+
+The earlier planning choices were not automatically persistent decisions; the authorized implementation now establishes D054. No unresolved product or architectural decision blocks the five milestones under these contracts. Deferred questions below must remain unresolved until their capabilities are authorized.
 
 
 ## Outcomes & Retrospective
 
 
-The implementation plan is saved at plans/fretboard-engine-v1.md and has been reviewed against the complete ExecPlan protocol. Documentation checks passed, and the only working-tree change is this new plan. All five implementation milestones remain not started. The documentation-only task is complete.
+Milestone 1 review: explicit tuning, canonical independent copies, stable identities, zero frets, alternative string counts, runtime shape validation, safe endpoints and overflow rejection are covered by 48 passing tests. Readonly assertions pass type checking. No defaults or mutable retuning API were added.
 
-No Fretboard production module, test, application feature, dependency, or unrelated documentation file has been changed. No commit or staging operation occurred. Existing baseline tests establish only the inspected Music Theory foundation; Fretboard behavior remains unimplemented and unverified.
+Milestone 2 review: standard tuning, Drop D, fret 22 versus unavailable fret 24, octave equivalence, negative/safe endpoint coordinates, frozen reordered structural records, whole-board validation and readonly location contracts pass. Direct mapping reuses checked Music Theory transposition.
 
-At each future milestone, replace predictions with actual evidence and record remaining limitations. Do not mark a milestone complete solely because files exist or TypeScript compiles.
+Milestone 3 review: D3/A2 reference alternatives, strict independent regions, reordered/frozen inputs, fresh results, distant safe targets, validation even for empty selections, and the exact 10,000/10,001 match boundary pass. Searches count before output allocation and never scan frets.
+
+Milestone 4 review: all twelve classes match an independent bounded exhaustive oracle over five tunings, five board bounds and five regions, including reversed input permutations. D-class fixtures, strict validation, copy isolation, exact allocation boundaries across strings, huge boards with narrow regions and both safe endpoints pass. Arithmetic counts precede result allocation and enumeration advances by twelve frets.
+
+Milestone 5 review: D natural-minor metadata and all 47 reference locations, the eight-note registered run, enharmonic spelling retention, repeated and unavailable occurrences, the one-string simultaneous-realization counterexample and the test-local chord consumer all pass. Music Theory production modules and existing tests remain unchanged.
+
+Implementation resumed on 2026-10-28 from a clean working tree. All five milestones are now complete. Final regression passes 17,613 tests in 36 suites (318 new Fretboard tests), focused integration passes 327 tests in three suites, and final npm run typecheck passes. The approved contract and deferred scope remain unchanged. The only execution adjustment was the documented outside-sandbox retry after SSR-cache failures; no dependency or runner configuration changed. Explicit undefined unions in optional region fields align the public TypeScript contract with the approved runtime behavior. No scope deviations or unresolved implementation defects were found.
+
+Remaining limitations are deliberate: searches expose location alternatives only, with a 10,000-result allocation cap and safe-integer coordinates. They do not assign simultaneous chord locations, validate fingerings, rank grips, infer metadata or implement later instrument/UI/AI/audio features. Independent fixtures and an exhaustive bounded oracle complement boundary tests; useful numeric domains can exceed the allocation budget without invalidating their direct or narrow queries.
 
 
 ## Context and Orientation
@@ -99,7 +115,7 @@ docs/MUSIC_THEORY_V1.md explains the existing handoff. docs/FRETBOARD_REFERENCE.
 
 The completed plans/music-theory-v1-readiness.md, plans/registered-pitch.md, and plans/registered-scale-runs.md establish useful verification and living-document patterns. Older plans contain historical source paths and spelling limits; current source and accepted decisions take precedence.
 
-Planned implementation files are:
+Implemented files are:
 
 - domain/fretboard/fretboard.ts — the minimal public contracts, validation, and mapping functions.
 - tests/fretboard.test.ts — deterministic board, mapping, search, boundary, and type-contract tests.
@@ -244,9 +260,7 @@ Record actual results and final file review in the living sections.
 
 Run commands from C:/Users/simoa/Documents/fretbo-AI-rd.
 
-The current planning task ends after saving and reviewing this document. It does not proceed into milestone 1. Inspect the saved file directly, verify all required sections and two blank lines after headings, check links and trailing whitespace, and confirm that only plans/fretboard-engine-v1.md was added.
-
-For a later authorized implementation, first inspect current instructions and status:
+The earlier planning task ended after saving and reviewing this document. The current authorized implementation begins by inspecting instructions and status:
 
     git -c safe.directory=C:/Users/simoa/Documents/fretbo-AI-rd status --short
     node --version
@@ -299,6 +313,20 @@ There are no migrations or external state changes. Repair only files belonging t
 ## Artifacts and Notes
 
 
+Implementation verification on 2026-10-28, from the repository root:
+
+| Milestone | Actual verification and result |
+| --- | --- |
+| 1 | npm test -- tests/fretboard.test.ts: 48 passed; npm run typecheck passed after fixing two type-narrowing issues. |
+| 2 | Same focused command: 114 passed; npm run typecheck passed. |
+| 3 | Same focused command: 201 passed; npm run typecheck passed after fixing a test callback's generic inference. |
+| 4 | Same focused command: 312 passed; npm run typecheck passed. |
+| 5 | npm test -- tests/fretboard.test.ts tests/fretboard-music-theory.test.ts tests/music-theory-readiness.test.ts: 327 passed in three suites outside the sandbox after the documented cache-loading failure. |
+| Final regression | npm test: 17,613 passed in 36 suites outside the sandbox after the same cache-loading failure; no assertion failures. |
+| Final static checks | npm run typecheck passed; git diff --check passed. New files were inspected directly and checked separately because they are untracked. |
+
+Final review covers the production module, both new test files, architecture, D054, the handoff guide and this plan. Git status contains only those seven intended files; package/dependency configuration, Music Theory implementation and existing tests are unchanged. No staging, commit, build or publication was performed. Production import review confirms only existing Music Theory pitch primitives, with no reverse Music Theory dependency on Fretboard and no Playability implementation.
+
 Planning evidence on 2026-10-27:
 
 - Git status was clean before and after the initial planning inspection, and again before persistence.
@@ -347,8 +375,8 @@ Add the following public surface to domain/fretboard/fretboard.ts. All object pr
     }>;
 
     type FretboardSearchRegion = Readonly<{
-      stringIds?: readonly StringId[];
-      frets?: FretRange;
+      stringIds?: readonly StringId[] | undefined;
+      frets?: FretRange | undefined;
     }>;
 
     const MAX_FRETBOARD_SEARCH_RESULTS = 10_000;
@@ -403,3 +431,7 @@ None of these deferred decisions blocks v1 pitch-location mapping. If a future r
 Revision note: 2026-10-27, prepared from verified repository state and the user's three contract choices. All implementation milestones remain not started.
 
 Revision note: 2026-10-27, persisted and reviewed after the user explicitly confirmed documentation-only scope. Removed obsolete Plan-mode persistence instructions, recorded successful saved-file checks, and retained the implementation contracts and deferred boundaries unchanged. All implementation milestones remain not started.
+
+Revision note: 2026-10-28T07:35:57Z, user explicitly authorized implementation of milestones 1–5. Updated obsolete current-task restrictions; milestone 1 is verified. No staging or commit is authorized.
+
+Revision note: 2026-10-28T07:51:32Z, completed sequential implementation and verification of all five milestones. Recorded regression and sandbox-retry evidence, D054 and documentation updates, unchanged deferred scope, and final review. Normalized UTC timestamp separators to ISO format.
