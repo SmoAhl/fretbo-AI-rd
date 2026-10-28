@@ -22,6 +22,8 @@ These are portable modules under `domain/music-theory/`, imported directly using
 
 Music Theory determines musical content. The [implemented Fretboard v1](ARCHITECTURE.md#fretboard-v1-implementation) maps target classes or registered pitches to identified strings/frets using explicit registered tuning and fret bounds. `findPitchClassLocations` searches across registers; `findRegisteredPitchLocations` preserves the exact target register. Both return `{ stringId, fret, pitch }` alternatives. Consumers retain the source objects below alongside those numeric results; no shared musical-request schema is introduced.
 
+The [Fretboard v1 consumer guide](FRETBOARD_V1.md) continues this handoff with explicit physical string positions, strict search and numerical limits, and the information a future Playability consumer must preserve. Its [readiness review](../plans/fretboard-v1-readiness.md) records fresh verification separately from this guide's original Music Theory review.
+
 | Mapping need | Existing data to retain | Meaning for the consumer |
 | --- | --- | --- |
 | Any octave of a target class | Numeric pitch classes plus original collection tonic, ordinal/formula roles and spellings where supplied | A class does not choose register, spelling or a simultaneous grip. Scales/melodies currently require note locations only. |

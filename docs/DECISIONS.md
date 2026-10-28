@@ -8,6 +8,8 @@ Use stable decision IDs. Each record identifies its status, decision, rationale,
 
 Accepted technology choices describe what the project will use, not what has been installed or implemented. See [current implementation](ARCHITECTURE.md#current-implementation) for the verified repository state. This documentation update does not scaffold tooling or authorize implementation.
 
+Implementation exclusions and undecided interfaces in earlier records describe those increments. Later accepted records establish additional contracts: in particular, Fretboard mapping is implemented under [D054](#d054-explicit-fretboard-and-bounded-pitch-location-searches), extended with required physical positions by [D055](#d055-explicit-physical-string-positions). Earlier references to deferred Fretboard work do not override these contracts; Playability and candidate-generation ownership remain open.
+
 When a decision changes, preserve its historical record, mark it superseded, and link the replacement. Only accepted, non-superseded records are currently in force. Record actual decisions rather than keeping a queue of proposals in this file.
 
 An ExecPlan's Decision Log concerns one effort. Promote a choice here only when it becomes a persistent project decision within the task's authority. Explain its reason and consequences and update the architectural description where relevant; do not promote it automatically.
