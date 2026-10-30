@@ -68,7 +68,7 @@ The existing integration suite demonstrates this composition locally: map each s
 | --- | --- |
 | Music Theory | Musical identity, pitch/register/spelling, formulas, descriptions, supplied voicings and existing coverage/bass analysis. |
 | Fretboard | Explicit strings, physical order, registered tuning, available frets and sounding pitch-location alternatives. |
-| Future Playability | Validate proposed simultaneous realizations and their string states, finger contacts, barres and shared grip; compare supported valid fingerings for practical recommendations. |
+| Playability | Geometry representation and structural resolution are implemented; finger contacts, barres, shared-grip validation and practical recommendations remain later work. |
 
 Individual availability is insufficient. On one string tuned to D3 with two frets, both D3 at fret 0 and E3 at fret 2 exist, but they cannot sound simultaneously on that string under the ordinary model. Likewise, two distinct requirements must not silently share one sounding occurrence. A selected location assignment still lacks finger/contact evidence; it is not automatically a playable grip.
 
@@ -76,11 +76,11 @@ The [Playability Reference](PLAYABILITY_REFERENCE.md) distinguishes open/fretted
 
 ## Limitations and next implementation prerequisites
 
-No chord-location assignment, fingering representation, candidate generator, contact/barre validator, shared-grip validator or ergonomic ranker exists. Ownership of automatic candidate generation, initial selection and the playability guarantee remains an [open architectural question](ARCHITECTURE.md#open-architectural-questions). This guide does not assign enumeration to either engine or invent a search/voicing architecture.
+The [Playability geometry foundation](ARCHITECTURE.md#playability-geometry-foundation) now represents explicit simultaneous string states and resolves their selected locations through Fretboard. It includes 12 geometry formulas and 13 documented placements, without finger assignments or approval. No fingering representation, candidate generator, contact/barre validator, shared-grip validator or ergonomic ranker exists. Ownership of automatic candidate generation remains an [open architectural question](ARCHITECTURE.md#open-architectural-questions). This guide does not assign enumeration to either engine or invent a search/voicing architecture.
 
 Capos and partial capos, per-string fret ranges, courses, harmonics, bends, microtonal mapping, tuning presets and physical geometry remain unimplemented. Arbitrary voicing generation, automatic guitar-specific omissions, melodic fingering/transitions, UI, AI and audio are also outside this boundary. Alternative tunings and explicit string counts are already supported and should not be confused with those deferred features.
 
-**Readiness assessment:** no blocking Fretboard contract defect was found. A separately authorized Playability effort can use these instrument facts to validate explicitly supplied candidates. Its first implementation must define the candidate/contact and string-state representation, how source occurrences and exact musical requirements are preserved, and the supported hard grip rules and recommendation criteria. Those are unresolved Playability design prerequisites, not missing pitch-mapping operations. Candidate-generation ownership must be resolved before implementing a generator; it need not be resolved merely to validate supplied candidates.
+**Readiness assessment:** no blocking Fretboard contract defect was found. Milestone 1 of the [Playability effort](../plans/playability-engine-v1.md) now uses these instrument facts to validate explicit candidate geometry and resolve each sounding occurrence. Independent witness/contact validation and preservation of exact musical requirements during assessment are planned later milestones. Candidate-generation ownership must be resolved before implementing a generator; it need not be resolved merely to validate supplied candidates.
 
 ## Readiness evidence
 

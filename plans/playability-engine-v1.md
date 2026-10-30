@@ -19,7 +19,7 @@ A formula and placement can support multiple witnesses. Changing, rejecting, or 
 
 The observable completion criterion is that all 13 documented instances reproduce the source geometry and complete fingerings, pass generic validation, and receive recommendation eligibility for compatible musical requests.
 
-No implementation is authorized by the current planning task.
+The user authorized implementation, testing, and review of Milestone 1 on 2026-10-30. Milestones 2–4 remain outside the current implementation scope.
 
 ## Progress
 
@@ -30,13 +30,21 @@ No implementation is authorized by the current planning task.
 - [x] 2026-10-30T08:27:08Z: Separated all documented finger assignments and barres into independent witness specifications.
 - [x] 2026-10-30T08:42:07Z: Reconfirmed clean Git status, current instructions and reference scope, then persisted the complete latest geometry-first plan as plans/playability-engine-v1.md under the user's planning-only authorization.
 - [x] 2026-10-30T08:45:16Z: Read the complete saved document and verified all 12 required sections, four milestones, 12 geometry-only formulas, 13 placements, 13 independent witnesses, 13 pitch fixtures, future integration requirements, heading spacing, local Markdown links, and new-file whitespace. All 13 geometries and finger rows match the reference; all complete contacts and pitch fixtures agree. No discrepancies found. Git status contains only this new plan; no production code or tests changed.
-- [ ] Milestone 1: Geometry-only formulas and concrete instantiation.
+- [x] 2026-10-30T09:04:00Z: Milestone 1 complete: geometry-only formulas, concrete instantiation/resolution, 12 formulas and 13 placements, 114 new tests, updated architecture/handoff, and final review. All 446 focused tests and type checking passed; tracked and new-file whitespace checks passed. Milestones 2–4 remain unimplemented.
 - [ ] Milestone 2: Independent fingering witnesses and generic contact validation.
 - [ ] Milestone 3: Musical assessment and reviewed physical support.
 - [ ] Milestone 4: Full verification, documentation, and completion review.
+- [x] 2026-10-30T10:13:12Z: Documented the post-implementation review's reference-ID maintenance finding under the user's documentation-only authorization. No implementation or test changes made for this follow-up.
+- [ ] Deferred maintenance: replace array-index-derived reference formula IDs with explicit stable IDs, preserving current ID-to-geometry mappings. Add checks for unique IDs and valid placement references. Implementation requires separate authorization; see Deferred maintenance below.
 
 ## Surprises & Discoveries
 
+
+2026-10-30T09:00:39Z: The first focused run passed all 332 existing Fretboard tests, but both new suites failed during module loading with the previously documented sandbox temporary SSR-cache ENOENT. No new-suite assertion ran. Type checking passed. The identical focused command outside the sandbox passed all 446 tests. No tooling change was needed.
+
+2026-10-30T09:04:00Z: Self-review found a test whose one-string board was itself invalid, allowing it to pass without exercising formula/board count mismatch. Corrected that fixture to a valid one-string board and reran the focused command successfully. No production defect or source-row discrepancy was found during review.
+
+2026-10-30, post-implementation review: `referenceChordShapeFormulas()` in `domain/playability/reference-grips.ts` derives formula IDs from the `patterns` array index, while placement records reference fixed IDs. Reordering patterns or inserting a pattern between existing entries would change those IDs' geometry associations. Current source-row tests protect the documented placements, and no current incorrect placement was found. This is a deferred maintenance risk, not a Milestone 1 blocker.
 
 Removing fingering information does not reduce the current formula count further. Five geometries contain open strings; seven contain no sounding open strings. Only F major and E-shaped C major share the same normalized geometry.
 
@@ -65,6 +73,10 @@ No contradiction was found in the 13 documented assignments under the discrete c
 
 These choices preserve D019, D054, and D055. This planning task changes no accepted decisions.
 
+2026-10-30, implementation author: Geometry records explicitly cover every board string, with canonical ascending physical-position output. Formula validation rejects non-normalized offsets rather than silently shifting them. All-open and all-silent formulas are valid; without any sounding fretted stops, anchor zero is the canonical placement. This extends the same geometry-only rules without selecting fingering or recommendation policies.
+
+2026-10-30, implementation author: Structural candidate contradictions return an invalid finding with a reason; malformed boards retain Fretboard RangeError behavior. Construction and comparisons reject invalid geometry with RangeError. Concrete provenance is optional, copied, and excluded from geometry comparison. Library getters return fresh copies; the bounded reference helper selects one documented placement at a time so short boards are checked per instance.
+
 ## Outcomes & Retrospective
 
 
@@ -72,14 +84,21 @@ The geometry-first planning audit is complete. No unresolved domain blocker was 
 
 The revised design preserves all documented coverage while removing fingering and approval from the geometry model. Future shape derivation can supply new geometry without requiring chord-specific validation code.
 
-The recommended first implementation milestone is geometry representation and instantiation. Milestone 3 first provides the complete reviewed recommendation capability. V1 completion requires milestone 4.
+Milestone 1 now provides geometry representation and instantiation. Milestone 3 first provides the complete reviewed recommendation capability. V1 completion requires milestone 4.
 
-The complete latest plan has been persisted and reviewed under the user's planning-only authorization. No saved-document coverage or transcription discrepancy was found. No production code, tests, accepted decisions, or other planning documents have been changed.
+The planning document was originally persisted under planning-only authorization. Milestone 1 is complete under the subsequent explicit user request. All 13 source geometries and pitch fixtures pass, using 12 distinct formulas; F major and E-shaped C share shape-08. Generic validation preserves separate open/fretted/muted/unplayed states, board identity and physical order, safe coordinates, and independent copies. No witness, musical-assessment, or practical-approval behavior is implemented. No remaining Milestone 1 blocker was found; practical usability remains deliberately unestablished until later witness and assessment milestones.
+
+### Deferred maintenance
+
+
+The reference-ID finding above remains open. Before expanding or reorganizing the reference library, the recommended follow-up is to store an explicit ID with each geometry definition in `domain/playability/reference-grips.ts`, rather than derive it from array position. Preserve all current `shape-01` through `shape-12` associations and the 13 placement records. Verify unique formula IDs, resolution of every placement's formula reference, and unchanged source geometries and pitches in the existing focused suites. Explicit IDs should remain attached to their geometry regardless of definition order.
+
+The user has authorized documenting this finding only and explicitly deferred its implementation. No fix or additional tests have been implemented; this entry does not authorize them or change accepted project decisions.
 
 ## Context and Orientation
 
 
-The reviewed repository was clean at 86fd8cc before this plan was created. Playability is not implemented.
+The reviewed repository was clean at 86fd8cc before this plan was created. The implementation continuation also began with a clean working tree. Playability's geometry foundation is now implemented; witnesses and assessment remain unimplemented.
 
 Existing authoritative boundaries:
 
@@ -277,7 +296,7 @@ Verify:
     npm test -- tests/chord-shape-formula.test.ts tests/playability-shape.test.ts tests/fretboard.test.ts
     npm run typecheck
 
-These Playability suites are proposed files.
+These Playability suites now exist as part of Milestone 1.
 
 ### Milestone 2 — Independent witnesses and generic contact validation
 
@@ -405,7 +424,7 @@ Read new files directly and check their whitespace separately because ordinary u
 
 If the previously documented sandbox SSR-cache ENOENT recurs during module loading, distinguish it from assertion failures and repeat the identical command outside the sandbox when permitted. Record both outcomes without changing tooling to hide the environmental failure.
 
-No implementation or test command has been run for this planning task.
+Milestone 1 execution on 2026-10-30 uses Node v24.19.0 and npm 11.6.2. The first focused test run encountered the sandbox module-cache failure recorded above. The identical outside-sandbox retry passed 446 tests across three suites; after correcting a review finding in a test fixture, the final repeat at 09:03:56Z also passed all 446 tests (114 new Playability tests plus 332 existing Fretboard tests). npm run typecheck passed initially and after the final test edit. git diff --check and git diff --no-index --check against /dev/null for every new file passed. Read all new source/test files and reviewed tracked documentation diffs, dependency direction, source rows, and Git status. No unrelated changes, staging, or commits. Full regression remains a Milestone 4 check and was not run for this additive geometry milestone.
 
 ## Validation and Acceptance
 
@@ -446,7 +465,7 @@ A witness failure must never trigger geometry rewriting or silent musical simpli
 ## Artifacts and Notes
 
 
-Saved path: plans/playability-engine-v1.md. The file contains the complete latest geometry-first plan as standalone Markdown, without the conversation's enclosing code fence or memory citations. Only persistence/progress/evidence text was updated from the finalized conversation draft; the architecture and milestone scope are unchanged.
+Saved path: plans/playability-engine-v1.md. The file contains the geometry-first plan as standalone Markdown, without the conversation's enclosing code fence or memory citations. The original persistence task changed only progress/evidence text; the subsequent Milestone 1 implementation updates current scope, decisions, status, and verification evidence without expanding to later milestones.
 
 The geometry-only audit counted 13 unique absolute rows and 12 normalized geometries without using finger data. All five open geometries and seven closed geometries are distinct under explicit state semantics.
 
@@ -470,7 +489,7 @@ Independent C0-based pitch fixtures, in source string 6 → 1 order with unplaye
 
 Saved-document verification on 2026-10-30: all 12 protocol sections and four milestone headings are present; all 12 geometry patterns are distinct using geometry alone; all 13 placements reproduce the reference fret rows; all 13 independent witnesses reproduce the reference finger rows and effective stops; all 13 pitch fixtures agree with the explicit standard tuning. Witness coverage is seven without barres, three with partial barres, and three with full barres. Geometry/fingering separation, one-to-many witnesses, future Music Theory/Fretboard integration, two-blank-line heading spacing, checkbox placement, the local Markdown link, and new-file whitespace checks passed. No discrepancies were found. These were document-consistency checks, not execution of a Playability implementation.
 
-The earlier planning audits were read-only. This persistence task changes only this plan. Production tests and type checking have not been run.
+The earlier planning audits were read-only. The later Milestone 1 implementation adds domain/playability/chord-shape-formula.ts, chord-shape.ts, reference-grips.ts and the two focused suites. Current execution evidence belongs to Concrete Steps and Progress, separate from those historical document checks.
 
 No unresolved domain blocker remains. The main risks are reintroducing fingering into formula identity, binding anchors to hidden contacts, approving witnesses through geometry membership, and losing exact registered occurrences during musical checking.
 
@@ -557,3 +576,7 @@ Defer automatic chord-shape derivation, arbitrary transposition, anchor enumerat
 Do not add formula inheritance, open-to-closed conversion, finger-remapping parameters, reusable fingering-template hierarchies, or solver frameworks.
 
 Revision note: 2026-10-30. Finalized geometry-only ChordShapeFormula identity; retained 12 formulas and 13 placements after recalculation; moved all complete execution data into independent FingeringWitness records; preserved one-to-many witnesses, four milestones, and the future Music Theory/Fretboard integration boundary. Persisted the complete plan under planning-only authorization and updated its persistence status without changing the finalized architecture.
+
+Revision note: 2026-10-30. Completed the explicitly authorized Milestone 1 implementation. Updated scope and implementation status, recorded geometry API details, focused verification and self-review, and preserved later milestones as unfinished. Architecture and Fretboard handoff now distinguish implemented geometry from future fingering and assessment.
+
+Revision note: 2026-10-30. Recorded the post-implementation review's array-index-derived reference-ID risk as deferred maintenance, with the recommended remedy and verification criteria. Documentation only; implementation remains explicitly deferred pending separate authorization.
