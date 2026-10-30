@@ -52,6 +52,19 @@ Review the changes and relevant Git status before reporting completion. Inspect 
 
 When reporting completed repository changes, include a concise suggested commit message in a fenced text block without waiting for the user to ask. Base it on the reviewed changes from the current task, including documentation-only work, and follow the repository's existing commit-message style. Do not include unrelated user changes or claim unimplemented behavior. Suggesting a message does not authorize staging or committing changes.
 
+### Post-implementation review
+
+After every code implementation, include a concise review in the final response. Write the review in Finnish, including its headings, so the user can read it quickly. Cover:
+
+- **Toteutettu:** What was added, changed, or completed.
+- **Varmennus:** Tests, type checks, and their actual results.
+- **Jatkotehtävät:** Intentionally postponed functionality, incomplete work, and newly discovered follow-up tasks.
+- **Ylläpidettävyys:** Concrete technical debt, architectural concerns, or future maintenance risks introduced or identified by the changes.
+
+Prioritize actionable findings over speculative improvements. Report at most two significant maintainability concerns, with relevant file references when applicable. Explicitly state when no concerns or deferred tasks were identified.
+
+Do not expand the implementation scope or address deferred items without authorization. Keep the review brief and preserve the existing commit-message suggestion convention.
+
 ## Documentation and continuation
 
 - This file owns working instructions and the ExecPlan threshold.
