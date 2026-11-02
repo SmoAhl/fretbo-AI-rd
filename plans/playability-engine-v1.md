@@ -1,25 +1,16 @@
-# Playability Engine v1 — Geometry, instances, and independent fingering evidence
+# Playability Engine v1 — Reusable movable geometry and fingering templates
 
 
-This plan follows [.agent/PLANS.md](../.agent/PLANS.md). Keep progress, findings, decisions, and verification evidence current throughout the implementation effort.
+This living plan follows [.agent/PLANS.md](../.agent/PLANS.md). The 2026-10-30 movable-template revision supersedes the original fixed-placement restrictions. Historical evidence below is retained explicitly as history.
 
 ## Purpose / Big Picture
 
 
-Implement Playability v1 using four separate responsibilities:
+Deliver a deterministic path from chord requirements through selected reusable templates to concrete, contact-valid, musically matched fingerings. Music Theory owns harmonic requirements, Fretboard supplies actual pitches, and Playability instantiates and assesses execution. Geometry, execution and review evidence remain separate.
 
-1. ChordShapeFormula describes deterministic discrete string/fret geometry.
-2. ChordShapeInstance places that geometry on an explicit fretboard.
-3. FingeringWitness describes an independent complete execution of a concrete instance.
-4. PlayabilityAssessment combines structural and musical validation with separately validated fingering evidence.
+The user explicitly authorized implementation of Milestones 2b, 3 and 4. Preserve the completed Milestone 1 geometry and Milestone 2 absolute witness validators. Support bounded search over known templates and template-pattern review across compatible six-string tunings. Do not implement a general fingering solver, ranking, anatomy, muting techniques, UI or AI. Do not stage or commit. The pre-existing staged Milestone 2 snapshot must remain intact.
 
-V1 includes all 13 unique documented reference grips from docs/PLAYABILITY_REFERENCE.md. Their geometry is represented by 12 formulas and 13 placements. Their complete finger assignments are represented separately by 13 initial reviewed witnesses.
-
-A formula and placement can support multiple witnesses. Changing, rejecting, or adding a witness must not change or duplicate the formula or concrete geometry.
-
-The observable completion criterion is that all 13 documented instances reproduce the source geometry and complete fingerings, pass generic validation, and receive recommendation eligibility for compatible musical requests.
-
-The user authorized implementation, testing, and review of Milestone 1 on 2026-10-30. Milestones 2–4 remain outside the current implementation scope.
+The original 13 placements are compatibility fixtures, not the complete supported position set. V1 contains 13 distinct geometry formulas and 13 execution templates (five open, eight closed), plus the original 13 placements. The three new acceptance positions must emerge through relative construction and search, never new absolute placement records.
 
 ## Progress
 
@@ -31,20 +22,27 @@ The user authorized implementation, testing, and review of Milestone 1 on 2026-1
 - [x] 2026-10-30T08:42:07Z: Reconfirmed clean Git status, current instructions and reference scope, then persisted the complete latest geometry-first plan as plans/playability-engine-v1.md under the user's planning-only authorization.
 - [x] 2026-10-30T08:45:16Z: Read the complete saved document and verified all 12 required sections, four milestones, 12 geometry-only formulas, 13 placements, 13 independent witnesses, 13 pitch fixtures, future integration requirements, heading spacing, local Markdown links, and new-file whitespace. All 13 geometries and finger rows match the reference; all complete contacts and pitch fixtures agree. No discrepancies found. Git status contains only this new plan; no production code or tests changed.
 - [x] 2026-10-30T09:04:00Z: Milestone 1 complete: geometry-only formulas, concrete instantiation/resolution, 12 formulas and 13 placements, 114 new tests, updated architecture/handoff, and final review. All 446 focused tests and type checking passed; tracked and new-file whitespace checks passed. Milestones 2–4 remain unimplemented.
-- [ ] Milestone 2: Independent fingering witnesses and generic contact validation.
-- [ ] Milestone 3: Musical assessment and reviewed physical support.
-- [ ] Milestone 4: Full verification, documentation, and completion review.
+- [x] 2026-10-30T10:23:26Z: Inspected clean Git state at 300600f, repository instructions, complete plan/protocol, relevant references and accepted decisions, geometry APIs and tests. Began the authorized Milestone 2 continuation using Node v24.19.0 and npm 11.6.2.
+- [x] 2026-10-30T12:49:00Z: Milestone 2 complete: independent witnesses, generic contact validation, all 13 source assignments with separate review contexts, 74 new tests, architecture/handoff updates, and diff/new-file review. Final focused run passed 188 tests across three suites; type checking and tracked/new-file whitespace checks passed. Milestones 3–4 remain unimplemented.
+- [x] 2026-10-30T16:46:30Z: Revised Milestone 3 complete: bounded known-template search, musical assessment, exact occurrence/spelling preservation and tuning-independent reviewed-pattern support. All three requested acceptance positions pass through search.
+- [x] 2026-10-30T16:32:19Z: Rechecked staged Milestone 2 work, instructions, current APIs, references and accepted contracts. No incompatibility requires changing the geometry or absolute-contact validators. Approved additions: 13 geometry/template pairs, five explicit open-to-closed associations, signed relative contacts, a 10,000-placement bounded search, and tuning-independent reviewed pattern support on compatible six-string boards.
+- [x] 2026-10-30T16:46:30Z: Milestone 2b complete: signed relative contacts, checked construction, 13 canonical templates, explicit CAGED variants and compatible historical reference outputs.
+- [x] 2026-10-30T16:46:30Z: Milestone 4 complete: 17,870 tests across 41 suites passed on the final full regression; type checking passed. Reviewed new/tracked files and source compatibility, updated architecture, D056 and consumer guide. No staging or commits.
 - [x] 2026-10-30T10:13:12Z: Documented the post-implementation review's reference-ID maintenance finding under the user's documentation-only authorization. No implementation or test changes made for this follow-up.
 - [ ] Deferred maintenance: replace array-index-derived reference formula IDs with explicit stable IDs, preserving current ID-to-geometry mappings. Add checks for unique IDs and valid placement references. Implementation requires separate authorization; see Deferred maintenance below.
 
 ## Surprises & Discoveries
 
 
+Historical Milestone 1–2 observations (counts describe those snapshots):
+
 2026-10-30T09:00:39Z: The first focused run passed all 332 existing Fretboard tests, but both new suites failed during module loading with the previously documented sandbox temporary SSR-cache ENOENT. No new-suite assertion ran. Type checking passed. The identical focused command outside the sandbox passed all 446 tests. No tooling change was needed.
 
 2026-10-30T09:04:00Z: Self-review found a test whose one-string board was itself invalid, allowing it to pass without exercising formula/board count mismatch. Corrected that fixture to a valid one-string board and reran the focused command successfully. No production defect or source-row discrepancy was found during review.
 
 2026-10-30, post-implementation review: `referenceChordShapeFormulas()` in `domain/playability/reference-grips.ts` derives formula IDs from the `patterns` array index, while placement records reference fixed IDs. Reordering patterns or inserting a pattern between existing entries would change those IDs' geometry associations. Current source-row tests protect the documented placements, and no current incorrect placement was found. This is a deferred maintenance risk, not a Milestone 1 blocker.
+
+2026-10-30T12:46:53Z: Milestone 2's first focused run hit the same sandbox SSR-cache ENOENT in all three suites before assertions. The identical outside-sandbox retry passed 186 tests; type checking passed. Review then strengthened invalid-field tests so a missing required stop could not mask the intended rejection, and added seven-string barre/silent-state and familiar-ID regressions. The final run passed 188 tests. No production defect or source discrepancy was found.
 
 Removing fingering information does not reduce the current formula count further. Five geometries contain open strings; seven contain no sounding open strings. Only F major and E-shaped C major share the same normalized geometry.
 
@@ -56,8 +54,29 @@ A witness may include lower barre contacts hidden beneath higher sounding stops.
 
 No contradiction was found in the 13 documented assignments under the discrete contact model. The C-major A, G, and D forms trigger wider finger-gap review heuristics, but the reference already supplies reviewed complete assignments. Do not convert those heuristics into new hard prohibitions.
 
+2026-10-30, movable-template continuation: the initial five-suite test run again failed before assertions with sandbox SSR-cache ENOENT. The identical outside-sandbox retry passed 233 tests. Initial type checking found a test-only union-narrowing issue; the fixture was corrected. Production modules typechecked before tests were introduced. Additional review-driven acceptance tests were completed before full regression. Review also replaced automatically generated template-review membership with an explicit reviewed-ID list so future execution data cannot silently acquire approval.
+
 ## Decision Log
 
+
+Current authorized decisions, 2026-10-30, user:
+
+- Reusable movable patterns are core v1. Add bounded template search, not arbitrary shape/finger solving.
+- Reviewed complete patterns apply to compatible six-string boards regardless of tuning. Musical results always use the actual tuning.
+- Preserve geometry and concrete-contact models. Add signed relative contacts, checked instantiation and an explicit closed C-major variant.
+- Retain historical getters and placements. Keep existing shape IDs and append shape-13; the separately deferred array-index ID-storage cleanup is not authorized.
+
+Implementation decisions, 2026-10-30, implementation author:
+
+- Fingering templates associate to formula IDs; IDs never confer support. Actual normalized geometry and canonical complete contacts determine support against private reference snapshots.
+- Optional custom search catalogs permit future shapes and alternative fingerings without editing algorithms. Custom data cannot add trusted review evidence.
+- Search returns contact-valid, musically matched candidates with their support findings; an unreviewed custom pattern remains visible but recommendation-ineligible. Results sort by anchor, formula ID, template ID.
+- Require explicit selected template IDs and an inclusive anchor range. Validate all inputs even for an empty selection. Count available template/anchor pairs before enumeration, with a separate 10,000-placement cap and BigInt arithmetic; never truncate.
+- Assess supplied witnesses independently. Omitted witnesses instantiate matching reviewed patterns; an explicit empty list means no witnesses. One invalid witness cannot veto a valid supported alternative.
+- Template review membership is an explicit list independent of execution-data membership; adding a library pattern does not automatically approve it.
+- Exact matching preserves a copied request and maps each original occurrence to a distinct physical-position-ordered sounding-location index. Spelled exact requests also retain written membership semantics.
+
+Historical decisions below explain Milestones 1–2. Their fixed-placement-only, no-relative-template and standard-tuning-only review restrictions are superseded by the current decisions above:
 
 2026-10-30, user: ChordShapeFormula contains only explicit string states and relative fret geometry. Finger identities, contacts, barres, ergonomic heuristics, and review evidence are excluded.
 
@@ -77,506 +96,122 @@ These choices preserve D019, D054, and D055. This planning task changes no accep
 
 2026-10-30, implementation author: Structural candidate contradictions return an invalid finding with a reason; malformed boards retain Fretboard RangeError behavior. Construction and comparisons reject invalid geometry with RangeError. Concrete provenance is optional, copied, and excluded from geometry comparison. Library getters return fresh copies; the bounded reference helper selects one documented placement at a time so short boards are checked per instance.
 
+2026-10-30, Milestone 2 implementation author: Use an explicit `instanceId` on each independent witness; validate each supplied witness separately against actual instance geometry. No collection-wide veto or geometry copy is needed for one-to-many associations. Return copied contacts in finger order, sounding fingers in physical-position order (0 denotes open), and a nullable contact span. Malformed boards throw; candidate contradictions return invalid findings.
+
+2026-10-30, Milestone 2 implementation author: Interpret a contact as exclusive ownership of a discrete string/fret stop: different fingers may share a fret on different strings, or overlap a string at different frets, but cannot occupy the same string/fret contact. This also rejects overlaps hidden beneath a higher stop or on silent strings. The rule is a discrete-model consistency constraint, not an anatomical claim. Count every held fretting contact in span; silent-state declarations contribute no additional contacts or sounding notes. Muting technique, reach and practical recommendation are not established by this checker.
+
+2026-10-30, Milestone 2 implementation author: Keep review source and standard-tuning context in separate `ReferenceFingeringReview` records keyed to witness IDs. Library getters return fresh nested copies. The generic checker never reads review records; matching review context and actual geometry belongs to Milestone 3. Do not implement the separately deferred formula-ID maintenance.
+
 ## Outcomes & Retrospective
 
 
-The geometry-first planning audit is complete. No unresolved domain blocker was found.
+Milestones 1 and 2 established the reusable geometry and concrete-contact foundation. Inspection and read-only feasibility runs proved the requested A-flat major/minor E shapes and D-major C shape need no changes to those validators. The revised v1 is complete: 13 reusable geometries and execution templates, bounded placement search, independent assessment, and all three acceptance cases passing. The original 13 reference fixtures remain unchanged. All eight closed patterns were exercised over available positions with independent pitch/finger expectations and musical transposition checks. Forty-nine new tests supplement the preserved suites. The final full regression passed 17,870 tests in 41 suites; type checking passed. No implementation blocker remains.
 
-The revised design preserves all documented coverage while removing fingering and approval from the geometry model. Future shape derivation can supply new geometry without requiring chord-specific validation code.
-
-Milestone 1 now provides geometry representation and instantiation. Milestone 3 first provides the complete reviewed recommendation capability. V1 completion requires milestone 4.
-
-The planning document was originally persisted under planning-only authorization. Milestone 1 is complete under the subsequent explicit user request. All 13 source geometries and pitch fixtures pass, using 12 distinct formulas; F major and E-shaped C share shape-08. Generic validation preserves separate open/fretted/muted/unplayed states, board identity and physical order, safe coordinates, and independent copies. No witness, musical-assessment, or practical-approval behavior is implemented. No remaining Milestone 1 blocker was found; practical usability remains deliberately unestablished until later witness and assessment milestones.
-
-### Deferred maintenance
-
-
-The reference-ID finding above remains open. Before expanding or reorganizing the reference library, the recommended follow-up is to store an explicit ID with each geometry definition in `domain/playability/reference-grips.ts`, rather than derive it from array position. Preserve all current `shape-01` through `shape-12` associations and the 13 placement records. Verify unique formula IDs, resolution of every placement's formula reference, and unchanged source geometries and pitches in the existing focused suites. Explicit IDs should remain attached to their geometry regardless of definition order.
-
-The user has authorized documenting this finding only and explicitly deferred its implementation. No fix or additional tests have been implemented; this entry does not authorize them or change accepted project decisions.
+The existing reference formula IDs still derive from array position. Keep all existing associations unchanged and append the new geometry. Explicit ID storage remains a documented deferred maintenance task, not part of this implementation.
 
 ## Context and Orientation
 
 
-The reviewed repository was clean at 86fd8cc before this plan was created. The implementation continuation also began with a clean working tree. Playability's geometry foundation is now implemented; witnesses and assessment remain unimplemented.
+The continuation started with staged Milestone 2 changes in architecture, handoff, reference data, absolute witness validation/tests and this plan. No unrelated edits were found. Leave the index unchanged.
 
-Existing authoritative boundaries:
+`domain/playability/chord-shape-formula.ts` already places closed normalized geometry at positive anchors and open/nut-origin geometry at zero. `chord-shape.ts` resolves concrete strings through Fretboard. `fingering-witness.ts` validates absolute contacts without requiring catalog membership. These modules remain unchanged.
 
-- domain/fretboard/fretboard.ts owns explicit strings, physical positions, registered tuning, available frets, and deterministic pitch-location mapping.
-- domain/music-theory/chords-symbols-and-realization/chord-formulas.ts owns musical degree formulas and chord-tone construction.
-- domain/music-theory/chords-symbols-and-realization/registered-chords.ts preserves explicit registered voicings, order, spellings, and repeated occurrences.
-- domain/music-theory/chords-symbols-and-realization/chord-voicing-analysis.ts owns known-chord coverage, omission policy, and bass analysis.
-- docs/FRETBOARD_V1.md and docs/MUSIC_THEORY_V1.md describe information consumers must preserve.
-- docs/PLAYABILITY_REFERENCE.md owns the reference geometry, complete fingerings, barre behavior, and practical-support conventions.
+`reference-grips.ts` holds geometry, historical placements and independent execution data. Extend it with relative templates and separate template reviews. F and E-shaped C share geometry and execution. Historical absolute getters remain compatible, deriving contacts from placement anchors.
 
-A musical ChordFormula is not a physical ChordShapeFormula. Musical formulas specify harmonic requirements; they do not select strings, frets, registers, doublings, or a unique usable grip.
-
-### ChordShapeFormula
-
-
-The formula contains only:
-
-- An opaque identifier.
-- Explicit states for physical string positions.
-- Relative fret offsets for fretted sounding positions.
-
-States distinguish open, fretted, muted, and unplayed. Muted declares an intended nonsounding state; it contains no muting technique or contact.
-
-The formula contains no finger numbers, contacts, barres, witnesses, tuning, chord identity, pitches, ergonomic limits, or review fields. It does not point to witness records.
-
-A formula's identity excludes its identifier. Canonical comparison orders states by physical position and compares state plus relative fret offset.
-
-Open/closed classification is derivable from the states; it need not be stored as another source of truth.
-
-For the built-in open formulas, the coordinate origin is the nut and the anchor is 0. Open states always remain actual fret 0.
-
-Closed formulas have no sounding open states. Their lowest selected sounding fretted position has offset 0, and placement uses a positive anchor. This anchor is not necessarily a chord-root fret.
-
-No finger-contact information participates in normalization.
-
-### ChordShapeInstance
-
-
-An instance is concrete geometry on the supplied board: explicit string states, stable string IDs, and absolute sounding frets.
-
-Placement records retain formula ID and anchor as construction provenance. This provenance is not review evidence or a prerequisite for validating arbitrary supplied geometry.
-
-Instantiation maps physical positions to board IDs and performs checked fret-coordinate addition. It obtains sounding pitches through registeredPitchAtLocation rather than calculating pitches itself.
-
-Instance identity and comparison depend on actual geometry in the board context, not on a caller's claimed reference ID.
-
-The instance contains no embedded fingering, preferred witness, or approval flag.
-
-### FingeringWitness
-
-
-A witness is associated with one concrete instance and contains complete absolute finger contacts.
-
-Each used finger has one contact at one positive fret over an inclusive physical-position interval. A one-position interval is an individual stop; a longer interval is a continuous barre.
-
-Witnesses reference their associated instance rather than copying its geometry. More than one witness may reference the same instance.
-
-Trusted reference records separately associate witnesses with their source and reviewed support context. Review is specific to the witness and context; it is not inherited by other fingerings of the same instance.
-
-The initial library has one documented witness per instance. The implementation must nevertheless support one-to-many associations.
-
-### Geometry inventory
-
-
-Notation runs from conventional string 6 to string 1:
-
-- o: explicitly open.
-- x: explicitly unplayed.
-- fN: fretted sounding position at relative offset N.
-- f0 is a fretted state at the anchor, not an open string.
-
-Formula IDs are opaque geometry identifiers. The table contains no execution information.
-
-| Formula ID | Relative string geometry |
-| --- | --- |
-| shape-01 | x f3 f2 o f1 o |
-| shape-02 | x o f2 f2 f2 o |
-| shape-03 | f3 f2 o o o f3 |
-| shape-04 | o f2 f2 f1 o o |
-| shape-05 | x x o f2 f3 f2 |
-| shape-06 | x f0 f2 f2 f2 f0 |
-| shape-07 | f3 f2 f0 f0 f0 f3 |
-| shape-08 | f0 f2 f2 f1 f0 f0 |
-| shape-09 | x x f0 f2 f3 f2 |
-| shape-10 | x f0 f2 f2 f1 f0 |
-| shape-11 | f0 f2 f2 f0 f0 f0 |
-| shape-12 | x x f0 f2 f3 f1 |
-
-All built-in formulas describe six positions, but generic validators must not hardcode six strings or named chord qualities.
-
-### Documented placements
-
-
-These records select geometry and placement only. Review evidence belongs to the associated witnesses.
-
-The absolute rows are independent acceptance fixtures, not duplicated production geometry.
-
-| Instance ID | Formula | Anchor | Expected absolute frets 6 → 1 |
-| --- | --- | --- | --- |
-| open-c-major | shape-01 | 0 | x 3 2 0 1 0 |
-| open-a-major | shape-02 | 0 | x 0 2 2 2 0 |
-| open-g-major | shape-03 | 0 | 3 2 0 0 0 3 |
-| open-e-major | shape-04 | 0 | 0 2 2 1 0 0 |
-| open-d-major | shape-05 | 0 | x x 0 2 3 2 |
-| c-major-a-shape | shape-06 | 3 | x 3 5 5 5 3 |
-| c-major-g-shape | shape-07 | 5 | 8 7 5 5 5 8 |
-| c-major-e-shape | shape-08 | 8 | 8 10 10 9 8 8 |
-| c-major-d-shape | shape-09 | 10 | x x 10 12 13 12 |
-| c-minor-a-shape | shape-10 | 3 | x 3 5 5 4 3 |
-| c-minor-e-shape | shape-11 | 8 | 8 10 10 8 8 8 |
-| c-minor-d-shape | shape-12 | 10 | x x 10 12 13 11 |
-| f-major-full-barre | shape-08 | 1 | 1 3 3 2 1 1 |
-
-A board with fretCount 13 can contain the complete set. Do not impose that count globally: each instance needs only its own selected locations.
-
-### Independent reviewed fingering inventory
-
-
-Each row describes a separate witness associated with the named instance.
-
-Contact notation finger@fret:[positions] uses absolute frets and inclusive physical positions. These contacts must not appear in ChordShapeFormula records.
-
-| Instance | Expected sounding fingers 6 → 1 | Complete absolute contacts |
-| --- | --- | --- |
-| open-c-major | x 3 2 0 1 0 | 1@1:[2]; 2@2:[4]; 3@3:[5] |
-| open-a-major | x 0 1 2 3 0 | 1@2:[4]; 2@2:[3]; 3@2:[2] |
-| open-g-major | 2 1 0 0 0 4 | 1@2:[5]; 2@3:[6]; 4@3:[1] |
-| open-e-major | 0 2 3 1 0 0 | 1@1:[3]; 2@2:[5]; 3@2:[4] |
-| open-d-major | x x 0 1 3 2 | 1@2:[3]; 2@2:[1]; 3@3:[2] |
-| c-major-a-shape | x 1 2 3 4 1 | 1@3:[1–5]; 2@5:[4]; 3@5:[3]; 4@5:[2] |
-| c-major-g-shape | 3 2 1 1 1 4 | 1@5:[2–4]; 2@7:[5]; 3@8:[6]; 4@8:[1] |
-| c-major-e-shape | 1 3 4 2 1 1 | 1@8:[1–6]; 2@9:[3]; 3@10:[5]; 4@10:[4] |
-| c-major-d-shape | x x 1 2 4 3 | 1@10:[4]; 2@12:[3]; 3@12:[1]; 4@13:[2] |
-| c-minor-a-shape | x 1 3 4 2 1 | 1@3:[1–5]; 2@4:[2]; 3@5:[4]; 4@5:[3] |
-| c-minor-e-shape | 1 3 4 1 1 1 | 1@8:[1–6]; 3@10:[5]; 4@10:[4] |
-| c-minor-d-shape | x x 1 3 4 2 | 1@10:[4]; 2@11:[1]; 3@12:[3]; 4@13:[2] |
-| f-major-full-barre | 1 3 4 2 1 1 | 1@1:[1–6]; 2@2:[3]; 3@3:[5]; 4@3:[4] |
-
-The trusted review context is standard six-string guitar tuning. Registered open pitches by positions 1 through 6 are [52,47,43,38,33,28], using C0 = 0.
-
-That context belongs to evidence records, not formulas.
-
-### Implementation organization
-
-
-Use a small domain/playability folder:
-
-- chord-shape-formula.ts: geometry-only formula types and instantiation.
-- chord-shape.ts: concrete instance types and structural resolution.
-- fingering-witness.ts: independent witness types and generic contact validation.
-- reference-grips.ts: separate formula, placement, and reviewed-witness collections.
-- playability.ts: musical and evidence assessment composition.
-
-The formula module must not depend on witness types, contact validation, or review data. Use existing direct relative .js imports and no new dependencies.
+D019 preserves domain separation; D052 supplies coverage, specified-bass and voicing analysis; D054/D055 supply explicit IDs, physical adjacency and checked pitch mapping. Consult the relevant Music Theory, Fretboard and Playability references. Pattern support describes the declared discrete model, not universal anatomical feasibility or comfort.
 
 ## Plan of Work
 
 
-### Milestone 1 — Geometry-only formulas and instances
+### Milestones 1 and 2 — Retain completed foundations
 
 
-Purpose: establish a reusable physical representation without fingering assumptions.
+Preserve the existing geometry constructors, comparison, structural resolution, absolute witness representation and contact checker, together with all historical source-row tests. Update only the formula-library count assertion from 12 to 13 when adding closed C.
 
-Dependencies: existing Fretboard contracts.
-
-Implement formula and instance types, geometry validation, checked instantiation, structural resolution, and the 12 geometry definitions with 13 placement records.
-
-Formula validation checks explicit positions and states, valid offsets, and geometry-only normalization. It does not check finger count, barres, reach, or practical playability.
-
-Instantiation maps positions to stable board IDs and resolves pitches through Fretboard. Keep the initial supported application path limited to documented placements; do not enumerate arbitrary anchors.
-
-Reference coverage: all 13 absolute geometry rows must be reproduced.
-
-Acceptance:
-
-- Geometry-only identity yields exactly 12 built-in formulas.
-- F and E-shaped C share shape-08.
-- Open C appears once.
-- Open strings remain actual fret 0.
-- Built-in open formulas use anchor 0; nonzero open-form placement is not silently treated as transposition.
-- Closed offset 0 produces a fretted stop at a positive anchor.
-- Anchors depend on sounding geometry, never contacts.
-- All formula and instance types exclude fingering and approval fields.
-- IDs, array order, tuning, and witnesses do not affect formula identity.
-- Invalid bounds and unsafe addition fail explicitly.
-- Short-board availability is evaluated per instance.
-- Outputs preserve existing readonly/copy conventions.
-
-Focused suites: tests/chord-shape-formula.test.ts and tests/playability-shape.test.ts.
-
-Include independent source rows, retuning with unchanged geometry, noncontiguous IDs, record permutations, frozen inputs, numeric boundaries, and all-open/no-contact geometry where applicable.
-
-Verify:
-
-    npm test -- tests/chord-shape-formula.test.ts tests/playability-shape.test.ts tests/fretboard.test.ts
-    npm run typecheck
-
-These Playability suites now exist as part of Milestone 1.
-
-### Milestone 2 — Independent witnesses and generic contact validation
+### Milestone 2b — Relative execution and explicit variants
 
 
-Purpose: validate execution separately from geometry.
+Add `fingering-template.ts` with relative contacts (finger, signed safe offset, inclusive physical-position interval), formula association, defensive copying, available-anchor bounds and concrete instantiation through the existing validators. Include hidden negative-offset contacts in availability and span without changing the geometry origin.
 
-Dependencies: milestone 1.
+Canonical relative patterns replace private absolute witness storage; derive all 13 historical witnesses from placements. Five open forms remain anchor-zero templates. Closed variants select independent known data: C -> shape-13, A -> shape-06, G -> shape-07, E -> shape-08, D -> shape-09. Unsupported conversions throw rather than infer.
 
-Implement FingeringWitness, explicit instance association, one-to-many witness handling, generic contact validation, and all 13 documented witness records.
+Closed C geometry is `x f3 f2 f0 f1 f0` (6 -> 1). Contacts are finger 1 at offset 0 across positions 1–5, finger 2 at offset 1 on position 2, finger 3 at offset 2 on position 4, and finger 4 at offset 3 on position 5. The user-approved addition is documented separately from historical reference examples.
 
-Review source/context remains separate from the generic consistency checker.
+Acceptance: all old outputs unchanged, explicit variants, every closed template at every valid anchor, signed hidden offsets, malformed contacts, numeric boundaries, copy isolation and no new dependency from geometry to execution.
 
-Validate fingers 1–4, one simultaneous contact per used finger, positive absolute frets, physical intervals, complete barre coverage, highest-stop behavior, required fretted stops, and open-string clearance.
-
-Calculate contact span from the witness, including hidden lower barres. No contacts means span null. Do not write that span back into the formula or use it to redefine the instance anchor.
-
-Reference coverage: every documented witness must pass and reproduce its exact sounding-finger row.
-
-Acceptance:
-
-- Seven no-barre, three partial-barre, and three full-barre witnesses pass.
-- Lower contacts survive higher stops.
-- Contact under an unplayed string does not make it sound.
-- Missing stops, incompatible duties, and open-string conflicts reject the witness.
-- A failed witness leaves geometry validity unchanged.
-- Two witnesses can target one instance without copying or changing geometry.
-- Wider-gap review triggers and same-fret ordering do not become invented universal prohibitions.
-- Mechanical consistency grants no practical approval.
-
-Mandatory separation regression: use one synthetic concrete geometry with two mechanically consistent witnesses, one containing a lower hidden barre. Its formula, anchor, and sounding geometry must remain identical while witness contact span differs. This fixture is not added to the reviewed library.
-
-Also test one invalid and one valid witness associated with the same instance. The invalid witness must not veto the valid one.
-
-Verify:
-
-    npm test -- tests/playability-witness.test.ts tests/chord-shape-formula.test.ts tests/playability-shape.test.ts
-    npm run typecheck
-
-### Milestone 3 — Musical assessment and reviewed physical support
+### Milestone 3 — Bounded search and independent assessment
 
 
-Purpose: compose independent findings using existing domain capabilities.
+`playability.ts` composes structural resolution, musical analysis and support matching. Copy original requirements, preserve exact register/doublings and optional-role policies, and distinguish structural invalidity, musical mismatch and unverified support. Structural failure makes dependent findings not-assessed. Musical mismatch must not erase pattern support. Empty sounding geometry is musically mismatched.
 
-Dependencies: milestones 1 and 2.
+Use the existing registered-pitch analyzer for coverage and bass. Exact voicings additionally require full multiset equality. For spelled descriptions with spelled exact voicings, apply the existing spelled analyzer to the original notes. Never respell board coordinates or infer root-position bass.
 
-Implement assessChordShape over supplied concrete geometry, musical requirements, and the trusted reviewed-witness library.
+Template support requires actual normalized geometry, complete relative finger contacts and six-string compatibility. Validate each concrete witness. IDs, provenance and user-provided catalog entries cannot grant approval. Review covers unchanged patterns across available closed placements and any compatible tuning; no new anatomical guarantee is implied.
 
-Structural checking uses actual instance geometry. Musical checking uses Fretboard-derived pitches and existing Music Theory analysis. Physical support requires at least one applicable reviewed witness that passes generic validation.
+`template-search.ts` validates the board, requirements, catalog, selected IDs and range; intersects anchor bounds from geometry and contacts; checks the 10,000-pair budget; then instantiates, validates and assesses each candidate. Open forms contribute only anchor zero. Keep distinct witnesses and sort deterministically. Empty/no-match searches return []; invalid or oversized requests throw RangeError. General solver/search ownership beyond this known-pattern enumeration remains undecided.
 
-Reference lookup must compare actual geometry and board context. Caller-provided IDs are not approval certificates.
-
-Reference coverage: all 13 instances receive matching musical findings, supported physical findings, and recommendation eligibility for compatible requests.
-
-Acceptance:
-
-- Musical mismatch does not erase physical support.
-- An unreviewed placement of a known formula remains unverified.
-- Another fingering of a supported instance does not inherit witness approval.
-- Multiple applicable reviewed witnesses can be reported independently.
-- Invalid or unsupported witnesses cannot confer approval.
-- Exact registered matching preserves every occurrence, register, and doubling.
-- Explicit bass and optional-role policies retain existing semantics.
-- Unknown shapes and witnesses are not called physically impossible.
-- Muted versus unplayed remains distinct; unsupported muting stays unverified.
-- Matching and validation contain no branches keyed to named chord qualities.
-
-Include a custom musical ChordFormula using existing APIs to verify that musical assessment does not depend on a catalog quality name. Do not add a new production shape family.
-
-Verify:
-
-    npm test -- tests/playability.test.ts tests/playability-references.test.ts tests/playability-witness.test.ts tests/chord-shape-formula.test.ts tests/fretboard-music-theory.test.ts tests/chord-voicing-analysis.test.ts tests/registered-chords.test.ts
-    npm run typecheck
-
-This milestone first provides complete reviewed recommendation capability.
-
-### Milestone 4 — Regression, documentation, and completion review
+### Milestone 4 — Acceptance, regression and documentation
 
 
-Purpose: verify the geometry-first boundary and all documented coverage.
+Require the three acceptance searches below to return supported, contact-valid, musically matched results. Preserve all 13 historical placements; test every closed pattern across available anchors, retuning/reentrant bass, exact occurrences and spelling, malformed catalogs, forged IDs, independent witnesses, custom formulas and boundary budgets.
 
-Dependencies: milestone 3.
-
-Audit formulas, placements, and witnesses separately against docs/PLAYABILITY_REFERENCE.md. Confirm that no finger/contact/review information has migrated into geometry records and no geometry is duplicated merely to represent an alternative witness.
-
-Run full regression and type checking after focused verification passes.
-
-Update docs/ARCHITECTURE.md, the relevant Fretboard handoff, and docs/PLAYABILITY_V1.md. Document the four responsibilities, one-to-many witness relationship, exact matching guarantees, reference coverage, and future integration boundary.
-
-Preserve the Playability Reference and accepted decisions. Record persistent implementation contracts only within the later implementation task's authority.
-
-Completion requires:
-
-- 12 distinct geometry formulas and 13 documented placements.
-- All 13 documented complete fingerings represented as independent reviewed witnesses.
-- Exact source geometry, finger rows, barres, and pitch fixtures passing.
-- One-to-many witness and hidden-contact independence regressions passing.
-- Full tests, type checking, documentation review, and Git review complete.
-- No automatic generation, new chord families, or unrelated refactoring.
-
-A source discrepancy must be reported and resolved explicitly, never silently corrected by substituting another fingering.
+Run focused suites, then full `npm test`, `npm run typecheck`, and whitespace/diff review including untracked files. Update architecture, the Fretboard handoff and a Playability consumer guide. Record accepted movable-pattern contracts and distinguish historical reference context from tuning-independent template support.
 
 ## Concrete Steps
 
 
-Run from C:\Users\simoa\Documents\fretbo-AI-rd.
+Run from the repository root using installed Node 24.x and npm. No dependency changes are needed.
 
-Before implementation, reread current instructions, this plan, and the authoritative reference. Inspect Git status and preserve any new user work.
-
-    git -c safe.directory=C:/Users/simoa/Documents/fretbo-AI-rd status --short
-    node --version
-    npm --version
-
-Use the existing Node 24.x baseline and installed tooling. No dependency changes are required.
-
-Implement milestones in order. Run each listed focused command and npm run typecheck; review changes and record actual UTC results before marking a milestone complete.
-
-At the final boundary run:
-
-    npm test
+    npm test -- tests/fingering-template.test.ts tests/playability.test.ts tests/playability-witness.test.ts tests/chord-shape-formula.test.ts tests/playability-shape.test.ts
     npm run typecheck
-    git -c safe.directory=C:/Users/simoa/Documents/fretbo-AI-rd diff --check
-    git -c safe.directory=C:/Users/simoa/Documents/fretbo-AI-rd status --short
+    npm test
+    git diff --check
+    git status --short
 
-Read new files directly and check their whitespace separately because ordinary unstaged diffs omit untracked files.
+For new files also run `git diff --no-index --check -- /dev/null <path>` and read them directly. Exit 1 without diagnostics denotes the new-file difference. If sandbox SSR-cache ENOENT prevents assertions, retry the identical command outside the sandbox when permitted and record both outcomes.
 
-If the previously documented sandbox SSR-cache ENOENT recurs during module loading, distinguish it from assertion failures and repeat the identical command outside the sandbox when permitted. Record both outcomes without changing tooling to hide the environmental failure.
+Final movable-template execution: the initial sandbox focused run loaded no tests due to SSR-cache ENOENT; its identical outside-sandbox retry passed 233 tests. After expanded tests and explicit review membership, final `npm test` at 2026-10-30T16:45:45Z passed 17,870 tests across 41 suites. `npm run typecheck` passed. Tracked and new-file whitespace checks, dependency-direction inspection and final diff/new-file review passed. The three protected low-level Playability modules and all Music Theory/Fretboard source files have no changes relative to the pre-existing index. No dependencies, staging, commits or unrelated changes were introduced.
 
-Milestone 1 execution on 2026-10-30 uses Node v24.19.0 and npm 11.6.2. The first focused test run encountered the sandbox module-cache failure recorded above. The identical outside-sandbox retry passed 446 tests across three suites; after correcting a review finding in a test fixture, the final repeat at 09:03:56Z also passed all 446 tests (114 new Playability tests plus 332 existing Fretboard tests). npm run typecheck passed initially and after the final test edit. git diff --check and git diff --no-index --check against /dev/null for every new file passed. Read all new source/test files and reviewed tracked documentation diffs, dependency direction, source rows, and Git status. No unrelated changes, staging, or commits. Full regression remains a Milestone 4 check and was not run for this additive geometry milestone.
+Historical Milestone 1 final checks: 446 focused tests passed, including 114 new geometry tests and 332 Fretboard tests; type checking and whitespace checks passed. Historical Milestone 2 final checks: 188 focused tests passed, including 74 witness tests; type checking and whitespace checks passed. Full regression had not been run at those additive boundaries.
 
 ## Validation and Acceptance
 
 
-Mandatory cross-boundary regressions:
+| Request | Template / anchor | Frets 6 -> 1 | Fingers 6 -> 1 |
+| --- | --- | --- | --- |
+| A-flat major | closed-e-major / 4 | 4 6 6 5 4 4 | 1 3 4 2 1 1 |
+| A-flat minor | closed-e-minor / 4 | 4 6 6 4 4 4 | 1 3 4 1 1 1 |
+| D major | closed-c-major / 2 | x 5 4 2 3 2 | x 4 3 1 2 1 |
 
-1. Formula equality ignores all fingering, source, review, and musical metadata.
-2. Altering witness contacts cannot alter formula identity or instance placement.
-3. One instance supports multiple witnesses without geometry duplication.
-4. A hidden lower barre affects witness span but not the geometry anchor.
-5. F major and E-shaped C share geometry while retaining separate concrete placements and witnesses.
-6. Open strings remain at fret 0 and never become implicit fretted contacts.
-7. A known formula at an unreviewed placement receives no inherited practical approval.
-8. Open C requested as D major remains physically supported but musically mismatched and ineligible.
-9. Exact matching rejects octave substitutions and missing or extra repeated tones despite unchanged pitch-class coverage.
-10. Two requested occurrences cannot reuse one sounding string.
-11. Bass is the minimum sounding coordinate, including on reentrant tuning.
-12. Optional formula positions do not authorize deleting explicit registered occurrences.
-13. Every intermediate barre string and every intended open string is checked.
-14. Noncontiguous IDs, array permutations, and frozen inputs preserve behavior.
-15. Existing generic musical descriptions work without chord-specific validation changes.
+All three must emerge from bounded search, including octave-displaced placements when available. No dedicated acceptance placement records are allowed. Test expected pitches/finger rows independently of production templates.
 
-Expected source rows and pitches must be independently transcribed. Do not derive expected answers through production formulas, instantiation, or witness validation.
+Preserve exact repeated occurrences through distinct location associations; optional formula indices never authorize dropping exact requested notes. Actual lowest registered pitch determines bass even under reentrant tuning. Only lowest specified non-chord bass occurrences are allowed. Unknown execution patterns remain unverified rather than impossible.
 
-Type checking must confirm the readonly geometry contracts and the exclusion of finger/contact/review fields from ChordShapeFormula. Review dependency direction directly; introduce no new lint framework.
+Check original reference outputs, every template's bounds, noncontiguous IDs, array permutations, frozen inputs, result isolation, negative hidden-contact offsets, unsafe coordinate addition, cap equality/excess, input validation on empty queries and deterministic alternative-witness ordering.
 
 ## Idempotence and Recovery
 
 
-Instantiation, witness checking, and assessment are deterministic and side-effect free.
-
-Follow existing readonly-by-type and independent-copy conventions. Do not expose mutable aliases to the trusted library or cache practical approval by board object identity.
-
-There are no migrations, external services, or generated runtime artifacts. On continuation, inspect Git status and recorded progress before resuming. Preserve partial and unrelated work.
-
-A witness failure must never trigger geometry rewriting or silent musical simplification.
+All domain operations remain pure, deterministic and independently copied. No filesystem, network, migration or framework dependency enters domain code. Preserve staged work and leave the index unchanged. Resume from Git status and recorded test evidence; no staging or commits are authorized.
 
 ## Artifacts and Notes
 
 
-Saved path: plans/playability-engine-v1.md. The file contains the geometry-first plan as standalone Markdown, without the conversation's enclosing code fence or memory citations. The original persistence task changed only progress/evidence text; the subsequent Milestone 1 implementation updates current scope, decisions, status, and verification evidence without expanding to later milestones.
+The historical 13 placements and independently transcribed geometry/pitch/finger fixtures remain in their existing tests. New closed C has no absolute production placement. Review sources for original patterns remain the Playability Reference; the new closed C addition points to the consumer guide and this approved revision.
 
-The geometry-only audit counted 13 unique absolute rows and 12 normalized geometries without using finger data. All five open geometries and seven closed geometries are distinct under explicit state semantics.
-
-Independent C0-based pitch fixtures, in source string 6 → 1 order with unplayed strings omitted:
-
-| Instance | Expected registered pitches |
-| --- | --- |
-| open-c-major | 36, 40, 43, 48, 52 |
-| open-a-major | 33, 40, 45, 49, 52 |
-| open-g-major | 31, 35, 38, 43, 47, 55 |
-| open-e-major | 28, 35, 40, 44, 47, 52 |
-| open-d-major | 38, 45, 50, 54 |
-| c-major-a-shape | 36, 43, 48, 52, 55 |
-| c-major-g-shape | 36, 40, 43, 48, 52, 60 |
-| c-major-e-shape | 36, 43, 48, 52, 55, 60 |
-| c-major-d-shape | 48, 55, 60, 64 |
-| c-minor-a-shape | 36, 43, 48, 51, 55 |
-| c-minor-e-shape | 36, 43, 48, 51, 55, 60 |
-| c-minor-d-shape | 48, 55, 60, 63 |
-| f-major-full-barre | 29, 36, 41, 45, 48, 53 |
-
-Saved-document verification on 2026-10-30: all 12 protocol sections and four milestone headings are present; all 12 geometry patterns are distinct using geometry alone; all 13 placements reproduce the reference fret rows; all 13 independent witnesses reproduce the reference finger rows and effective stops; all 13 pitch fixtures agree with the explicit standard tuning. Witness coverage is seven without barres, three with partial barres, and three with full barres. Geometry/fingering separation, one-to-many witnesses, future Music Theory/Fretboard integration, two-blank-line heading spacing, checkbox placement, the local Markdown link, and new-file whitespace checks passed. No discrepancies were found. These were document-consistency checks, not execution of a Playability implementation.
-
-The earlier planning audits were read-only. The later Milestone 1 implementation adds domain/playability/chord-shape-formula.ts, chord-shape.ts, reference-grips.ts and the two focused suites. Current execution evidence belongs to Concrete Steps and Progress, separate from those historical document checks.
-
-No unresolved domain blocker remains. The main risks are reintroducing fingering into formula identity, binding anchors to hidden contacts, approving witnesses through geometry membership, and losing exact registered occurrences during musical checking.
+The reference-ID maintenance risk remains open: future reordering must not alter shape-01 through shape-13 associations. This revision appends without performing the deferred storage refactor.
 
 ## Interfaces and Dependencies
 
 
-### Geometry and witness operations
+Geometry and witness operations retain their existing APIs. New relative construction exports `RelativeFingerContact`, `FingeringTemplate`, `TemplateFingering`, `createFingeringTemplate`, `templateAnchorBounds`, and `instantiateTemplateFingering`.
 
+Reference additions expose copied templates, template reviews, explicit CAGED variant associations and variant selection. Historical formula, placement, witness and review getters retain their original outputs except the intentional thirteenth geometry. Historical standard-tuning review records are preserved as source context; new template reviews govern movable support independently of tuning.
 
-The geometry instantiator accepts a formula, placement anchor, and explicit board and produces ChordShapeInstance geometry. It does not require a known chord quality or a reviewed formula ID.
+Assessment accepts board, concrete instance, `ChordShapeRequirements` and optional explicit witnesses. Requirements retain description, optionalFormulaIndices and optional exact numeric/spelled voicing. Return copied requirements, structural/musical/physical findings, independent witness findings and recommendation eligibility.
 
-The initial application path uses the 13 documented placements. The generic helper performs no anchor enumeration or automatic chord-shape generation.
+Search accepts board, requirements, selected IDs and inclusive anchor range, with an optional explicit `TemplateCatalog` for future/custom data. It returns concrete instances, witnesses and assessments ordered by anchor/formula/template. Custom catalog data adds no trusted evidence. The cap counts available template-anchor pairs before filtering.
 
-The witness validator accepts a board, concrete instance, and associated FingeringWitness. It returns contact-consistency findings and witness measurements. It does not rewrite the instance or grant practical approval.
+No general-purpose solver, automatic open-to-closed conversion, finger remapping, arbitrary new shape derivation, muting techniques, thumb fretting, ergonomic ranking, player profiles, transitions, biomechanics, UI, audio or AI is introduced.
 
-Instance/witness identifiers are association keys, not certificates. Validate actual geometry and board context even when identifiers appear familiar.
-
-### Assessment contract
-
-
-assessChordShape accepts concrete geometry and musical requirements. Formula provenance is not a prerequisite for validating supplied geometry.
-
-Requirements retain an existing numeric or spelled description, optionalFormulaIndices when supplied, and an optional numeric or spelled registered voicing.
-
-Return:
-
-- Structural: valid or invalid, with reasons.
-- Musical: matched, mismatched, or not-assessed.
-- Physical support: supported, unverified, or not-assessed, with supporting witness identifiers and evidence reasons.
-- Recommendation eligibility: true only when structure is valid, music matches, and physical support is supported.
-
-Structurally invalid geometry has dependent findings not assessed. A musical mismatch must still receive independent physical assessment.
-
-The operation assesses existence of a supported reviewed execution. It does not claim to validate arbitrary finger assignments supplied separately by a caller.
-
-Candidate structural contradictions produce findings. Existing board and musical representation errors retain their error behavior; do not translate arbitrary exceptions into unverified support.
-
-### Musical guarantees
-
-
-Obtain all sounding coordinates through registeredPitchAtLocation. Reuse existing coverage and bass analysis.
-
-Missing required roles, unexpected tones, or specified-bass mismatch prevent a musical match. Unspecified bass does not imply root position.
-
-For exact registered requests, require multiset equality, including every duplicate and excluding extra sounding tones. Preserve original order and occurrence indices; deterministic associations use distinct sounding locations.
-
-Retain original spelling. When both description and registered voicing are spelled, also use existing exact-spelled analysis on those original notes. Do not reconstruct spellings from board pitches.
-
-Equivalent formula roles may share coverage evidence under D052. Only explicit occurrence requirements require separate physical occurrences.
-
-### Practical-support guarantees
-
-
-Trusted review evidence is attached to a complete witness and support context. It is absent from formulas and instances.
-
-A witness must match its concrete instance, pass generic contact validation, and have applicable review evidence before it can establish support.
-
-New witnesses do not inherit approval from another witness, their instance, or their formula. Mechanically consistent unreviewed witnesses remain unestablished for practical recommendation.
-
-The initial support context is the documented standard six-string tuning. Other valid boards retain structural and musical assessment without inheriting that evidence.
-
-### Future domain integration
-
-
-Preserve the following development path without implementing it in v1:
-
-1. Music Theory resolves musical ChordFormula requirements into chord tones, harmonic roles, and any explicit bass/register/omission requirements.
-2. Fretboard supplies deterministic pitch-location alternatives.
-3. Future candidate construction selects simultaneous string/fret geometry and derives or defines ChordShapeFormula records.
-4. Existing structural and musical validation evaluates concrete instances.
-5. Independent witness construction, feasibility checks, and practical review establish execution evidence.
-
-A musical formula can have many physical realizations or none under a particular board and request. Individual available locations do not establish simultaneous realization or a usable fingering.
-
-Minor, seventh, suspended, added-tone, extended, and custom musical structures must use the same generic validation path. Future additions should normally introduce geometry and witness data, not chord-quality branches in validators.
-
-Do not finalize general candidate-generation ownership, search algorithms, or a generator interface in this effort.
-
-### Deferred functionality
-
-
-Defer automatic chord-shape derivation, arbitrary transposition, anchor enumeration, movable-family generation, new production chord families, general fingering solving, active muting techniques, thumb fretting, ergonomic ranking, player profiles, transitions, biomechanics, UI, audio, and AI.
-
-Do not add formula inheritance, open-to-closed conversion, finger-remapping parameters, reusable fingering-template hierarchies, or solver frameworks.
-
-Revision note: 2026-10-30. Finalized geometry-only ChordShapeFormula identity; retained 12 formulas and 13 placements after recalculation; moved all complete execution data into independent FingeringWitness records; preserved one-to-many witnesses, four milestones, and the future Music Theory/Fretboard integration boundary. Persisted the complete plan under planning-only authorization and updated its persistence status without changing the finalized architecture.
-
-Revision note: 2026-10-30. Completed the explicitly authorized Milestone 1 implementation. Updated scope and implementation status, recorded geometry API details, focused verification and self-review, and preserved later milestones as unfinished. Architecture and Fretboard handoff now distinguish implemented geometry from future fingering and assessment.
-
-Revision note: 2026-10-30. Recorded the post-implementation review's array-index-derived reference-ID risk as deferred maintenance, with the recommended remedy and verification criteria. Documentation only; implementation remains explicitly deferred pending separate authorization.
+Revision note: 2026-10-30. User-approved movable-template revision supersedes fixed-placement-only support and deferral of relative templates/transposition/bounded anchor enumeration. Historical milestones and findings are retained; implementation of 2b–4 is authorized without changes to the completed low-level validators or the Git index.

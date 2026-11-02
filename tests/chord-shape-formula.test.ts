@@ -13,10 +13,10 @@ const closed = createChordShapeFormula("closed", [
 const board = createFretboard([{ id: 90, position: 1, openPitch: 0 }, { id: 4, position: 2, openPitch: 0 }], 12);
 
 describe("geometry-only formulas", () => {
-  test("has exactly twelve distinct formulas, thirteen placements and one open C", () => {
+  test("has thirteen distinct formulas, thirteen historical placements and one open C", () => {
     const formulas = referenceChordShapeFormulas();
     const placements = referenceChordShapePlacements();
-    expect(formulas).toHaveLength(12);
+    expect(formulas).toHaveLength(13);
     expect(placements).toHaveLength(13);
     expect(placements.filter((p) => p.id === "open-c-major")).toHaveLength(1);
     expect(placements.filter((p) => p.formulaId === "shape-08").map((p) => p.id))

@@ -8,7 +8,7 @@ Use stable decision IDs. Each record identifies its status, decision, rationale,
 
 Accepted technology choices describe what the project will use, not what has been installed or implemented. See [current implementation](ARCHITECTURE.md#current-implementation) for the verified repository state. This documentation update does not scaffold tooling or authorize implementation.
 
-Implementation exclusions and undecided interfaces in earlier records describe those increments. Later accepted records establish additional contracts: in particular, Fretboard mapping is implemented under [D054](#d054-explicit-fretboard-and-bounded-pitch-location-searches), extended with required physical positions by [D055](#d055-explicit-physical-string-positions). Earlier references to deferred Fretboard work do not override these contracts; Playability and candidate-generation ownership remain open.
+Implementation exclusions and undecided interfaces in earlier records describe those increments. Later accepted records establish additional contracts: Fretboard mapping is implemented under [D054](#d054-explicit-fretboard-and-bounded-pitch-location-searches), extended with physical positions by [D055](#d055-explicit-physical-string-positions). [D056](#d056-reusable-playability-templates-and-bounded-placement-search) establishes Playability templates, assessment and bounded known-pattern search; general candidate-generation ownership remains open.
 
 When a decision changes, preserve its historical record, mark it superseded, and link the replacement. Only accepted, non-superseded records are currently in force. Record actual decisions rather than keeping a queue of proposals in this file.
 
@@ -709,3 +709,19 @@ Rationale: String identity and tuning alone cannot describe adjacency. A require
 Consequences: All public operations validate positions through the shared board validator, including structural boards and empty search selections. Missing, duplicate, noninteger and out-of-range positions throw `RangeError`; there is no fallback to ID or array order. Callers must supply the new required field. The factory independently copies positions with IDs and tuning, readonly by type and unfrozen. Existing pitch arithmetic, locations, regions, search-result ordering and allocation limits remain unchanged. This does not implement barre contacts, fingerings, candidate generation, Playability or UI geometry.
 
 Recorded: 2026-10-28. Authority: User requested implementation of the missing string ordering after discussing explicit order separate from identity. The implementation selects per-string positions from the discussed representation alternatives. See the [string-ordering effort](../plans/fretboard-string-ordering.md).
+
+## D056: Reusable Playability templates and bounded placement search
+
+Status: Accepted. Extends the discrete domain responsibilities in D019 using D052, D054 and D055.
+
+Decision: Keep geometry formulas, relative fingering templates, concrete absolute witnesses and review evidence separate. Place closed formulas and complete relative contacts at any available positive anchor; retain open forms at zero and select explicitly defined closed CAGED alternatives. Include the user-approved closed C-major pattern. Preserve all 13 historical placements as fixtures, not the supported-position boundary.
+
+Known-pattern search belongs to Playability. Require selected templates and an inclusive anchor range; count available template/anchor pairs before enumeration with a separate 10,000-placement budget. Preserve alternative executions, order results by anchor/formula/template, and reject oversized searches without truncation. Custom catalogs can supply data but cannot supply trusted approval.
+
+Assessment independently reports structure, musical matching and reviewed-pattern support. Use actual Fretboard pitches and existing Music Theory coverage/bass analysis; preserve exact register, multiplicity, original spelling and omission policy. Reviewed complete geometry/contact patterns apply across compatible six-string tunings and valid placements after concrete validation. IDs and provenance are not evidence. Changed finger assignments do not inherit support, and musical mismatch does not erase physical support. Recommendation eligibility requires all three findings to pass.
+
+Rationale: Movable patterns are core guitar-domain capabilities. Relative execution preserves complete barre duties while allowing the same geometry to carry multiple fingerings. Bounded template enumeration joins the engines without introducing a general-purpose fingering solver or chord-specific rules.
+
+Consequences: The initial library has 13 geometries and 13 execution templates (five open, eight closed). Original reference getters remain compatible. Pattern support describes the declared discrete model, not anatomical feasibility or guaranteed comfort. General shape derivation, fingering solving, active muting, ergonomic ranking, individual-hand models and application integrations remain outside v1. Existing geometry and absolute-contact validators remain unchanged.
+
+Recorded: 2026-10-30. Authority: User explicitly requested implementation of the revised movable-template v1 plan, selected bounded template search and support across any compatible tuning, and supplied the A-flat major/minor and D-major C-shape acceptance cases.
