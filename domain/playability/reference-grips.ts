@@ -8,20 +8,21 @@ export type ReferenceChordShapePlacement = Readonly<{ id: string; formulaId: str
 
 // Source order is conventional string 6 -> 1. Numbers are fretted offsets,
 // including zero; "open" is a separate state. No execution or review data.
-const patterns: readonly (readonly (number | "open" | "unplayed")[])[] = [
-  ["unplayed", 3, 2, "open", 1, "open"],
-  ["unplayed", "open", 2, 2, 2, "open"],
-  [3, 2, "open", "open", "open", 3],
-  ["open", 2, 2, 1, "open", "open"],
-  ["unplayed", "unplayed", "open", 2, 3, 2],
-  ["unplayed", 0, 2, 2, 2, 0],
-  [3, 2, 0, 0, 0, 3],
-  [0, 2, 2, 1, 0, 0],
-  ["unplayed", "unplayed", 0, 2, 3, 2],
-  ["unplayed", 0, 2, 2, 1, 0],
-  [0, 2, 2, 0, 0, 0],
-  ["unplayed", "unplayed", 0, 2, 3, 1],
-  ["unplayed", 3, 2, 0, 1, 0],
+// IDs belong to geometry records, never their position in this collection.
+const patterns: readonly Readonly<{ id: string; strings: readonly (number | "open" | "unplayed")[] }>[] = [
+  { id: "shape-01", strings: ["unplayed", 3, 2, "open", 1, "open"] },
+  { id: "shape-02", strings: ["unplayed", "open", 2, 2, 2, "open"] },
+  { id: "shape-03", strings: [3, 2, "open", "open", "open", 3] },
+  { id: "shape-04", strings: ["open", 2, 2, 1, "open", "open"] },
+  { id: "shape-05", strings: ["unplayed", "unplayed", "open", 2, 3, 2] },
+  { id: "shape-06", strings: ["unplayed", 0, 2, 2, 2, 0] },
+  { id: "shape-07", strings: [3, 2, 0, 0, 0, 3] },
+  { id: "shape-08", strings: [0, 2, 2, 1, 0, 0] },
+  { id: "shape-09", strings: ["unplayed", "unplayed", 0, 2, 3, 2] },
+  { id: "shape-10", strings: ["unplayed", 0, 2, 2, 1, 0] },
+  { id: "shape-11", strings: [0, 2, 2, 0, 0, 0] },
+  { id: "shape-12", strings: ["unplayed", "unplayed", 0, 2, 3, 1] },
+  { id: "shape-13", strings: ["unplayed", 3, 2, 0, 1, 0] },
 ];
 
 const placements: readonly ReferenceChordShapePlacement[] = [
@@ -42,7 +43,7 @@ const placements: readonly ReferenceChordShapePlacement[] = [
 
 /** Fresh copies prevent callers from changing subsequent reference lookups. */
 export function referenceChordShapeFormulas(): readonly ChordShapeFormula[] {
-  return patterns.map((pattern, index) => createChordShapeFormula(`shape-${String(index + 1).padStart(2, "0")}`,
+  return patterns.map(({ id, strings: pattern }) => createChordShapeFormula(id,
     pattern.map((state, i) => typeof state === "number"
       ? { position: pattern.length - i, state: "fretted", offset: state }
       : { position: pattern.length - i, state })));

@@ -29,7 +29,7 @@ The original 13 placements are compatibility fixtures, not the complete supporte
 - [x] 2026-10-30T16:46:30Z: Milestone 2b complete: signed relative contacts, checked construction, 13 canonical templates, explicit CAGED variants and compatible historical reference outputs.
 - [x] 2026-10-30T16:46:30Z: Milestone 4 complete: 17,870 tests across 41 suites passed on the final full regression; type checking passed. Reviewed new/tracked files and source compatibility, updated architecture, D056 and consumer guide. No staging or commits.
 - [x] 2026-10-30T10:13:12Z: Documented the post-implementation review's reference-ID maintenance finding under the user's documentation-only authorization. No implementation or test changes made for this follow-up.
-- [ ] Deferred maintenance: replace array-index-derived reference formula IDs with explicit stable IDs, preserving current ID-to-geometry mappings. Add checks for unique IDs and valid placement references. Implementation requires separate authorization; see Deferred maintenance below.
+- [x] 2026-11-16: Separately authorized reference maintenance completed: explicit stable formula IDs preserve all 13 ID-to-geometry mappings. Regression checks cover unique IDs and valid catalog associations. All six Playability suites passed (239 tests); `npm run typecheck` passed.
 
 ## Surprises & Discoveries
 
@@ -107,7 +107,7 @@ These choices preserve D019, D054, and D055. This planning task changes no accep
 
 Milestones 1 and 2 established the reusable geometry and concrete-contact foundation. Inspection and read-only feasibility runs proved the requested A-flat major/minor E shapes and D-major C shape need no changes to those validators. The revised v1 is complete: 13 reusable geometries and execution templates, bounded placement search, independent assessment, and all three acceptance cases passing. The original 13 reference fixtures remain unchanged. All eight closed patterns were exercised over available positions with independent pitch/finger expectations and musical transposition checks. Forty-nine new tests supplement the preserved suites. The final full regression passed 17,870 tests in 41 suites; type checking passed. No implementation blocker remains.
 
-The existing reference formula IDs still derive from array position. Keep all existing associations unchanged and append the new geometry. Explicit ID storage remains a documented deferred maintenance task, not part of this implementation.
+At the original movable-template implementation's completion, reference formula IDs still derived from array position. The separately authorized 2026-11-16 maintenance now stores explicit IDs alongside geometry without changing existing associations, ordering, public APIs or fingerings. Focused catalog tests protect mappings and references; no runtime catalog framework was needed for this private static data.
 
 ## Context and Orientation
 
@@ -199,7 +199,7 @@ All domain operations remain pure, deterministic and independently copied. No fi
 
 The historical 13 placements and independently transcribed geometry/pitch/finger fixtures remain in their existing tests. New closed C has no absolute production placement. Review sources for original patterns remain the Playability Reference; the new closed C addition points to the consumer guide and this approved revision.
 
-The reference-ID maintenance risk remains open: future reordering must not alter shape-01 through shape-13 associations. This revision appends without performing the deferred storage refactor.
+The reference-ID maintenance risk was closed on 2026-11-16 by explicit ID storage and catalog regression checks. The earlier movable-template revision only appended geometry; its scope exclusions above remain historical records.
 
 ## Interfaces and Dependencies
 
@@ -215,3 +215,5 @@ Search accepts board, requirements, selected IDs and inclusive anchor range, wit
 No general-purpose solver, automatic open-to-closed conversion, finger remapping, arbitrary new shape derivation, muting techniques, thumb fretting, ergonomic ranking, player profiles, transitions, biomechanics, UI, audio or AI is introduced.
 
 Revision note: 2026-10-30. User-approved movable-template revision supersedes fixed-placement-only support and deferral of relative templates/transposition/bounded anchor enumeration. Historical milestones and findings are retained; implementation of 2b–4 is authorized without changes to the completed low-level validators or the Git index.
+
+Revision note: 2026-11-16. User authorized the previously identified reference maintenance. This isolated fix required no new ExecPlan: explicit geometry IDs and regression checks complete that item. Existing onboarding/README work was preserved. No UI, SVG, heuristic ranking or broader Playability functionality was added.
