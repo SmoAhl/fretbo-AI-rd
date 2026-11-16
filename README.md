@@ -6,6 +6,8 @@ FretboAIrd is intended to connect notes, intervals, scales, and chords with thei
 
 The application is designed to be useful without AI. Later, optional AI assistance will interpret intent and orchestrate the same deterministic capabilities used by direct interaction. Musical calculations, fretboard mapping, and chord fingering rules remain the responsibility of the domain code.
 
+New contributors: start with the [developer onboarding guide](docs/onboarding/README.md) for the source-verified architecture, algorithms, examples and current status, including implemented Playability v1. Its [discrepancy ledger](docs/onboarding/implementation-status.md#documentation-discrepancies-discovered) identifies older status wording below that predates the movable-template implementation.
+
 ## Project status
 
 **Technical bootstrap, the bounded Music Theory Engine v1, and Fretboard Engine v1 are implemented.** The independent Music Theory domain supports numeric pitch classes with C = 0, registered semitone coordinates with C0 = 0, explicit spellings through triple accidentals, and conversions among these representations. It parses note and interval text, formats supplied note spelling in Unicode or ASCII, selects reverse spellings with an explicit sharps/flats policy, and transposes spellings or registered notes by numbered, qualified intervals in either direction. Interval text supports compact and full forms with required direction, such as `m3 up`, `minor third down`, and `major 16 up`. Focused tests verify behavior and numerical boundaries. The application retains its minimal Next.js/TypeScript/Vitest and presentation-tooling bootstrap. Broader spelling-context inference, approximate or context-ranked chord identification, arbitrary voicing generation, Playability, AI, and product UI remain unimplemented.
@@ -124,6 +126,7 @@ The organization is one repository and one private Next.js application package; 
 
 | Document | Purpose |
 | --- | --- |
+| [Developer onboarding](docs/onboarding/README.md) | Guided architecture, domain algorithms, executable examples, verification and current implementation status. |
 | [Architecture](docs/ARCHITECTURE.md) | System responsibilities, domain boundaries, implementation status, and open questions. |
 | [Decisions](docs/DECISIONS.md) | Accepted project decisions and their rationale. |
 | [Music Theory Reference](docs/MUSIC_THEORY_REFERENCE.md) | Pitch, spelling, intervals, scales, modes, and chord construction under 12-TET. |
