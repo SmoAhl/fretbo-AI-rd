@@ -16,6 +16,8 @@ Use this index to find the document that owns the information you need. [Project
 
 For a quick human introduction, read status, architecture, then one complete worked example. For an AI task, select the relevant rows and sections rather than loading every document.
 
+When planning an implementation, review the finalized plan and its [proposed coding prompt](../AGENTS.md#from-a-finalized-plan-to-coding) before requesting execution. The prompt summarizes the assignment; the plan retains the detailed specification. Small direct fixes can proceed without a separate planning round.
+
 ## Documentation ownership
 
 | Document | Maintained responsibility |

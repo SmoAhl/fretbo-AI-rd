@@ -40,11 +40,34 @@ Resolve routine implementation details within the agreed scope and record signif
 
 The Decision Log records decisions for this effort. Only promote a choice to [DECISIONS.md](../docs/DECISIONS.md) when it becomes an actual persistent project decision within the task's authority. Include its rationale and update [ARCHITECTURE.md](../docs/ARCHITECTURE.md) when the architectural description changes. Proposals and temporary implementation choices do not become permanent merely because they appear in a plan.
 
+## Implementation handoff
+
+Follow [AGENTS.md's finalized-plan handoff rule](../AGENTS.md#from-a-finalized-plan-to-coding). Every finalized implementation plan presented to the user ends with a proposed coding prompt. An implementation ExecPlan stores it in the template section below so the handoff remains available across sessions. For an investigation-only effort, state that implementation handoff does not apply; do not invent implementation scope. Existing completed historical plans need no retrospective prompt.
+
+Use a short copyable text block containing the concrete outcome, key deliverables, constraints/exclusions, plan reference and acceptance criteria. Refer to repository instructions for implementation, verification, documentation and completion reporting instead of duplicating those rules. The detailed plan remains the specification. When revising it, update the prompt to match; unresolved consequential choices must be settled before presenting the plan as ready for coding.
+
+For example, replace the brackets with the finalized task's actual details:
+
+```text
+Implement [outcome] following [repository plan path, or the finalized plan above in this chat].
+
+Deliver: [concrete behavior and important integration requirements].
+Preserve: [compatibility requirements or other constraints].
+Outside scope: [explicit exclusions].
+
+Follow the plan's acceptance criteria and AGENTS.md. Complete the authorized
+implementation, relevant verification, affected documentation and completion report.
+If new evidence requires a material change to the agreed behavior or scope,
+explain the conflict and obtain the needed decision before making that change.
+```
+
+For a new chat without a saved plan, include the finalized plan with the prompt. Do not claim a repository path exists unless it does. A planning-only task ends with the proposal; implementation begins only when authorized and allowed by the active mode. No additional approval is needed merely because a prompt was proposed if implementation has already been authorized.
+
 ## Formatting and required sections
 
 Use plain language and primarily prose. Explain technical terms where they matter. Keep evidence concise. Checkbox checklists belong only in Progress; keep the other sections focused on explanation. Leave two blank lines after headings in an ExecPlan.
 
-A standalone plan file contains ordinary Markdown without an enclosing code fence. When presenting an entire plan in a message, use one `md` fence and indented examples inside it, rather than nested fences. The fenced block below is an unpopulated template inside the protocol, not an active plan.
+A standalone plan file contains ordinary Markdown without an enclosing code fence. When presenting an entire plan in a message, follow the active mode's required format. Otherwise use one `md` fence and indented examples inside it, rather than nested fences. Include the implementation handoff within that plan presentation. The fenced block below is an unpopulated template inside the protocol, not an active plan.
 
 Retain all sections in the template. State explicitly when a section has no findings yet or a consideration does not apply. Do not leave unresolved placeholders in a milestone represented as ready for implementation. Each plan must reference this protocol.
 
@@ -117,4 +140,9 @@ This plan follows [.agent/PLANS.md](../.agent/PLANS.md). It is a living document
 <Describe the interfaces and dependencies required by this effort, their responsibilities, and the reasons for the choices. Distinguish existing contracts from deliberate changes. Do not predesign unrelated future features.>
 
 Revision note: <Date, change to the plan, and reason. Update affected sections rather than relying on this note alone.>
+
+## Proposed implementation prompt
+
+
+<For a finalized implementation plan, provide the concise task-specific handoff described above. Use a copyable text block in the actual plan file, or an indented block when presenting inside an enclosing Markdown fence. For an investigation-only plan, state that implementation is outside scope. For a draft, identify the decisions still needed rather than supplying a ready-to-run coding prompt.>
 ```

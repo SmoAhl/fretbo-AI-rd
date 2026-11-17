@@ -42,6 +42,14 @@ Small isolated fixes, tests, or documentation changes do not automatically requi
 
 This section is the authoritative threshold. When an ExecPlan is required, read and follow the complete [.agent/PLANS.md](.agent/PLANS.md) protocol. Actual ExecPlans belong in the repository-level `plans/` directory; create that directory only when the first real plan is needed. Use one plan for one significant effort, not for the whole project roadmap.
 
+### From a finalized plan to coding
+
+When presenting a finalized implementation plan, including in Plan mode, end the plan with a clearly labeled, copyable **Proposed implementation prompt**. Summarize the concrete deliverables, important constraints and exclusions, and reference the plan's acceptance criteria and repository instructions. The user should be able to see what submitting the prompt will ask the coding agent to build. Keep it a concise handoff; introduce no requirements or decisions absent from the plan. Regenerate it whenever the finalized plan changes.
+
+Reference the actual repository plan path when one exists. A same-chat handoff may refer to the finalized plan above; a new-chat handoff must use an accessible plan path or include the finalized plan so it does not depend on missing conversation history. Do not invent a saved plan or write files merely to provide a handoff when the active mode or request permits planning only. Follow the active mode's presentation format, placing the prompt inside the plan when required. The [planning protocol](.agent/PLANS.md#implementation-handoff) gives the handoff format.
+
+Exploratory discussions and plans with unresolved consequential choices do not need a coding prompt yet; identify the decisions needed to finalize them. Small direct implementation requests do not require a separate planning round. Producing a plan or proposed prompt does not authorize implementation. The user's implementation request supplies that authority; do not require them to copy the prompt or reconfirm work they have already authorized. Always respect the active mode's execution limits.
+
 ## Commands and verification
 
 Application commands are defined in `package.json`: `npm run dev`, `npm run build`, `npm run start`, `npm run typecheck`, and `npm test`. Discover any additional commands from actual configuration, documentation, and the execution environment. Do not invent commands, tools, dependencies, or existing project capabilities. If an authorized task introduces tooling, distinguish proposed setup from tools that already exist.
