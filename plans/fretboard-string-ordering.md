@@ -1,6 +1,9 @@
 # Explicit physical string order in the discrete fretboard
 
 
+Status: Completed historical effort. Its scope, commands, paths and verification describe that increment; use [current status](../docs/STATUS.md), current contracts and [the plan index](README.md) before resuming work.
+
+
 This plan follows [.agent/PLANS.md](../.agent/PLANS.md). It records the string-ordering extension requested after the completed Fretboard v1 effort.
 
 

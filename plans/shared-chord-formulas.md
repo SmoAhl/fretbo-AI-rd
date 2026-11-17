@@ -1,6 +1,9 @@
 # Resolve custom chord formulas without register
 
 
+Status: Completed historical effort. Its scope, commands, paths and verification describe that increment; use [current status](../docs/STATUS.md), current contracts and [the plan index](README.md) before resuming work.
+
+
 This living ExecPlan follows [.agent/PLANS.md](../.agent/PLANS.md). The user authorized the six-stage chord roadmap on 2026-10-26; this plan owns only its shared foundation.
 
 ## Purpose / Big Picture

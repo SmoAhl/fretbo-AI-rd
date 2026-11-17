@@ -1,6 +1,9 @@
 # Simplify domain references for a discrete fretboard
 
 
+Status: Completed historical effort. Its scope, commands, paths and verification describe that increment; use [current status](../docs/STATUS.md), current contracts and [the plan index](README.md) before resuming work.
+
+
 This ExecPlan follows [.agent/PLANS.md](../.agent/PLANS.md). It records the documentation refactoring requested on 2026-10-06.
 
 ## Purpose / Big Picture

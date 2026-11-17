@@ -1,6 +1,18 @@
 # Playability v1: movable templates and assessment
 
+This guide owns the current supported Playability contracts. [Architecture](ARCHITECTURE.md) describes system boundaries and [status](STATUS.md) tracks the capability overview.
+
 Playability combines reusable geometry, independent execution patterns, actual fretboard pitches and musical requirements. It searches placements of selected known templates, not arbitrary new shapes or finger assignments. [D056](DECISIONS.md#d056-reusable-playability-templates-and-bounded-placement-search) records the accepted boundary; the [ExecPlan](../plans/playability-engine-v1.md) records verification.
+
+## Reading map
+
+- [Deterministic path](#deterministic-path)
+- [Finding A-flat and D-major examples](#finding-a-flat-and-d-major-examples)
+- [Geometry and contact contracts](#geometry-and-contact-contracts)
+- [Geometry and execution contracts](#geometry-and-execution-contracts)
+- [Explicit CAGED variants](#explicit-caged-variants)
+- [Assessment and support](#assessment-and-support)
+- [Search bounds and extension](#search-bounds-and-extension)
 
 ## Deterministic path
 
@@ -45,9 +57,37 @@ The board is explicit, not an engine default. Relative shape names describe patt
 
 These positions are computed from templates. They are not stored as new absolute reference placements. Wider ranges may include further octave-displaced placements.
 
-## Geometry and execution contracts
+## Geometry and contact contracts
 
-`ChordShapeFormula` contains only states and relative sounding offsets. Closed formulas normalize their lowest selected sounding fret to offset zero and require a positive anchor. Open forms retain actual open strings and anchor zero.
+Geometry is independent of fingering and approval. `domain/playability/chord-shape-formula.ts` exports readonly `ChordShapeFormula` and `ChordShapeFormulaString`, `createChordShapeFormula`, `validateChordShapeFormula`, `chordShapeFormulasEqual`, and `instantiateChordShape(board, formula, anchor, instanceId)`.
+
+Formulas explicitly cover physical positions 1 through their string count once, using open, fretted, muted, or unplayed states. Only fretted states have nonnegative safe-integer offsets. Open formulas use the nut as origin, anchor zero, and positive fretted offsets. Closed formulas normalize their lowest sounding fretted offset to zero and require a positive placement anchor. All-open and all-silent geometry is allowed with anchor zero. Formula identity ignores IDs and array order. There are no finger, contact, pitch, tuning, or review fields.
+
+### Concrete shapes and structural resolution
+
+`chord-shape.ts` exports readonly `ChordShapeString`, `ChordShapeInstance`, and `ChordShapeResolution`, plus `resolveChordShape(board, instance)` and `chordShapeInstancesEqual(board, left, right)`. An instance has an ID, explicit string states with stable board IDs and physical positions, absolute sounding frets (open is always zero), and optional formula/anchor provenance. Structural resolution validates complete board coverage and available stops and obtains every sounding pitch through `registeredPitchAtLocation`. It accepts supplied geometry without provenance. IDs and provenance do not establish identity or approval; comparison checks actual geometry on the supplied board. Muted and unplayed remain distinct, and neither supplies a pitch or specifies a technique.
+
+Structural contradictions return `{ status: "invalid", reasons }`; valid results contain copied instance geometry and sounding locations in ascending physical-position order, preserving every sounding occurrence. Malformed boards retain Fretboard's `RangeError` behavior. Invalid formula construction, placement, or comparison throws `RangeError`. Checked BigInt addition rejects unsafe or unavailable placed frets. Outputs are fresh, independently copied, readonly by type, and unfrozen; unknown metadata is not copied. These operations are domain validation, not a general external-data schema.
+
+### Reference geometry and identity
+
+`reference-grips.ts` exposes fresh-copy `referenceChordShapeFormulas()` and `referenceChordShapePlacements()` collections and `instantiateReferenceChordShape(board, instanceId)`. The 13 formulas include the reference geometries plus an explicit closed C-major variant; the original 13 documented placements remain compatibility fixtures, including one open C and shared shape-08 for F major and E-shaped C major. The reference path selects only documented placements and checks board availability per instance. The generic instantiator does not enumerate anchors. Generic geometry supports explicit string counts and tunings. Reviewed template-pattern support is separately defined under D056.
+
+Reference geometry records store explicit stable IDs; inserting or reordering records cannot reassign existing IDs to other shapes. `tests/playability-reference.test.ts` preserves all 13 ID-to-geometry mappings and checks unique identities and valid references across placements, templates, witnesses, reviews and CAGED variants. These are catalog integrity checks, not new approval rules.
+
+### Absolute finger contacts
+
+The `fingering-witness.ts` module exports readonly `FrettingFinger`, `FingerContact`, `FingeringWitness`, `SoundingFinger`, and `FingeringWitnessValidation`, plus `validateFingeringWitness(board, instance, witness)`. A witness has an ID, an `instanceId` association, and complete absolute contacts; it contains no geometry or review evidence. Multiple independent witnesses may target the same instance. Validation checks actual supplied geometry before contacts, so matching IDs cannot bypass the rules.
+
+Each finger 1–4 may hold one contact at a positive available fret over an inclusive physical-position interval. Every covered string is checked. Different fingers cannot occupy the same discrete string/fret contact; different frets may overlap, including lower barres beneath higher sounding stops. The highest contact must match each selected fretted stop, and intended open strings must remain clear. Contacts on unplayed or muted positions add no tone; the checker does not establish a muting technique. It imposes no finger-order, gap, span or ergonomic approval rule.
+
+Invalid geometry or contact candidates return invalid findings; malformed boards still throw `RangeError`. Valid results contain a copied witness in ascending finger order, sounding fingers in physical-position order (0 for open strings), and `contactSpan`: maximum minus minimum held contact fret, or null with no contacts. Hidden contacts contribute to span without changing formula identity or instance anchors. This result establishes discrete contact consistency only, not physical feasibility or practical support.
+
+`referenceFingeringWitnesses()` supplies 13 independent complete assignments; `referenceFingeringReviews()` separately supplies source paths and standard-tuning contexts by physical position. Both return fresh nested copies. Seven witnesses have no barre, three have a partial barre, and three have a full barre. These historical review records retain their original source context. Movable support now comes from separate template review records and actual pattern matching, as described below.
+
+`tests/chord-shape-formula.test.ts`, `tests/playability-shape.test.ts`, and `tests/playability-witness.test.ts` cover independent source fret/pitch/finger rows, complete barres, normalization, identity, retuning, explicit IDs and physical order, bounds, unsafe addition, malformed inputs, readonly contracts, and copy isolation. Alternative valid/invalid witnesses and hidden-barre span regressions protect geometry independence. See [assessment and support](#assessment-and-support) for musical assessment and recommendation eligibility. General shape generation, fingering solving and ergonomic ranking remain unimplemented.
+
+## Geometry and execution contracts
 
 `FingeringTemplate` contains an ID, formula association and complete relative contacts: finger 1–4, signed safe-integer offset, and inclusive physical-position interval. A negative contact offset is allowed for a hidden barre beneath the geometry anchor. `createFingeringTemplate` validates representation and association; duplicate finger duties and other simultaneous contradictions are findings from concrete witness validation.
 
@@ -71,7 +111,7 @@ The catalog also contains closed-a-minor, closed-e-minor and closed-d-minor. The
 
 ### Closed C variant
 
-The user-approved movable-template revision adds this pattern separately from the historical Playability Reference rows. Geometry in string 6 → 1 order is `x f3 f2 f0 f1 f0`. Finger 1 holds offset 0 over positions 1–5; fingers 2, 3 and 4 hold offsets 1, 2 and 3 at positions 2, 4 and 5 respectively. At anchor 2 this produces the documented acceptance result D major. No absolute D-major placement is needed.
+This pattern is separate from the historical Playability Reference rows. Geometry in string 6 → 1 order is `x f3 f2 f0 f1 f0`. Finger 1 holds offset 0 over positions 1–5; fingers 2, 3 and 4 hold offsets 1, 2 and 3 at positions 2, 4 and 5 respectively. At anchor 2 this produces the documented acceptance result D major. No absolute D-major placement is needed.
 
 ## Assessment and support
 

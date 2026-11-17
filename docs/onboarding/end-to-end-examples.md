@@ -1,6 +1,6 @@
 # End-to-end examples
 
-[Onboarding index](README.md) · Previous: [Playability](playability-engine.md) · Next: [Implementation status](implementation-status.md)
+[Onboarding index](README.md) · Previous: [Playability](playability-engine.md) · Next: [Implementation status](../STATUS.md)
 
 These walkthroughs call existing public functions. Each TypeScript block is independent and uses imports as if the caller were at the **repository root**. The assertions make the expected results explicit; Node's assertion module is only a demonstration host dependency, not a domain dependency. Domain `.js` specifiers resolve to TypeScript sources through the project's TypeScript/Vitest setup. Do not assume plain `node example.ts` resolves those specifiers without a build or loader.
 

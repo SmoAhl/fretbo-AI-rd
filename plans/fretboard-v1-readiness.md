@@ -1,6 +1,9 @@
 # Fretboard v1 readiness review and Playability handoff
 
 
+Status: Completed historical effort. Its scope, commands, paths and verification describe that increment; use [current status](../docs/STATUS.md), current contracts and [the plan index](README.md) before resuming work.
+
+
 This plan follows [.agent/PLANS.md](../.agent/PLANS.md). It records the authorized code review, verification and documentation audit; production code and tests must remain unchanged.
 
 ## Purpose / Big Picture

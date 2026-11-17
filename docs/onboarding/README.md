@@ -2,7 +2,7 @@
 
 FretboAIrd is a guitar and music-theory workbench for exploring an instrument and developing musical ideas. Its intended product connects notes, intervals, scales and chords to a discrete fretboard, then helps find sensible chord fingerings. A musician could inspect a scale on an alternate tuning, understand a chord's construction, or compare ways of realizing an idea during composition or arrangement.
 
-**Today, the working product foundation is the deterministic domain code and its tests.** Music Theory v1, Fretboard v1 and the bounded movable-template Playability v1 are implemented. The Next.js application is a bootstrap page; the interactive fretboard, composition interface, persistence, audio and AI integration are not implemented. This guide describes the source at `1ad31b3`, investigated on **2026-11-11**. See [implementation status](implementation-status.md) for evidence, limitations and older documentation that disagrees with this snapshot.
+**The working foundation is the deterministic domain and its tests.** Music Theory v1, Fretboard v1 and bounded Playability v1 are implemented; the application remains a bootstrap. [Current status](../STATUS.md) owns the capability overview and known follow-ups. This maintained guide teaches the implementation; its [original investigation](../../plans/developer-onboarding.md) preserves dated verification evidence.
 
 The central mental model is:
 
@@ -21,9 +21,8 @@ These are collections of TypeScript functions and records inside one package, no
 | 5 | [Fretboard Engine](fretboard-engine.md) | Explicit instruments, ID versus physical position, pitch lookup and bounded location searches. |
 | 6 | [Playability Engine](playability-engine.md) | Geometry, witnesses, barres, relative templates, exact musical matching, pattern support and search. |
 | 7 | [End-to-end examples](end-to-end-examples.md) | Concrete calls and intermediate results, including a complete supported chord-to-fingering path. |
-| 8 | [Implementation status and remaining work](implementation-status.md) | Which capabilities are complete within their bounds, which are missing, and which decisions remain open. |
 
-For a quick first pass, read chapters 1, 7 and 8, then follow a domain chapter when an unfamiliar concept appears. The Music Theory chapters introduce terminology before using it; no advanced musical background is assumed.
+For a quick first pass, read [current status](../STATUS.md) and chapters 1 and 7, then follow a domain chapter when an unfamiliar concept appears. The Music Theory chapters introduce terminology before using it; no advanced musical background is assumed.
 
 ## First local session
 
@@ -52,16 +51,17 @@ For musical composition across the five Music Theory subject folders, start with
 
 ## How this guide relates to existing documents
 
-This is an explanation of the current system, not a replacement specification or a new roadmap.
+This guide explains algorithms and examples. Use the [documentation ownership map](../README.md#documentation-ownership) to distinguish contracts, current status and historical evidence.
 
 | Document | Authority and use |
 | --- | --- |
 | [AGENTS.md](../../AGENTS.md) | Working instructions, change scope, verification and ExecPlan threshold. |
-| [Architecture](../ARCHITECTURE.md) | Architectural boundaries, implementation descriptions and open questions. |
+| [Status](../STATUS.md) | Current capability overview, missing areas and known follow-ups. |
+| [Architecture](../ARCHITECTURE.md) | Architectural boundaries, cross-layer data and open questions. |
 | [Decisions](../DECISIONS.md) | Accepted choices and their rationale; later entries may extend earlier increments. |
 | [Music Theory Reference](../MUSIC_THEORY_REFERENCE.md), [Fretboard Reference](../FRETBOARD_REFERENCE.md), [Playability Reference](../PLAYABILITY_REFERENCE.md) | Domain knowledge and convention distinctions; reference coverage does not imply executable support. |
-| [Music Theory v1](../MUSIC_THEORY_V1.md), [Fretboard v1](../FRETBOARD_V1.md), [Playability v1](../PLAYABILITY_V1.md) | Concise consumer contracts and handoff guidance. |
-| [Plans](../../plans/) and [plan protocol](../../.agent/PLANS.md) | Per-effort context, historical progress, verification and explicit deferred work. |
-| [This investigation's ExecPlan](../../plans/developer-onboarding.md) | Documentation scope, findings and checks performed for this guide. |
+| [Music Theory v1](../MUSIC_THEORY_V1.md), [Fretboard v1](../FRETBOARD_V1.md), [Playability v1](../PLAYABILITY_V1.md) | Current supported contracts, limits and handoff guidance. |
+| [Plans](../../plans/README.md) and [plan protocol](../../.agent/PLANS.md) | Per-effort context, historical progress, verification and explicit deferred work. |
+| [Original onboarding investigation](../../plans/developer-onboarding.md) | Documentation scope, findings and checks performed for this guide. |
 
 When changing behavior, read the relevant implementation and tests, the owning reference section, and its accepted decision. An old plan's statement that a feature is deferred describes that plan's increment; it is not evidence that later source lacks the feature.

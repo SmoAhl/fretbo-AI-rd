@@ -1,6 +1,9 @@
 # Add registered pitches to Music Theory
 
 
+Status: Completed historical effort. Its scope, commands, paths and verification describe that increment; use [current status](../docs/STATUS.md), current contracts and [the plan index](README.md) before resuming work.
+
+
 This ExecPlan follows [.agent/PLANS.md](../.agent/PLANS.md) and implements the user-approved registered-pitch contract.
 
 ## Purpose / Big Picture

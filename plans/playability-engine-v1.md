@@ -1,6 +1,9 @@
 # Playability Engine v1 — Reusable movable geometry and fingering templates
 
 
+Status: Completed historical effort. Its scope, commands, paths and verification describe that increment; use [current status](../docs/STATUS.md), current contracts and [the plan index](README.md) before resuming work.
+
+
 This living plan follows [.agent/PLANS.md](../.agent/PLANS.md). The 2026-10-30 movable-template revision supersedes the original fixed-placement restrictions. Historical evidence below is retained explicitly as history.
 
 ## Purpose / Big Picture

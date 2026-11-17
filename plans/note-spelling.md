@@ -1,6 +1,9 @@
 # Add explicit note spelling to Music Theory
 
 
+Status: Completed historical effort. Its scope, commands, paths and verification describe that increment; use [current status](../docs/STATUS.md), current contracts and [the plan index](README.md) before resuming work.
+
+
 This plan follows [.agent/PLANS.md](../.agent/PLANS.md). It is a living document for the user-approved spelling increment.
 
 ## Purpose / Big Picture

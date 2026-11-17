@@ -1,6 +1,9 @@
 # Degrees: explicit formulas and collection queries
 
 
+Status: Completed historical effort. Its scope, commands, paths and verification describe that increment; use [current status](../docs/STATUS.md), current contracts and [the plan index](README.md) before resuming work.
+
+
 This plan follows [.agent/PLANS.md](../.agent/PLANS.md). Maintain its progress, evidence, decisions, and outcomes during implementation.
 
 ## Purpose / Big Picture

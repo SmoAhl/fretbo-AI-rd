@@ -156,7 +156,7 @@ Formatting matches the **exact ordered formula**, including duplicate and compou
 
 `C7(#11)` is rejected. The implemented complete sharp-eleventh construction includes a ninth and uses `C9(#11)`. Also, `C#9` means a C-sharp-root dominant ninth; `C7(#9)` means a C-root chord with an altered ninth. Parentheses and exact suffix grammar matter.
 
-Parsing/formatting do not construct derived spellings. `G###maj7` can parse and format while its exact spelled major-seventh tones exceed the accidental range; numeric tones still exist. See [D050](../DECISIONS.md#d050-bounded-chord-symbol-grammar-and-canonical-formatting) and the [canonical grammar](../ARCHITECTURE.md#chord-symbol-grammar).
+Parsing/formatting do not construct derived spellings. `G###maj7` can parse and format while its exact spelled major-seventh tones exceed the accidental range; numeric tones still exist. See [D050](../DECISIONS.md#d050-bounded-chord-symbol-grammar-and-canonical-formatting) and the [canonical grammar](../MUSIC_THEORY_V1.md#chord-symbol-grammar).
 
 ## Registered voicings and narrow root-position construction
 

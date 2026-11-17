@@ -1,6 +1,9 @@
 # Construct complete ninth eleventh and thirteenth chords
 
 
+Status: Completed historical effort. Its scope, commands, paths and verification describe that increment; use [current status](../docs/STATUS.md), current contracts and [the plan index](README.md) before resuming work.
+
+
 This living ExecPlan follows [.agent/PLANS.md](../.agent/PLANS.md) and implements milestone 5 of the user-approved chord roadmap.
 
 ## Purpose / Big Picture

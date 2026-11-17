@@ -6,13 +6,95 @@ This document records significant accepted project decisions and their rationale
 
 Use stable decision IDs. Each record identifies its status, decision, rationale, consequences, and recording date and authority. Bootstrap records D001-D008 and the subsequent approved technology foundation D009-D018 are recorded on 2026-10-01; that date does not claim when every idea was first discussed.
 
-Accepted technology choices describe what the project will use, not what has been installed or implemented. See [current implementation](ARCHITECTURE.md#current-implementation) for the verified repository state. This documentation update does not scaffold tooling or authorize implementation.
+Accepted technology choices describe what the project will use, not what has been installed or implemented. See [current status](STATUS.md) and the engine contract guides for supported capabilities; accepted technology choices alone do not establish implementation.
 
 Implementation exclusions and undecided interfaces in earlier records describe those increments. Later accepted records establish additional contracts: Fretboard mapping is implemented under [D054](#d054-explicit-fretboard-and-bounded-pitch-location-searches), extended with physical positions by [D055](#d055-explicit-physical-string-positions). [D056](#d056-reusable-playability-templates-and-bounded-placement-search) establishes Playability templates, assessment and bounded known-pattern search; general candidate-generation ownership remains open.
 
-When a decision changes, preserve its historical record, mark it superseded, and link the replacement. Only accepted, non-superseded records are currently in force. Record actual decisions rather than keeping a queue of proposals in this file.
+When a decision changes, preserve its historical record, mark it superseded, and link the replacement. Only accepted, non-superseded records are currently in force, with explicit amendments from later records applied. A partial amendment changes only the stated clause. Record actual decisions rather than keeping a queue of proposals in this file.
 
 An ExecPlan's Decision Log concerns one effort. Promote a choice here only when it becomes a persistent project decision within the task's authority. Explain its reason and consequences and update the architectural description where relevant; do not promote it automatically.
+
+## Topic index
+
+Read the decisions relevant to the task. Records describe their original increments; follow amendment links before applying historical limits.
+
+### Principles and workflow
+
+- [D001: Deterministic domain authority](#d001-deterministic-domain-authority)
+- [D002: A useful standalone application with shared domain capabilities](#d002-a-useful-standalone-application-with-shared-domain-capabilities)
+- [D003: One system for exploration and composition](#d003-one-system-for-exploration-and-composition)
+- [D004: Domain-first construction](#d004-domain-first-construction)
+- [D005: Clear contracts that evolve deliberately](#d005-clear-contracts-that-evolve-deliberately)
+- [D006: Technology choices require explicit decisions](#d006-technology-choices-require-explicit-decisions)
+- [D007: Separate documentation responsibilities and decision status](#d007-separate-documentation-responsibilities-and-decision-status)
+- [D008: Self-contained ExecPlans for significant efforts](#d008-self-contained-execplans-for-significant-efforts)
+- [D057: Maintained documentation ownership](#d057-maintained-documentation-ownership)
+
+### Technology and package boundaries
+
+- [D009: TypeScript and strict contract checking](#d009-typescript-and-strict-contract-checking)
+- [D010: Native ESM with NodeNext semantics](#d010-native-esm-with-nodenext-semantics)
+- [D011: Node.js 24 LTS development baseline](#d011-nodejs-24-lts-development-baseline)
+- [D012: npm and deliberate dependency updates](#d012-npm-and-deliberate-dependency-updates)
+- [D013: Vitest and separate behavioral verification](#d013-vitest-and-separate-behavioral-verification)
+- [D014: React for application UI and interaction](#d014-react-for-application-ui-and-interaction)
+- [D015: Next.js as the full-stack application boundary](#d015-nextjs-as-the-full-stack-application-boundary)
+- [D016: Generic UI controls, accessible primitives, and styling](#d016-generic-ui-controls-accessible-primitives-and-styling)
+- [D017: Custom fretboard visualization with React and SVG](#d017-custom-fretboard-visualization-with-react-and-svg)
+- [D018: One private application package with an independent domain](#d018-one-private-application-package-with-an-independent-domain)
+- [D019: Discrete fretboard and practical chord fingerings](#d019-discrete-fretboard-and-practical-chord-fingerings)
+
+### Pitch, spelling and intervals
+
+- [D020: C-based pitch classes and explicit note spelling](#d020-c-based-pitch-classes-and-explicit-note-spelling)
+- [D021: Registered pitch coordinates with C0 as origin](#d021-registered-pitch-coordinates-with-c0-as-origin)
+- [D022: Note text and explicit reverse spelling policy](#d022-note-text-and-explicit-reverse-spelling-policy)
+- [D023: Spelled transposition by qualified intervals](#d023-spelled-transposition-by-qualified-intervals)
+- [D024: Interval text syntax with required direction](#d024-interval-text-syntax-with-required-direction)
+- [D025: Registered interval measurement and identification](#d025-registered-interval-measurement-and-identification)
+- [D026: Simple interval inversion by octave displacement](#d026-simple-interval-inversion-by-octave-displacement)
+- [D027: Interval formatting and public semitone displacement](#d027-interval-formatting-and-public-semitone-displacement)
+- [D039: Triple accidentals and degree alterations](#d039-triple-accidentals-and-degree-alterations)
+
+### Collections, modes, degrees and keys
+
+- [D028: Seven-note scales, modes, and ordinal degrees](#d028-seven-note-scales-modes-and-ordinal-degrees)
+- [D029: Pentatonic collections and scale-specific ordinal limits](#d029-pentatonic-collections-and-scale-specific-ordinal-limits)
+- [D030: Relative relationships between major-scale modes](#d030-relative-relationships-between-major-scale-modes)
+- [D031: Registered scale runs with explicit octave extent](#d031-registered-scale-runs-with-explicit-octave-extent)
+- [D032: Strict scale-name parsing](#d032-strict-scale-name-parsing)
+- [D033: Standalone numeric chromatic collection](#d033-standalone-numeric-chromatic-collection)
+- [D034: Explicit melodic-minor traversal conventions](#d034-explicit-melodic-minor-traversal-conventions)
+- [D035: Fixed modes of harmonic and ascending melodic minor](#d035-fixed-modes-of-harmonic-and-ascending-melodic-minor)
+- [D036: Simple degree formulas and shared collection queries](#d036-simple-degree-formulas-and-shared-collection-queries)
+- [D037: Explicit major/minor keys and conventional signatures](#d037-explicit-majorminor-keys-and-conventional-signatures)
+- [D038: Key-aware pitch-class spelling with explicit degree roles](#d038-key-aware-pitch-class-spelling-with-explicit-degree-roles)
+
+### Chord content and descriptions
+
+- [D040: Basic triads from explicit root and quality](#d040-basic-triads-from-explicit-root-and-quality)
+- [D041: Seventh chords from explicit root and quality](#d041-seventh-chords-from-explicit-root-and-quality)
+- [D042: Shared chord formulas with unregistered compound roles](#d042-shared-chord-formulas-with-unregistered-compound-roles)
+- [D043: Triad formulas and suspended structures](#d043-triad-formulas-and-suspended-structures)
+- [D044: Seventh formulas and suspended structures](#d044-seventh-formulas-and-suspended-structures)
+- [D045: Added-tone and sixth chord formulas](#d045-added-tone-and-sixth-chord-formulas)
+- [D046: Complete named extended chord formulas](#d046-complete-named-extended-chord-formulas)
+- [D047: Five selected altered extended constructions](#d047-five-selected-altered-extended-constructions)
+- [D048: Seven-note collection harmonization](#d048-seven-note-collection-harmonization)
+- [D049: Structured chord descriptions with specified bass](#d049-structured-chord-descriptions-with-specified-bass)
+
+### Symbols, realization and analysis
+
+- [D050: Bounded chord-symbol grammar and canonical formatting](#d050-bounded-chord-symbol-grammar-and-canonical-formatting)
+- [D051: Explicit registered voicings and root-position realization](#d051-explicit-registered-voicings-and-root-position-realization)
+- [D052: Known-chord bass, inversion, and voicing analysis](#d052-known-chord-bass-inversion-and-voicing-analysis)
+- [D053: Exact catalog chord identification](#d053-exact-catalog-chord-identification)
+
+### Fretboard and Playability
+
+- [D054: Explicit fretboard and bounded pitch-location searches](#d054-explicit-fretboard-and-bounded-pitch-location-searches)
+- [D055: Explicit physical string positions](#d055-explicit-physical-string-positions)
+- [D056: Reusable Playability templates and bounded placement search](#d056-reusable-playability-templates-and-bounded-placement-search)
 
 ## D001: Deterministic domain authority
 
@@ -89,6 +171,8 @@ Recorded: 2026-10-01. Authority: User-accepted shared project understanding and 
 ## D007: Separate documentation responsibilities and decision status
 
 Status: Accepted.
+
+Current interpretation: Documentation ownership is partially superseded by [D057: Maintained documentation ownership](#d057-maintained-documentation-ownership).
 
 Decision: `AGENTS.md` owns coding-agent instructions; `.agent/PLANS.md` owns the ExecPlan protocol; `docs/ARCHITECTURE.md` owns architectural boundaries and the current implementation description; this file owns accepted persistent decisions and their rationale. Open questions remain open until actually resolved.
 
@@ -250,6 +334,8 @@ Reference set: 2026-10-06. Authority: User-supplied CAGED major and movable mino
 
 Status: Accepted.
 
+Current interpretation: The original accidental range is extended by [D039: Triple accidentals and degree alterations](#d039-triple-accidentals-and-degree-alterations).
+
 Decision: Interpret numeric pitch classes with C = 0 and natural letters D=2, E=4, F=5, G=7, A=9, B=11. Represent explicit spelling as a readonly object with required uppercase `letter` (A through G) and numeric `accidental` (-2|-1|0|1|2, for double flat through double sharp). Convert spellings one way to pitch class using the existing semitone transposition capability.
 
 Rationale: A named origin connects the numeric foundation to Western letter spelling. Keeping letter and accidental explicit preserves enharmonic distinctions before conversion without choosing a canonical spelling or requiring key context. C = 0 is a project convention; octave equivalence and modulo-12 arithmetic are mathematical properties.
@@ -274,6 +360,8 @@ Recorded: 2026-10-07. Authority: User's explicit approval and implementation req
 
 Status: Accepted.
 
+Current interpretation: The original accidental text grammar is extended by [D039: Triple accidentals and degree alterations](#d039-triple-accidentals-and-degree-alterations).
+
 Decision: Parse separate unregistered spellings and registered notes using uppercase A-G, optional #/♯, b/♭, ##/𝄪, bb/𝄫, or ♮, and a required signed decimal integer octave for registered notes. Trim outer whitespace and reject internal spaces, lowercase, x, mixed accidentals, and repeated Unicode accidentals. Format supplied spelling in ASCII or Unicode, defaulting to Unicode; omit natural tokens and include the written octave only for registered notes. Reverse conversion requires an explicit sharps/flats policy, preferring naturals and otherwise single accidentals for all twelve classes.
 
 Rationale: Text syntax and display choices are explicit project conventions. Formatting an existing spelling must not silently choose an enharmonic alternative; selecting spelling from a numeric pitch is a separate operation whose policy cannot be inferred from the number alone.
@@ -285,6 +373,8 @@ Recorded: 2026-10-07. Authority: User's explicit answers to parser/formatter and
 ## D023: Spelled transposition by qualified intervals
 
 Status: Accepted.
+
+Current interpretation: The original spelling limit is extended by [D039: Triple accidentals and degree alterations](#d039-triple-accidentals-and-degree-alterations).
 
 Decision: Describe spelled transposition with a positive safe-integer interval number (including compound intervals), perfect/major/minor/augmented/diminished quality, and explicit up/down direction. Determine the target letter from interval number and its accidental from the sounding semitone displacement. Support both unregistered spellings and registered notes. Reject diminished unisons and derived accidentals outside the existing -2..2 contract with `RangeError`.
 
@@ -345,6 +435,8 @@ Recorded: 2026-10-08. Authority: User's approval and implementation request for 
 ## D028: Seven-note scales, modes, and ordinal degrees
 
 Status: Accepted.
+
+Current interpretation: Collection support is extended by [D029: Pentatonic collections and scale-specific ordinal limits](#d029-pentatonic-collections-and-scale-specific-ordinal-limits), [D035: Fixed modes of harmonic and ascending melodic minor](#d035-fixed-modes-of-harmonic-and-ascending-melodic-minor) and [D039: Triple accidentals and degree alterations](#d039-triple-accidentals-and-degree-alterations).
 
 Decision: Support explicit ScaleType identifiers major, natural-minor, harmonic-minor, melodic-minor-ascending, ionian, dorian, phrygian, lydian, mixolydian, aeolian, and locrian. Construct seven tonic-relative ordered pitch classes or NoteSpelling values with no repeated octave tonic. Share upward SpelledInterval patterns between numeric and spelled construction, including shared major/Ionian and natural-minor/Aeolian definitions. Expose ordinal ScaleDegree 1..7, class retrieval by degree, and class-to-degree membership returning undefined for non-members.
 
@@ -444,6 +536,8 @@ Recorded: 2026-10-09. Authority: User's explicit implementation request for cons
 
 Status: Accepted. Additive extension of [D028](#d028-seven-note-scales-modes-and-ordinal-degrees), [D029](#d029-pentatonic-collections-and-scale-specific-ordinal-limits), and [D035](#d035-fixed-modes-of-harmonic-and-ascending-melodic-minor).
 
+Current interpretation: The original alteration limit is extended by [D039: Triple accidentals and degree alterations](#d039-triple-accidentals-and-degree-alterations); compound chord roles are separately defined by [D042: Shared chord formulas with unregistered compound roles](#d042-shared-chord-formulas-with-unregistered-compound-roles).
+
 Decision: Represent a simple major-relative role as readonly DegreeFormula with required number: ScaleDegree (1..7) and alteration: Accidental (-2..2). Expose pitchClassFromDegreeFormula and noteSpellingFromDegreeFormula. Expose DegreeCollection = ScaleType | MinorMode and shared degreeFormulas, degreeFormulaAtOrdinal, pitchClassAtCollectionDegree, noteSpellingAtCollectionDegree, and collectionDegreeOfPitchClass. Membership returns readonly CollectionDegree with ordinal/formula, or undefined for non-members. Preserve existing ordinal scale-query signatures and behavior.
 
 Rationale: Ordinal position and major-relative role differ in pentatonic collections; a formula's alteration also differs from its resulting note accidental. Existing scale/mode spelling at C supplies ordered roles without duplicating definitions. Spelling from the tonic's natural reference role and validating the final combined accidental supports B-double-sharp plus flat 3 yielding D-double-sharp. Independent formula arithmetic supports all simple double alterations without expanding the existing interval-quality contract. Numeric membership reports the selected collection's role rather than choosing an enharmonic interpretation outside it.
@@ -460,6 +554,8 @@ Recorded: 2026-10-09. Authority: User's explicit selections of the narrow Degree
 
 Status: Accepted. Additive extension of [D020](#d020-c-based-pitch-classes-and-explicit-note-spelling), [D028](#d028-seven-note-scales-modes-and-ordinal-degrees), and [D036](#d036-simple-degree-formulas-and-shared-collection-queries).
 
+Current interpretation: Identity and relative-key counts change under [D039: Triple accidentals and degree alterations](#d039-triple-accidentals-and-degree-alterations); conventional signatures remain limited to uniform single accidentals.
+
 Decision: Expose KeyMode major/minor, readonly Key with required tonic: NoteSpelling and mode: KeyMode, and createKey. Keep identity independent of signature support and musical collection selection. Expose keySignature returning KeySignature, a readonly array of KeySignatureAccidental entries with letter and single accidental -1/1. Support conventional signatures of zero through seven sharps or flats, in F-C-G-D-A-E-B or B-E-A-D-G-C-F order; zero alterations are omitted and count is array length. Preserve enharmonic tonic spelling without automatic substitution.
 
 Rationale: A minor key is not one fixed minor scale. Existing major/natural-minor spelling supplies the conventional signature baseline without adding a collection field or new musical definitions. Keeping identity independent allows theoretical identities and relationships even when their signatures exceed this increment's support. Ordered entries provide the actual altered letters without redundant count/direction fields or renderer-specific placement.
@@ -468,7 +564,7 @@ Relationships: Expose relativeKey, deriving formula 6 from major or ♭3 from mi
 
 Consequences: Unsupported runtime modes, non-conventional signatures, and spelling-limit failures throw RangeError. Tonic spelling retains the existing typed-input boundary. Results are fresh readonly objects/arrays rather than runtime-frozen, including copied tonic and signature entries. Existing scale, text, degree, and spelling-selection contracts remain unchanged; key identity does not extend DegreeCollection. Key text, theoretical signatures, key-aware spelling, inverse signature lookup, harmonization, UI, AI, and dependencies are outside this increment.
 
-Deferred improvements: Triple accidentals and improved error classification are documentation-only TODOs with capability-driven triggers in [Architecture](ARCHITECTURE.md#deferred-music-theory-improvements). They do not widen current spelling limits, change public errors, add structured codes, or introduce infrastructure in this increment.
+Deferred improvements: Triple accidentals and improved error classification are documentation-only TODOs with capability-driven triggers in [follow-up documentation](STATUS.md#known-maintenance-and-verification-follow-ups). They do not widen current spelling limits, change public errors, add structured codes, or introduce infrastructure in this increment.
 
 Recorded: 2026-10-12. Authority: User's explicit identity/signature and structured-input selections, acceptance of the plan with deferred TODO triggers, and implementation request.
 
@@ -476,13 +572,15 @@ Recorded: 2026-10-12. Authority: User's explicit identity/signature and structur
 
 Status: Accepted. Additive extension of [D022](#d022-note-text-and-explicit-reverse-spelling-policy), [D036](#d036-simple-degree-formulas-and-shared-collection-queries), and [D037](#d037-explicit-majorminor-keys-and-conventional-signatures).
 
+Current interpretation: The shared spelling/role range is extended by [D039: Triple accidentals and degree alterations](#d039-triple-accidentals-and-degree-alterations).
+
 Decision: Expose spellingFromPitchClassInKey(pitchClass, key, role?) in a separate portable domain module, returning NoteSpelling or undefined. Require numeric class and explicit Key; optional role is the existing major-relative DegreeFormula measured from key tonic. Without a role, major/natural-minor baseline membership supplies the formula to spell. Pitches outside that baseline return undefined rather than receiving an inferred role or fallback spelling. This baseline is a spelling-selection convention, not a selected collection for subsequent operations or a definition of every pitch usable in the key.
 
 Rationale: Key context supplies conventional baseline spellings such as E-sharp in F-sharp major, while chromatic pitches can retain multiple musical roles. Existing numeric degree membership and formula conversion separate role selection from spelling construction. An explicit role can deliberately override baseline spelling, including C-major class 0 as B-sharp under sharp 7. Roles remain major/perfect-relative in minor: B-minor formula 6 is G-sharp, not a natural-minor ordinal or alteration added to its baseline sixth.
 
 Consequences: Validate runtime classes as integers in 0..11 and key mode through existing key construction; tonic spelling retains its typed boundary. For supplied roles, validate formula/pitch agreement numerically before spelling. Invalid inputs, contradictory roles, and selected spellings beyond +/-2 throw RangeError without fallback. Support all existing key identities, validate only the selected output, and never require conventional signature support or full collection spelling. Return fresh readonly-by-type spellings without runtime freezing or input mutation. Generic sharps/flats selection, registered spelling, key/signature, degree, and parser contracts remain unchanged.
 
-Registered output, candidate enumeration, fallback policies, collection-ordinal roles, broader functional/context inference, triple accidentals, structured error infrastructure, UI, AI, and dependencies are outside this increment. The [deferred improvements](ARCHITECTURE.md#deferred-music-theory-improvements) retain their capability-driven triggers. Earlier key-aware exclusions describe preceding increments; this narrow key-and-formula capability is now implemented.
+Registered output, candidate enumeration, fallback policies, collection-ordinal roles, broader functional/context inference, triple accidentals, structured error infrastructure, UI, AI, and dependencies are outside this increment. The [deferred improvements](STATUS.md#known-maintenance-and-verification-follow-ups) retain their capability-driven triggers. Earlier key-aware exclusions describe preceding increments; this narrow key-and-formula capability is now implemented.
 
 Recorded: 2026-10-12. Authority: User's explicit unresolved-result, DegreeFormula, pitch-class output, and selected-result key-support choices, followed by the approved-plan implementation request.
 
@@ -634,7 +732,7 @@ Recorded: 2026-10-26. Authority: User selected both representations, the shared 
 
 Status: Accepted. Additive notation adapter over D042-D049.
 
-Decision: Export parseChordSymbol(text): SpelledChordDescription and formatChordSymbol(description, notation = unicode) from chord-symbols.ts. Use private exhaustive suffix tables backed by existing formula getters for all 37 named qualities, with the six aliases documented in the [complete grammar](ARCHITECTURE.md#chord-symbol-grammar). Root/bass reuse existing uppercase note spelling and accidental tokens, suffixes are case-sensitive, outer whitespace is trimmed and internal whitespace rejected. Support optional terminal note slash bass while retaining 6/9 as a complete suffix.
+Decision: Export parseChordSymbol(text): SpelledChordDescription and formatChordSymbol(description, notation = unicode) from chord-symbols.ts. Use private exhaustive suffix tables backed by existing formula getters for all 37 named qualities, with the six aliases documented in the [complete grammar](MUSIC_THEORY_V1.md#chord-symbol-grammar). Root/bass reuse existing uppercase note spelling and accidental tokens, suffixes are case-sensitive, outer whitespace is trimmed and internal whitespace rejected. Support optional terminal note slash bass while retaining 6/9 as a complete suffix.
 
 Rationale: A bounded notation vocabulary connects musician-readable symbols to existing structured intent without adding musical construction rules or a general alteration language. Canonical 9(#11)/maj9(#11) makes the catalog's included ninth explicit. Exact ordered formula matching preserves compound-role, duplicate and enharmonic distinctions rather than inferring identity from pitch classes.
 
@@ -647,6 +745,8 @@ Recorded: 2026-10-26. Authority: User selected small aliases, Unicode default, e
 ## D051: Explicit registered voicings and root-position realization
 
 Status: Accepted. Additive realization capability using D021, D036, D042 and D049.
+
+Current interpretation: Its original exclusions for analysis and identification are addressed separately by [D052: Known-chord bass, inversion, and voicing analysis](#d052-known-chord-bass-inversion-and-voicing-analysis) and [D053: Exact catalog chord identification](#d053-exact-catalog-chord-identification).
 
 Decision: Export numeric/spelled voicing records containing explicit nonempty registered tone lists, with validating copy factories. Preserve supplied order, repeated tones, enharmonic spellings and negative registers. Add rootPositionChordRegisteredPitches(description, root) and rootPositionChordRegisteredNotes(description, root), requiring an explicit registered root matching the description, an unaltered formula role 1, and no formula tone below the anchor. Preserve full role distances, formula order and duplicates; do not insert a missing root, sort output or adjust octave placement. Numeric construction accepts either description representation; spelled construction requires exact root spelling.
 
@@ -688,6 +788,8 @@ Recorded: 2026-10-26. Authority: User selected all four input forms, numeric ide
 
 Status: Accepted. Implements the discrete mapping boundary in D019 using existing Music Theory pitch primitives.
 
+Current interpretation: The board contract requires physical positions under [D055: Explicit physical string positions](#d055-explicit-physical-string-positions). Bounded template generation is owned by Playability under [D056: Reusable Playability templates and bounded placement search](#d056-reusable-playability-templates-and-bounded-placement-search).
+
 Extended by [D055](#d055-explicit-physical-string-positions): string records now also require physical position. The original pitch mapping, identity and canonical result-order contracts below remain in force.
 
 Decision: Represent a board with explicit, unique positive safe-integer string IDs, registered open pitches and a common nonnegative safe-integer fret count. Frets 0 through that count are available. Export board construction, direct registered-pitch lookup, exact registered-pitch search and pitch-class search from `domain/fretboard/fretboard.ts`. Regions strictly restrict existing strings and inclusive available fret bounds. Search results are complete alternatives ordered by string ID then fret, capped at 10,000 locations; larger results throw `RangeError` before output allocation.
@@ -725,3 +827,18 @@ Rationale: Movable patterns are core guitar-domain capabilities. Relative execut
 Consequences: The initial library has 13 geometries and 13 execution templates (five open, eight closed). Original reference getters remain compatible. Pattern support describes the declared discrete model, not anatomical feasibility or guaranteed comfort. General shape derivation, fingering solving, active muting, ergonomic ranking, individual-hand models and application integrations remain outside v1. Existing geometry and absolute-contact validators remain unchanged.
 
 Recorded: 2026-10-30. Authority: User explicitly requested implementation of the revised movable-template v1 plan, selected bounded template search and support across any compatible tuning, and supplied the A-flat major/minor and D-major C-shape acceptance cases.
+
+
+## D057: Maintained documentation ownership
+
+Status: Accepted. Partially supersedes [D007](#d007-separate-documentation-responsibilities-and-decision-status): current capability overview and detailed implementation contracts move out of Architecture. Its separation of instructions, reasoning and execution history remains in force.
+
+Decision: Root README owns introduction/setup; the documentation index routes readers; STATUS owns the current capability overview and known follow-ups; Architecture owns system boundaries, cross-layer data and open architectural questions. The existing engine v1 guides own supported APIs, guarantees, limits and handoffs. References own domain knowledge; onboarding owns teaching explanations and examples. Decisions retain persistent rationale, and individual ExecPlans retain effort context and dated evidence.
+
+Source and tests establish actual behavior; accepted decisions and supported contracts establish intended constraints. Investigate disagreements and resolve them within task authority rather than silently letting stale prose or an accidental implementation change redefine the contract. Summaries may repeat, but detailed contracts have one maintained home.
+
+Rationale: Duplicated status and contract narratives drifted, leaving the README claiming Playability was absent and onboarding listing already-fixed reference-ID maintenance. Human readers and AI need a reliable reading path without interpreting a discrepancy ledger.
+
+Consequences: Update the owning document when behavior or boundaries change and link from summaries. Maintain guides rather than freezing them at old commits. Preserve historical plans and evidence with explicit labels; do not treat old exclusions or test totals as current status. Keep stable decision IDs and document later amendments. These documentation changes do not alter domain behavior or authorize future implementation.
+
+Recorded: 2026-11-17. Authority: User requested the proposed documentation cleanup while retaining repository documentation as the foundation and truth for humans and AI.

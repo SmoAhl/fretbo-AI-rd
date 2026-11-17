@@ -177,7 +177,7 @@ The [Playability Reference](../PLAYABILITY_REFERENCE.md#one-shared-grip-and-fret
 
 Future ranking may compare span, awkward arrangements, barre extent and finger count **after** validity, according to the reference. Weights, tie-breaking, additional exceptions, stronger reach guarantees and player-specific preferences are undecided. Hand positions, thumb fretting, active muting, melodic transitions, arbitrary shape generation and fingering solving remain unimplemented.
 
-The known maintenance risk is concrete: `referenceChordShapeFormulas()` derives shape IDs from array indices while templates/placements use fixed strings. Reordering/inserting patterns can change ID-to-geometry associations. The existing plan explicitly defers stable explicit ID storage; no fix is included in this documentation task.
+Reference geometry records store explicit stable IDs alongside their string states. Reordering or inserting records does not reassign existing IDs. [Catalog regression tests](../../tests/playability-reference.test.ts) protect the ID-to-geometry mapping, unique identities and valid associations; review support still depends on actual geometry and contacts.
 
 ## Tests to read
 

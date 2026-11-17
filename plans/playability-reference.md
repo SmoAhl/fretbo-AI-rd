@@ -1,6 +1,9 @@
 # Establish the Playability Reference — historical
 
 
+Status: Completed historical effort. Its scope, commands, paths and verification describe that increment; use [current status](../docs/STATUS.md), current contracts and [the plan index](README.md) before resuming work.
+
+
 This plan follows [.agent/PLANS.md](../.agent/PLANS.md). The documentation effort completed on 2026-10-05. Its original scope was superseded by the user's 2026-10-06 simplification; it is not an active plan or an implementation specification.
 
 ## Purpose / Big Picture

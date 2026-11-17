@@ -1,6 +1,9 @@
 # Keys and key signatures: explicit identity and relationships
 
 
+Status: Completed historical effort. Its scope, commands, paths and verification describe that increment; use [current status](../docs/STATUS.md), current contracts and [the plan index](README.md) before resuming work.
+
+
 This plan follows [.agent/PLANS.md](../.agent/PLANS.md). Maintain progress, findings, decisions, and outcomes during implementation. The user accepted and authorized this effort on 2026-10-12.
 
 ## Purpose / Big Picture

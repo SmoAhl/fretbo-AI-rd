@@ -1,6 +1,9 @@
 # Evidence-based developer onboarding
 
 
+Status: Completed historical effort. Its scope, commands, paths and verification describe that increment; use [current status](../docs/STATUS.md), current contracts and [the plan index](README.md) before resuming work.
+
+
 This plan follows [.agent/PLANS.md](../.agent/PLANS.md). It records one substantial documentation investigation, not an implementation roadmap.
 
 ## Purpose / Big Picture
@@ -20,7 +23,7 @@ Create an English onboarding guide at `docs/onboarding/README.md` with detailed 
 ## Surprises & Discoveries
 
 
-The root README still calls Playability unimplemented. Current source, D056, `docs/PLAYABILITY_V1.md` and the revised Playability plan describe reusable templates, search and assessment. The [discrepancy ledger](../docs/onboarding/implementation-status.md#documentation-discrepancies-discovered) records this and other historical/future wording that needs qualification. Navigation points readers to the current snapshot; existing historical records were not rewritten.
+The root README still calls Playability unimplemented. Current source, D056, `docs/PLAYABILITY_V1.md` and the revised Playability plan describe reusable templates, search and assessment. The [discrepancy ledger](#documentation-discrepancies-discovered) records this and other historical/future wording that needs qualification. Navigation points readers to the current snapshot; existing historical records were not rewritten.
 
 Music Theory and Playability require more than pitch-class coverage: formula roles, original spellings, explicit bass, optional indices and exact registered occurrences have independent contracts. Playability now supplies the occurrence-aware consumer that earlier handoff documents described as future work. Known-template generation exists, while general shape/fingering solving and heuristic ranking remain absent.
 
@@ -93,7 +96,7 @@ Deliverables:
 - [Architecture and development](../docs/onboarding/architecture-and-data-flow.md).
 - [Music Theory foundations](../docs/onboarding/music-theory-engine.md), [collections and keys](../docs/onboarding/collections-and-keys.md), [chords and voicings](../docs/onboarding/chords-and-voicings.md).
 - [Fretboard](../docs/onboarding/fretboard-engine.md) and [Playability](../docs/onboarding/playability-engine.md).
-- [Executable walkthroughs](../docs/onboarding/end-to-end-examples.md) and [implementation status/discrepancies](../docs/onboarding/implementation-status.md).
+- [Executable walkthroughs](../docs/onboarding/end-to-end-examples.md) and [implementation status/discrepancies](../docs/STATUS.md).
 - Root README navigation and this plan.
 
 The initial clean worktree and HEAD establish the review baseline. The final local audit passed 360 local links and 103 heading references, found direct links to all 38 production domain modules, and reported no unbalanced fences, conflict markers or trailing whitespace. `git diff --check` passed for the tracked README. Each of the ten new Markdown files also passed `git diff --no-index --check -- /dev/null <path>` with no whitespace diagnostics (exit 1 denotes the new-file difference). Directly rereading the new files covered content that ordinary unstaged diff omits. The changed-file set is exactly the nine guides, this plan and README; the staged set is empty.
@@ -106,3 +109,53 @@ No dedicated Markdown checker is configured. No production build or UI check was
 All existing public TypeScript interfaces remain unchanged. Documentation consumes their actual names and signatures. Existing tests, references, D001–D056 and the completed/revised domain plans supply evidence. No additional package, service, schema or API is proposed.
 
 Revision note: 2026-11-11. Completed the investigation plan with source review, chapter organization, findings, actual test/example/table verification, final link/whitespace checks and Markdown-only scope review.
+
+
+## Archived documentation investigation
+
+
+These observations and verification results describe the 2026-11-11 baseline `1ad31b3`. They were moved from the onboarding status page during the 2026-11-17 cleanup. The discrepancies below are historical observations, not current defects; consult [current status](../docs/STATUS.md). Reference geometry ID maintenance was subsequently completed in `0f5a256` on 2026-11-16.
+
+## Documentation discrepancies discovered
+
+
+The investigation found status drift and historical wording that can mislead a newcomer. These findings are recorded here; the task does not repair source behavior, tests or historical records. Existing documents receive navigation links only.
+
+| Location | What a reader encounters | Current evidence and interpretation |
+| --- | --- | --- |
+| [Root README: Project status](../README.md#project-status) | Playability is called unimplemented; representations/validation are described as future work. | Seven Playability modules, their five suites, [D056](../docs/DECISIONS.md#d056-reusable-playability-templates-and-bounded-placement-search) and [Playability v1](../docs/PLAYABILITY_V1.md) establish implemented templates, contacts, search and assessment. The README now points newcomers to this guide; its older detailed status text remains recorded as stale. |
+| [Architecture: Fretboard implementation](../docs/FRETBOARD_V1.md#operations-and-output-guarantees) | The subsection ends by listing chord generation/fingerings among deferred capabilities. Later Playability sections implement a bounded subset. | Read that exclusion as the Fretboard module's boundary. Repo-wide, known-template search and witnesses exist; general shape/fingering generation and ranking remain absent. |
+| [Music Theory v1: composition rules](../docs/MUSIC_THEORY_V1.md#composition-rules-and-deliberate-information-loss) | A future realization consumer must check exact pitches/multiplicity. | Still true as a responsibility statement; [Playability assessment](../domain/playability/playability.ts) is now that consumer for supplied shapes through `exactVoicing`. The guide's original readiness review predates it. |
+| [Playability Reference: use in checks](../docs/PLAYABILITY_REFERENCE.md#use-in-playability-checks) | “A future engine should accept” the documented reference assignments. | The current source/tests now accept those assignments after actual validation. Reference span/reach guidance still must not be mistaken for a general implemented heuristic evaluator. |
+| [Architecture: accepted technology](../docs/ARCHITECTURE.md#accepted-technology-foundation) and root technology table | React/SVG visualization appears among selected technologies. | It is an accepted choice under D017, not an existing renderer; [the page](../app/page.tsx) remains generic. |
+
+The reference mentions a D7(sharp-11) musical convention while the parser accepts the complete catalog form `D9(#11)`. This is a **documented scope difference**, not a discovered parser bug: [the reference](../docs/MUSIC_THEORY_REFERENCE.md#purpose-and-scope) explicitly says its examples do not define grammar, and [D050](../docs/DECISIONS.md#d050-bounded-chord-symbol-grammar-and-canonical-formatting) deliberately selects the explicit ninth form.
+
+Likewise, no new code/test contradiction was established in the reviewed current contracts. That is the outcome of this documentation investigation, not a claim that every future integration or arbitrary untrusted input has been audited.
+
+## Reading historical decisions and plans correctly
+
+
+Earlier accepted records describe the limits at their increment. [D039](../docs/DECISIONS.md#d039-triple-accidentals-and-degree-alterations) extends older ±2 accidental limits to ±3, increasing supported spellings and key identities. D043/D044 supersede the older four-triad/eight-seventh catalogs. Later realization, analysis and identification decisions add features that their predecessors explicitly excluded.
+
+The [Playability plan](playability-engine-v1.md) retains Milestone 1's 12 formulas, Milestone 2's absolute witnesses, and original fixed-placement restrictions as history. Its revised outcomes and current source contain 13 formulas/templates and completed Milestones 2b–4. Historical reference reviews retain standard-tuning context; D056's separate movable-template reviews apply across compatible six-string tunings. Neither the old count nor the old tuning-only restriction describes current support.
+
+Some completed plans retain paths from before the [Music Theory folder reorganization](music-theory-folder-organization.md). Follow this guide's source links for current locations. Historical test totals and environment retries are evidence for those runs, not current failures or current counts.
+
+## Verification of this guide
+
+
+The documentation investigation inspected all 38 production domain modules, the app/tooling bootstrap, important unit/integration tests, all three references, architecture/decisions, v1 handoffs and relevant effort histories. Source and assertions establish behavior; accepted decisions establish intent. Seven standalone TypeScript walkthroughs were extracted from the Markdown, compiled with strict TypeScript/NodeNext options and executed with assertions against a temporary copy of the unchanged domain.
+
+Fresh checks on this snapshot:
+
+| Check | Result |
+| --- | --- |
+| `npm test` | 41 suites, 17,870 tests passed. |
+| `npm run typecheck` | Next type generation and both TypeScript checks passed. |
+| Seven documentation walkthroughs | Strict compilation and every runtime assertion passed. |
+| Catalog and prose examples | All 37 formula/suffix rows, 13 scale identifiers, 98 key identities, 30 signatures, 92 relative-key successes and additional pitch/interval/voicing examples matched execution. |
+
+Execution used installed Node **24.19.0** and npm **11.6.2**, within the Node `24.x` engine range but older than the `.nvmrc` 24.21.0 and manifest npm 11.19.0 pins. No environment/dependency upgrade was performed. `.npmrc` enables strict engine checks and exact dependency saving.
+
+The [documentation ExecPlan](developer-onboarding.md) records final link, reference, Markdown whitespace and scope-review results. No dedicated Markdown checker is configured. No production build or UI check was needed/run for this Markdown-only change, and no anatomical or ergonomic validation is claimed. Unsettled future policies are explicitly marked; no implemented domain area had to be omitted for lack of source evidence.

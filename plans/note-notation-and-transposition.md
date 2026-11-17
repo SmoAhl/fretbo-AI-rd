@@ -1,6 +1,9 @@
 # Establish note text, reverse spelling, and spelled transposition
 
 
+Status: Completed historical effort. Its scope, commands, paths and verification describe that increment; use [current status](../docs/STATUS.md), current contracts and [the plan index](README.md) before resuming work.
+
+
 This living ExecPlan follows [.agent/PLANS.md](../.agent/PLANS.md). It carries the full user-requested effort; the pending policy choices below do not reduce its scope.
 
 ## Purpose / Big Picture

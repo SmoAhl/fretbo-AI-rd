@@ -1,6 +1,9 @@
 # Fretboard Engine v1: deterministic pitch-location mapping
 
 
+Status: Completed historical effort. Its scope, commands, paths and verification describe that increment; use [current status](../docs/STATUS.md), current contracts and [the plan index](README.md) before resuming work.
+
+
 This ExecPlan follows [.agent/PLANS.md](../.agent/PLANS.md). Its progress, discoveries, decisions, and outcomes must remain current.
 
 The current task authorizes implementing milestones 1–5 sequentially, with milestone verification and final regression, type checking, and diff review. Do not stage or commit changes. The earlier documentation-only authorization is retained below as historical evidence.

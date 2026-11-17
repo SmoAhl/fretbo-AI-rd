@@ -109,7 +109,7 @@ These three movable adaptations realize C minor:
 
 ### Use in playability checks
 
-A future engine should accept these documented assignments within the supported reference model, preserve their required locations and musical content, and recognize each specified barre as one finger's compatible contact. It should reject incompatible simultaneous finger duties and open-string conflicts, while allowing supported alternatives. Acceptance of a reference example must not bypass those checks or turn its finger assignment into an exclusive solution.
+Within the supported reference model, an engine should accept these documented assignments, preserve their required locations and musical content, and recognize each specified barre as one finger's compatible contact. It should reject incompatible simultaneous finger duties and open-string conflicts, while allowing supported alternatives. Acceptance of a reference example must not bypass those checks or turn its finger assignment into an exclusive solution. The [Playability v1 contract](PLAYABILITY_V1.md) describes implemented validation and reviewed-pattern support; the heuristic guidance in this reference does not imply a general ergonomic evaluator.
 
 ## Simultaneous and sequential execution
 

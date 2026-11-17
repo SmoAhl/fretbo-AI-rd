@@ -1,6 +1,9 @@
 # Scale harmonization for existing seven-note collections
 
 
+Status: Completed historical effort. Its scope, commands, paths and verification describe that increment; use [current status](../docs/STATUS.md), current contracts and [the plan index](README.md) before resuming work.
+
+
 This living plan follows [.agent/PLANS.md](../.agent/PLANS.md).
 
 ## Purpose / Big Picture

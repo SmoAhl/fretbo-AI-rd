@@ -1,6 +1,9 @@
 # Construct eight seventh-chord qualities from an explicit root
 
 
+Status: Completed historical effort. Its scope, commands, paths and verification describe that increment; use [current status](../docs/STATUS.md), current contracts and [the plan index](README.md) before resuming work.
+
+
 This living ExecPlan follows [.agent/PLANS.md](../.agent/PLANS.md). The user selected eight qualities and approved implementation of this plan on 2026-10-21.
 
 ## Purpose / Big Picture
