@@ -6,7 +6,11 @@ Plans record one effort, not the project roadmap. Follow the [ExecPlan protocol]
 
 ## Active efforts
 
-No active effort is recorded. Use current status and the requested scope to select new work; completed plans do not authorize continuation.
+No implementation effort is currently under way.
+
+## Planned efforts
+
+- [Interactive fretboard](interactive-fretboard.md) — milestones 1–2 of the [standalone UI roadmap](../docs/ui/README.md). Both are **NOT STARTED**. Implementation requires a separate request.
 
 ## Completed history
 

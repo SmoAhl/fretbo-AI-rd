@@ -7,6 +7,7 @@ Use this index to find the document that owns the information you need. [Project
 | Task | Start here | Continue with |
 | --- | --- | --- |
 | Understand what works today | [Project status](STATUS.md) | The relevant engine contract below. |
+| Review the planned standalone interface | [UI v1 roadmap](ui/README.md) | [Interactive fretboard ExecPlan](../plans/interactive-fretboard.md) for milestones 1–2. |
 | Learn the implementation | [Onboarding](onboarding/README.md) | Its algorithm chapters and [worked examples](onboarding/end-to-end-examples.md). |
 | Use a domain capability | [Music Theory](MUSIC_THEORY_V1.md), [Fretboard](FRETBOARD_V1.md), [Playability](PLAYABILITY_V1.md) | Linked implementation and tests. |
 | Understand musical or instrument rules | [Music Theory Reference](MUSIC_THEORY_REFERENCE.md), [Fretboard Reference](FRETBOARD_REFERENCE.md), [Playability Reference](PLAYABILITY_REFERENCE.md) | Relevant contract to distinguish knowledge from implemented support. |
@@ -26,6 +27,7 @@ When planning an implementation, review the finalized plan and its [proposed cod
 | This index | Navigation and the ownership map. |
 | [Status](STATUS.md) | Current project capability overview, missing areas and known follow-ups. |
 | [Architecture](ARCHITECTURE.md) | System responsibilities, dependency direction, cross-layer data and open architectural questions. |
+| [UI v1 roadmap](ui/README.md) | Accepted standalone UI scope, milestone outcomes, deferred features and future product questions. |
 | Engine v1 guides | Current supported APIs, guarantees, limits and consumer handoffs. The v1 label bounds capability; these are maintained guides, not frozen snapshots. |
 | Domain references | Domain definitions, construction rules, assumptions and convention distinctions. Coverage does not imply implemented support. |
 | Onboarding | Explanations, algorithms and examples that teach the existing implementation. |
