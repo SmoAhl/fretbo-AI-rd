@@ -11,13 +11,15 @@ A guitarist will be able to inspect the sound at any location on a six-string ne
 ## Progress
 
 
-- [ ] Milestone 1 — NOT STARTED. Produce the static board, fixtures and geometry checks; complete the static SVG review with the developer.
+- [x] 2026-11-24T08:54Z — Demonstrated the first slice on `codex/interactive-fretboard` from `7fb4dc6`: the home page heading above one responsive rosewood rectangle.
+- [x] 2026-11-24T09:06Z — Adjusted the rectangle to sit centered near the bottom. The heading keeps its original width and top spacing. The space between them grows with the viewport height.
+- [ ] Milestone 1 — IN PROGRESS. Developer review of the one-rectangle slice is pending. Further board geometry, fixtures and checks require approval to proceed.
 - [ ] Milestone 2 — NOT STARTED. Implement free selection and inspection; complete the interaction review with the developer.
 
 ## Surprises & Discoveries
 
 
-No implementation findings yet. On continuation, record unexpected behavior and the observation or check that exposed it.
+The first browser runs stopped during the production build. Turbopack reported a CSS worker connection failure before Playwright created a trace. Preserving the old generated build cache and retrying outside the sandbox with a fresh cache allowed both tests to run.
 
 ## Decision Log
 
@@ -31,10 +33,11 @@ No implementation findings yet. On continuation, record unexpected behavior and 
 ## Outcomes & Retrospective
 
 
-No implementation or browser verification has taken place. Record actual results, review feedback, outstanding checks and UTC timestamps at each checkpoint. Update Progress only for work demonstrated.
+2026-11-24T08:54Z — `npm run test:e2e -- e2e/home.spec.ts` passed both Chromium tests in 24.9 seconds. The resize check found the whole rectangle within the viewport at both sizes and verified its bounds against the viewBox within half a CSS pixel. `npm run typecheck` passed. The development preview returned HTTP 200 at `/` with the title FretboAIrd.
+
+2026-11-24T09:06Z — Placement review: `npm run test:e2e -- e2e/home.spec.ts` passed both Chromium tests in 14.0 seconds. Increasing height from 800 to 920 at width 1280 moved the rectangle down 120 CSS pixels while preserving its width and bottom gap. At phone width the heading and whole rectangle were visible with equal 17.83 px side gutters and zero horizontal overflow. `npm run typecheck` passed after the overflow assertion was updated to read the root element through a Playwright locator.
 
 ## Context and Orientation
-
 
 At planning time `app/page.tsx` is a placeholder, with layout and styling in `app/layout.tsx` and `app/globals.css`. [D014–D018](../docs/DECISIONS.md#d014-react-for-application-ui-and-interaction) establish React, Next.js, generic controls and custom SVG in one application package. The [architecture](../docs/ARCHITECTURE.md) keeps musical and instrument rules independent of that stack.
 
@@ -77,7 +80,9 @@ Fixtures are deterministic and free selection is session-local. Reload for the e
 ## Artifacts and Notes
 
 
-No implementation artifacts or measurements exist yet. At checkpoint 1 record viewport sizes, measured fret widths and comparisons of the sparse and dense drawings. At checkpoint 2 record the location trace and actual input/browser results. Keep planned acceptance examples distinguishable from observed results.
+Before the placement adjustment, the SVG measured 624 × 124.80 CSS pixels at 1280 × 800 and 342 × 68.39 at 390 × 844. The original phone screenshot is preserved at `.local/neck-review/initial-390x844.png`.
+
+For the placement review, the local production preview returned HTTP 200. Full-page screenshots are in `.local/neck-review/layout-<width>x<height>.png`. At 1920 × 920 the visible rectangle measured 1299.18 px wide with a 26.40 px bottom gap. At 1280 × 800 it measured 866.07 px with an 18.93 px gap. At 390 × 844 it measured 354.34 px with a 10.11 px gap.
 
 ## Interfaces and Dependencies
 
@@ -85,6 +90,8 @@ No implementation artifacts or measurements exist yet. At checkpoint 1 record vi
 Use `createFretboard` and `registeredPitchAtLocation(board, { stringId, fret })` from [Fretboard](../domain/fretboard/fretboard.ts). Use existing [Music Theory spelling and register operations](../docs/MUSIC_THEORY_V1.md) to name the pitch with octave. The application supplies explicit instrument data, owns selected locations and coordinates lookup. The board receives string/marker data, draws by physical position, maintains keyboard focus and emits locations. Keep pitch arithmetic out of SVG. Playability search, server operations and new public engine interfaces are unnecessary for this workflow.
 
 Revision note: 2026-11-23 — Recorded the approved foundation and selection plan for later implementation and collaborative review.
+
+Revision note: 2026-11-24 — Recorded the first visible slice and its browser checks for developer review.
 
 ## Proposed implementation prompt
 
