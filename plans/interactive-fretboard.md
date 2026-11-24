@@ -13,7 +13,8 @@ A guitarist will be able to inspect the sound at any location on a six-string ne
 
 - [x] 2026-11-24T08:54Z — Demonstrated the first slice on `codex/interactive-fretboard` from `7fb4dc6`: the home page heading above one responsive rosewood rectangle.
 - [x] 2026-11-24T09:06Z — Adjusted the rectangle to sit centered near the bottom. The heading keeps its original width and top spacing. The space between them grows with the viewport height.
-- [ ] Milestone 1 — IN PROGRESS. Developer review of the one-rectangle slice is pending. Further board geometry, fixtures and checks require approval to proceed.
+- [x] 2026-11-24T09:51Z — Developer approved the bottom-centered placement. Added six silver strings using physical positions 1–6.
+- [ ] Milestone 1 — IN PROGRESS. Developer review of the six strings is pending.
 - [ ] Milestone 2 — NOT STARTED. Implement free selection and inspection; complete the interaction review with the developer.
 
 ## Surprises & Discoveries
@@ -32,6 +33,10 @@ The first browser runs stopped during the production build. Turbopack reported a
 
 ## Outcomes & Retrospective
 
+
+2026-11-24 — Adjusted the six non-scaling silver strokes from 1 px at high E to 3.5 px at low E in 0.5 px steps. Captured the development preview at 1280 × 800 and 390 × 844. Both Chromium tests passed in 18.0 seconds and typecheck passed. Visual approval is pending.
+
+2026-11-24T09:51Z — Inspected full-page screenshots at 1280 × 800 and 390 × 844. Both show six separate strokes across the wood. The five gaps are 32 SVG units and the outer string centers are 20 units from the wood edges. `npm run test:e2e -- e2e/home.spec.ts` passed both Chromium tests in 17.3 seconds, including the existing placement checks. `npm run typecheck` passed. The initial production build failed resolving a domain runtime import before browser startup. The static drawing now uses the domain string type directly.
 
 2026-11-24T08:54Z — `npm run test:e2e -- e2e/home.spec.ts` passed both Chromium tests in 24.9 seconds. The resize check found the whole rectangle within the viewport at both sizes and verified its bounds against the viewBox within half a CSS pixel. `npm run typecheck` passed. The development preview returned HTTP 200 at `/` with the title FretboAIrd.
 

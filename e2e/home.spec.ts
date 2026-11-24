@@ -20,6 +20,19 @@ async function checkNeck(page: Page, width: number, height: number) {
   const frame = await svg.evaluate(element => element.getBoundingClientRect().toJSON());
   const shape = await rect.evaluate(element => element.getBoundingClientRect().toJSON());
   const scale = frame.width / 1200;
+  const lines = svg.locator("line");
+  await expect(lines).toHaveCount(6);
+  for (const [index, y] of [40, 72, 104, 136, 168, 200].entries()) {
+    const line = lines.nth(index);
+    await expect(line).toHaveCSS("stroke", "rgb(192, 192, 192)");
+    await expect(line).toHaveCSS("stroke-width", `${1 + index * 0.5}px`);
+    await expect(line).toHaveCSS("vector-effect", "non-scaling-stroke");
+    const bounds = await line.evaluate(el => el.getBoundingClientRect().toJSON());
+    expect(Math.abs(bounds.left - shape.left)).toBeLessThan(0.5);
+    expect(Math.abs(bounds.right - shape.right)).toBeLessThan(0.5);
+    expect(Math.abs(bounds.top - frame.top - y * scale)).toBeLessThan(0.5);
+    expect(bounds.height).toBe(0);
+  }
   // SVG coordinates scale uniformly. Allow half a CSS pixel for layout rounding.
   expect(Math.abs(frame.height - 240 * scale)).toBeLessThan(0.5);
   expect(Math.abs(shape.x - frame.x - 20 * scale)).toBeLessThan(0.5);
