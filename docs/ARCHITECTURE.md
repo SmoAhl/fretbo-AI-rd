@@ -83,6 +83,8 @@ TypeScript makes contracts explicit and reviewable; its types do not replace det
 
 TypeScript checking and Vitest behavioral testing use separate configured commands. Determinism comes from explicit inputs, controlled state, domain rules, and meaningful assertions, not from the runner itself.
 
+Playwright Test exercises the application through a browser. Keep repeatable UI acceptance checks in `e2e/` and deterministic domain and geometry checks in Vitest. A browser assertion should cover a user-observable result, such as selection state after keyboard input or the full focused cell scrolling into view. The implementation agent and reviewer can inspect a failure trace to see which step failed. Visual readability and interaction feel remain part of the developer's UI review. See [D058](DECISIONS.md#d058-playwright-for-browser-verification) and the [setup commands](../README.md#getting-started).
+
 Verify early deterministic capabilities through ordinary tests and, when useful, a small debug or CLI harness. Later agent and product evaluation can measure interpretation and complete outcomes. It does not replace deterministic tests. Visual and human assessment may reveal practical limitations that automated checks do not yet capture.
 
 ## Current direction and later capabilities

@@ -37,6 +37,7 @@ Read the decisions relevant to the task. Records describe their original increme
 - [D011: Node.js 24 LTS development baseline](#d011-nodejs-24-lts-development-baseline)
 - [D012: npm and deliberate dependency updates](#d012-npm-and-deliberate-dependency-updates)
 - [D013: Vitest and separate behavioral verification](#d013-vitest-and-separate-behavioral-verification)
+- [D058: Playwright for browser verification](#d058-playwright-for-browser-verification)
 - [D014: React for application UI and interaction](#d014-react-for-application-ui-and-interaction)
 - [D015: Next.js as the full-stack application boundary](#d015-nextjs-as-the-full-stack-application-boundary)
 - [D016: Generic UI controls, accessible primitives, and styling](#d016-generic-ui-controls-accessible-primitives-and-styling)
@@ -842,3 +843,9 @@ Rationale: Duplicated status and contract narratives drifted, leaving the README
 Consequences: Update the owning document when behavior or boundaries change and link from summaries. Maintain guides rather than freezing them at old commits. Preserve historical plans and evidence with explicit labels; do not treat old exclusions or test totals as current status. Keep stable decision IDs and document later amendments. These documentation changes do not alter domain behavior or authorize future implementation.
 
 Recorded: 2026-11-17. Authority: User requested the proposed documentation cleanup while retaining repository documentation as the foundation and truth for humans and AI.
+
+## D058: Playwright for browser verification
+
+Accepted on 2026-11-24 at the project owner's request to add Playwright to the repository architecture and the UI/UX mentor workflow.
+
+Use Playwright Test for repeatable checks of the rendered application. Browser layout, focus and input handling need evidence from a running browser. Keep Playwright in development tooling and run its suite separately from the deterministic Node tests established by [D013](#d013-vitest-and-separate-behavioral-verification). UI handoffs identify the observable result to exercise, and reviews use actual browser results alongside the code and developer observations.

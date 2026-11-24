@@ -3,6 +3,7 @@
 /out/
 /.vercel/
 /.vitest/
+/test-results/
 /coverage/
 /.local/
 *.tsbuildinfo

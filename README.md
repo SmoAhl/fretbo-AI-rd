@@ -30,11 +30,14 @@ A fresh installation requires access to the dependency registry. The development
 | `npm run dev` | Start the development server. |
 | `npm test` | Run domain and bootstrap tests once. |
 | `npm run test:watch` | Run tests in watch mode. |
+| `npm run test:e2e` | Build the app, serve it on loopback port 3100, and run the Chromium browser tests. |
 | `npm run typecheck` | Generate Next.js types and run the configured TypeScript checks. |
 | `npm run build` | Create a production build. |
 | `npm run start` | Serve a production build. |
 
 Runtime tests and type checking are separate checks. Exact dependency versions and tool settings belong in configuration; [development details](docs/onboarding/architecture-and-data-flow.md#development-and-verification) explain the setup.
+
+Before the first browser run, or after updating Playwright, install its matching browser with `npx playwright install chromium`. Run one spec with `npm run test:e2e -- e2e/home.spec.ts`. On failure, open the trace with `npx playwright show-trace <path-to-trace.zip>` using the path printed by the runner.
 
 ## Repository map
 
@@ -45,6 +48,7 @@ Runtime tests and type checking are separate checks. Exact dependency versions a
 | `domain/playability/` | Chord geometry, finger contacts, template search and assessment. |
 | `app/` | Next.js application and presentation bootstrap. |
 | `tests/` | Deterministic unit and integration evidence. |
+| `e2e/` | Playwright checks against the running Next.js application. |
 | [docs/](docs/README.md) | Current guidance, contracts, domain knowledge and rationale. |
 | [plans/](plans/README.md) | Active efforts and clearly labeled historical records. |
 
