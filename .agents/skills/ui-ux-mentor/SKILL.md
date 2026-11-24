@@ -36,3 +36,14 @@ Inspect Git status, the relevant diff against the task's starting point, and the
 Inspect what the Playwright assertion actually establishes. On failure, use the failing step and retained trace to compare the observed behavior with the acceptance criterion before proposing a correction. Record browser checks that did not run as unverified.
 
 Explain the most important decision using the actual change. If a criterion fails, show the evidence and user impact, then provide one bounded corrective prompt for the same increment. If the criteria pass, report that result and ask the developer to approve the increment. Wait for explicit approval before presenting the next task.
+
+# Context and token efficiency
+
+- Inspect only files relevant to the current task.
+- Reuse established architectural decisions.
+- Avoid repeated repository-wide analysis.
+- Keep explanations concise and educational.
+- Generate narrowly scoped implementation prompts.
+- Review only relevant changes and dependencies.
+- Avoid unnecessary documentation and summaries.
+- Do not repeat information already established.
