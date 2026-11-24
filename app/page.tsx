@@ -20,6 +20,7 @@ export default function Home() {
         className="mt-auto block h-auto w-[94%] md:w-[70%]"
       >
         <rect x="20" y="20" width="1160" height="200" fill="#4A2C25" />
+        <rect x="20" y="20" width="32" height="200" fill="#E8DCC2" />
         {strings.map(({ id, position }) => {
           const y = 40 + (position - 1) * 32;
           const strokeWidth = 1 + (position - 1) * 0.5;

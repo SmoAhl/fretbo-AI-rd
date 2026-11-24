@@ -12,7 +12,7 @@ test("the home page identifies the workbench", async ({ page }) => {
 async function checkNeck(page: Page, width: number, height: number) {
   await page.setViewportSize({ width, height });
   const svg = page.getByRole("img", { name: "Fretboard neck", exact: true });
-  const rect = svg.locator("rect");
+  const rect = svg.locator('rect[fill="#4A2C25"]');
   await expect(rect).toHaveCount(1);
   await expect(rect).toBeVisible();
   await expect(rect).toBeInViewport({ ratio: 1 });
@@ -20,6 +20,16 @@ async function checkNeck(page: Page, width: number, height: number) {
   const frame = await svg.evaluate(element => element.getBoundingClientRect().toJSON());
   const shape = await rect.evaluate(element => element.getBoundingClientRect().toJSON());
   const scale = frame.width / 1200;
+  const nut = svg.locator('rect[fill="#E8DCC2"]');
+  await expect(nut).toHaveCSS("fill", "rgb(232, 220, 194)");
+  const bone = await nut.evaluate(el => el.getBoundingClientRect().toJSON());
+  expect(Math.abs(bone.left - shape.left)).toBeLessThan(0.5);
+  expect(Math.abs(bone.width - 32 * scale)).toBeLessThan(0.5);
+  expect(Math.abs(bone.top - shape.top)).toBeLessThan(0.5);
+  expect(Math.abs(bone.bottom - shape.bottom)).toBeLessThan(0.5);
+  const middleX = bone.left + bone.width / 2;
+  expect(await nut.evaluate((el, x) =>
+    el.ownerDocument.elementFromPoint(x, el.getBoundingClientRect().top + 2) === el, middleX)).toBe(true);
   const lines = svg.locator("line");
   await expect(lines).toHaveCount(6);
   for (const [index, y] of [40, 72, 104, 136, 168, 200].entries()) {
@@ -32,6 +42,8 @@ async function checkNeck(page: Page, width: number, height: number) {
     expect(Math.abs(bounds.right - shape.right)).toBeLessThan(0.5);
     expect(Math.abs(bounds.top - frame.top - y * scale)).toBeLessThan(0.5);
     expect(bounds.height).toBe(0);
+    expect(await line.evaluate((el, x) =>
+      el.ownerDocument.elementFromPoint(x, el.getBoundingClientRect().top) === el, middleX)).toBe(true);
   }
   // SVG coordinates scale uniformly. Allow half a CSS pixel for layout rounding.
   expect(Math.abs(frame.height - 240 * scale)).toBeLessThan(0.5);

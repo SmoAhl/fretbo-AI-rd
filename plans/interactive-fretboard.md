@@ -14,7 +14,8 @@ A guitarist will be able to inspect the sound at any location on a six-string ne
 - [x] 2026-11-24T08:54Z — Demonstrated the first slice on `codex/interactive-fretboard` from `7fb4dc6`: the home page heading above one responsive rosewood rectangle.
 - [x] 2026-11-24T09:06Z — Adjusted the rectangle to sit centered near the bottom. The heading keeps its original width and top spacing. The space between them grows with the viewport height.
 - [x] 2026-11-24T09:51Z — Developer approved the bottom-centered placement. Added six silver strings using physical positions 1–6.
-- [ ] Milestone 1 — IN PROGRESS. Developer review of the six strings is pending.
+- [x] Developer approved the six strings and their thickness progression.
+- [ ] Milestone 1 — IN PROGRESS. The ivory nut is ready for developer visual review.
 - [ ] Milestone 2 — NOT STARTED. Implement free selection and inspection; complete the interaction review with the developer.
 
 ## Surprises & Discoveries
@@ -25,6 +26,10 @@ The first browser runs stopped during the production build. Turbopack reported a
 ## Decision Log
 
 
+2026-11-24, project owner: Align the nut with the wood's left edge at x=20 and widen it from 8 to 32 SVG units. The fretted area begins at x=52. Future circular open-string tuning labels belong to the left of the nut.
+
+2026-11-24, project owner: Revisit string spacing and board width once note labels are visible and their clearance can be judged.
+
 2026-11-23, project owner: Use standard tuning and 17 frets plus open strings for UI v1. Earlier board lengths were alternatives. Set the count in the application board configuration.
 
 2026-11-23, project owner: Taper belongs to SVG presentation. Choose the initial taper during implementation and review its actual dimensions and tradeoffs. Readability, touch accuracy and consistent marker size take priority over matching a physical guitar's proportions.
@@ -34,7 +39,11 @@ The first browser runs stopped during the production build. Turbopack reported a
 ## Outcomes & Retrospective
 
 
-2026-11-24 — Adjusted the six non-scaling silver strokes from 1 px at high E to 3.5 px at low E in 0.5 px steps. Captured the development preview at 1280 × 800 and 390 × 844. Both Chromium tests passed in 18.0 seconds and typecheck passed. Visual approval is pending.
+2026-11-24 — Revised nut placement awaits visual approval. The nut measured 23.89 CSS px wide at 1280 × 800 and 9.77 CSS px at 390 × 844. The wood and nut shared their left edge and all six strings crossed the nut. Both Chromium tests passed in 16.5 seconds and typecheck passed.
+
+2026-11-24 — Adjusted the six non-scaling silver strokes from 1 px at high E to 3.5 px at low E in 0.5 px steps. Captured the development preview at 1280 × 800 and 390 × 844. Both Chromium tests passed in 18.0 seconds and typecheck passed. The developer approved the strings.
+
+2026-11-24 — Added the warm ivory nut from x=101 to x=109. Inspected desktop (1280 × 800) and phone (390 × 844) screenshots. Chromium verified the computed fill, flush top and bottom edges, and each string as the topmost shape at its crossing. The existing placement and string checks passed. `npm run test:e2e -- e2e/home.spec.ts` passed both tests in 18.0 seconds. `npm run typecheck` passed.
 
 2026-11-24T09:51Z — Inspected full-page screenshots at 1280 × 800 and 390 × 844. Both show six separate strokes across the wood. The five gaps are 32 SVG units and the outer string centers are 20 units from the wood edges. `npm run test:e2e -- e2e/home.spec.ts` passed both Chromium tests in 17.3 seconds, including the existing placement checks. `npm run typecheck` passed. The initial production build failed resolving a domain runtime import before browser startup. The static drawing now uses the domain string type directly.
 
