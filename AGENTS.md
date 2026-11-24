@@ -50,11 +50,21 @@ Reference the actual repository plan path when one exists. A same-chat handoff m
 
 Exploratory discussions and plans with unresolved consequential choices do not need a coding prompt yet; identify the decisions needed to finalize them. Small direct implementation requests do not require a separate planning round. Producing a plan or proposed prompt does not authorize implementation. The user's implementation request supplies that authority; do not require them to copy the prompt or reconfirm work they have already authorized. Always respect the active mode's execution limits.
 
+### UI milestone handoffs
+
+For mentor-led UI work, use the [UI/UX mentor workflow](.agents/skills/ui-ux-mentor/SKILL.md) and the [UI roadmap](docs/ui/README.md). The mentor gives the developer one copyable prompt for the next independently verifiable task. Name the relevant ExecPlan, the exact slice to implement, its observable acceptance criteria and the review checkpoint. A plan covering several milestones provides context for that slice.
+
+The developer sends the prompt to the implementation agent. Complete and verify that task, report the evidence, and stop at its boundary. At the checkpoint, the mentor and developer review the actual diff and rendered behavior. Wait for the developer's explicit approval before advancing to the next task.
+
 ## Commands and verification
 
-Application commands are defined in `package.json`: `npm run dev`, `npm run build`, `npm run start`, `npm run typecheck`, and `npm test`. Discover any additional commands from actual configuration, documentation, and the execution environment. Do not invent commands, tools, dependencies, or existing project capabilities. If an authorized task introduces tooling, distinguish proposed setup from tools that already exist.
+Application commands in [package.json](package.json) include `npm run dev`, `npm run build`, `npm run start`, `npm run typecheck`, `npm test` (Vitest) and `npm run test:e2e` (Playwright). Discover any additional commands from actual configuration, documentation, and the execution environment. Do not invent commands, tools, dependencies, or existing project capabilities. If an authorized task introduces tooling, distinguish proposed setup from tools that already exist.
 
 Verify behavior in proportion to risk. Prefer focused deterministic tests for domain logic, valuable regression coverage for bugs, and direct user-facing checks when presentation or interaction changes. Broaden testing when failures or unresolved risk justify it. Later agent evaluation does not replace ordinary tests.
+
+For UI changes, test pure geometry and domain rules with Vitest. For a repeatable browser criterion, add or update a focused Playwright spec in `e2e/` and run `npm run test:e2e -- <spec-path>` with its actual path. Exercise the relevant viewport or input method and assert the visible or accessible outcome. For example, if keyboard navigation must reveal a whole fretboard cell, verify both focus and the cell's full bounds inside the scroll area. See the [browser setup and trace commands](README.md#getting-started).
+
+Report the command and observed result. On failure, inspect the failing step and the retained trace when available. Identify any criterion still unverified. For judgments such as label legibility, show the developer the rendered UI at the intended size during review.
 
 Review the changes and relevant Git status before reporting completion. Inspect newly created files directly because an ordinary unstaged diff omits untracked files. Report what changed, what was actually checked, the results, and remaining uncertainty. Do not report an unrun check as passing.
 
