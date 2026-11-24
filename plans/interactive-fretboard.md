@@ -15,7 +15,8 @@ A guitarist will be able to inspect the sound at any location on a six-string ne
 - [x] 2026-11-24T09:06Z — Adjusted the rectangle to sit centered near the bottom. The heading keeps its original width and top spacing. The space between them grows with the viewport height.
 - [x] 2026-11-24T09:51Z — Developer approved the bottom-centered placement. Added six silver strings using physical positions 1–6.
 - [x] Developer approved the six strings and their thickness progression.
-- [ ] Milestone 1 — IN PROGRESS. The ivory nut is ready for developer visual review.
+- [x] Developer approved the ivory nut at x=20–52. Added six tuning labels derived from the configured registered pitches.
+- [ ] Milestone 1 — IN PROGRESS. Review the labels, string spacing and board width at desktop and phone sizes.
 - [ ] Milestone 2 — NOT STARTED. Implement free selection and inspection; complete the interaction review with the developer.
 
 ## Surprises & Discoveries
@@ -38,6 +39,8 @@ The first browser runs stopped during the production build. Turbopack reported a
 
 ## Outcomes & Retrospective
 
+
+2026-11-24 — Inspected the complete tuning column at normal zoom. At 1280 × 800 the font, circle diameter and row spacing measured 13.44, 22.40 and 23.89 CSS px. At 390 × 844 they measured 13.27, 22.12 and 23.59 CSS px. A 920 px minimum SVG width retains phone legibility. The board scrolls locally from the labels to the far edge. Desktop wood placement is preserved by widening the viewBox equally on both sides and increasing the desktop SVG width proportionally. The initial 936 px minimum caused a 4.16 px desktop gutter mismatch in the Playwright trace. After correction both Chromium tests passed in 17.4 seconds and typecheck passed.
 
 2026-11-24 — Revised nut placement awaits visual approval. The nut measured 23.89 CSS px wide at 1280 × 800 and 9.77 CSS px at 390 × 844. The wood and nut shared their left edge and all six strings crossed the nut. Both Chromium tests passed in 16.5 seconds and typecheck passed.
 
