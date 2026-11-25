@@ -13,6 +13,16 @@ const fretBoundaries = calculateFretWireBoundaries(
   FRET_COUNT,
   FINAL_FRET_WIDTH_RATIO,
 );
+const landmarkFrets = [3, 5, 7, 9, 12, 15, 17] as const;
+const landmarkPositions = landmarkFrets.reduce<{ fret: number; x: number; y: number }[]>((positions, fret) => {
+  const left = fretBoundaries[fret - 1]!;
+  const right = fretBoundaries[fret]!;
+  const center = (left + right) / 2;
+
+  positions.push({ fret, x: center, y: fret === 12 ? 88 : 120 });
+  if (fret === 12) positions.push({ fret, x: center, y: 152 });
+  return positions;
+}, []);
 
 const strings: readonly FretboardString[] = [
   { id: 1, position: 1, openPitch: 52 }, // E4
@@ -34,12 +44,16 @@ function Fretboard({ portrait = false }: { portrait?: boolean }) {
           <line key={index} data-fret-wire={index}
             x1={x} x2={x} y1="20" y2="220" stroke="#B8B6B2" strokeWidth="1.5" vectorEffect="non-scaling-stroke" />
         ))}
+        {landmarkPositions.map(({ fret, x, y }, index) => (
+          <circle key={`${fret}-${index}`} data-landmark-fret={fret}
+            cx={x} cy={y} r="7" fill="#D5C4A1" />
+        ))}
         {strings.map(({ id, position, openPitch }) => {
           const y = 40 + (position - 1) * 32;
           const strokeWidth = 1 + (position - 1) * 0.5;
           return (
             <g key={id}>
-              <circle cx="-2" cy={y} r="15" fill="#41362E" />
+              <circle data-open-string-label cx="-2" cy={y} r="15" fill="#41362E" />
               <text x="-2" y={y} textAnchor="middle" dominantBaseline="central" fontSize="18" fill="white">
                 {formatRegisteredNote(noteFromRegisteredPitch(openPitch, "sharps"))}
               </text>

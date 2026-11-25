@@ -44,9 +44,30 @@ async function checkNeck(page: Page, width: number, height: number) {
     expect(Math.abs(bounds!.y - shape.top)).toBeLessThan(0.5);
     expect(Math.abs(bounds!.height - shape.height)).toBeLessThan(0.5);
   }
+  const landmarks = svg.locator("[data-landmark-fret]");
+  await expect(landmarks).toHaveCount(8);
+  const landmarkFrets = [3, 5, 7, 9, 12, 12, 15, 17];
+  const landmarkBounds = await landmarks.evaluateAll(elements =>
+    elements.map(element => ({
+      fret: Number(element.getAttribute("data-landmark-fret")),
+      bounds: element.getBoundingClientRect().toJSON(),
+    })));
+  for (const [index, { fret, bounds }] of landmarkBounds.entries()) {
+    expect(fret).toBe(landmarkFrets[index]);
+    const x = (wireBounds[fret - 1]!.x + wireBounds[fret]!.x) / 2;
+    expect(Math.abs(bounds.x + bounds.width / 2 - x)).toBeLessThan(0.75);
+    expect(bounds.width).toBeLessThan(16 * scale);
+    expect(bounds.height).toBeLessThan(16 * scale);
+  }
+  const twelfthPair = landmarkBounds.slice(4, 6).map(({ bounds }) => bounds);
+  expect(Math.abs(twelfthPair[0]!.x - twelfthPair[1]!.x)).toBeLessThan(0.5);
+  if (width >= 1280) {
+    expect(Math.abs(twelfthPair[0]!.y + twelfthPair[0]!.height / 2 - (frame.top + 88 * scale))).toBeLessThan(0.75);
+    expect(Math.abs(twelfthPair[1]!.y + twelfthPair[1]!.height / 2 - (frame.top + 152 * scale))).toBeLessThan(0.75);
+  }
   const labels = svg.locator("text");
   await expect(labels).toHaveText(["E4", "B3", "G3", "D3", "A2", "E2"]);
-  await expect(svg.locator("circle")).toHaveCount(6);
+  await expect(svg.locator("[data-open-string-label]")).toHaveCount(6);
   let previousBottom = 0;
   for (const [index, y] of [40, 72, 104, 136, 168, 200].entries()) {
     const line = svg.locator(`[data-string-id="${index + 1}"]`);
@@ -57,7 +78,7 @@ async function checkNeck(page: Page, width: number, height: number) {
     expect(Math.abs(bounds.left - shape.left)).toBeLessThan(0.5);
     expect(Math.abs(bounds.right - shape.right)).toBeLessThan(0.5);
     expect(Math.abs(bounds.top - frame.top - y * scale)).toBeLessThan(0.5);
-    const circle = svg.locator("circle").nth(index);
+    const circle = svg.locator("[data-open-string-label]").nth(index);
     await expect(circle).toBeInViewport({ ratio: 1 });
     const disk = await circle.evaluate(el => el.getBoundingClientRect().toJSON());
     const text = await labels.nth(index).evaluate(el => el.getBoundingClientRect().toJSON());
@@ -119,14 +140,14 @@ test("portrait phone board starts at the nut and scrolls to the complete final f
     expect(Math.abs(direction.x)).toBeLessThan(0.001);
     expect(direction.y).toBeGreaterThan(0);
   }
-  for (const label of await svg.locator("circle").all()) await expect(label).toBeInViewport({ ratio: 1 });
+  for (const label of await svg.locator("[data-open-string-label]").all()) await expect(label).toBeInViewport({ ratio: 1 });
   const nut = await svg.locator('rect[fill="#E8DCC2"]').boundingBox();
   const wood = await svg.locator('rect[fill="#4A2C25"]').boundingBox();
   expect(Math.abs(nut!.y - wood!.y)).toBeLessThan(0.5);
   expect(nut!.width).toBeCloseTo(wood!.width);
   let previousLeft = 390;
   for (let index = 0; index < 6; index += 1) {
-    const circle = await svg.locator("circle").nth(index).boundingBox();
+    const circle = await svg.locator("[data-open-string-label]").nth(index).boundingBox();
     const text = await svg.locator("text").nth(index).boundingBox();
     const string = svg.locator("[data-string-id]").nth(index);
     const line = await string.evaluate(el => el.getBoundingClientRect().toJSON());
@@ -146,4 +167,37 @@ test("portrait phone board starts at the nut and scrolls to the complete final f
     expect(wire!.width).toBeGreaterThan(100);
   }
   expect(await page.locator("html").evaluate(el => el.scrollWidth)).toBe(390);
+});
+
+test("fretboard landmarks sit in their spaces at desktop and landscape phone sizes", async ({ page }) => {
+  for (const viewport of [{ width: 1280, height: 800 }, { width: 844, height: 390 }]) {
+    await page.setViewportSize(viewport);
+    await page.goto("/");
+    const svg = page.getByRole("img", { name: "Fretboard neck" });
+    const landmarks = svg.locator("[data-landmark-fret]");
+    await expect(landmarks).toHaveCount(8);
+    const wires = await svg.locator("[data-fret-wire]").evaluateAll(elements =>
+      elements.map(element => element.getBoundingClientRect().toJSON()));
+    const dots = await landmarks.evaluateAll(elements =>
+      elements.map(element => ({
+        fret: Number(element.getAttribute("data-landmark-fret")),
+        bounds: element.getBoundingClientRect().toJSON(),
+      })));
+    expect(dots.map(dot => dot.fret)).toEqual([3, 5, 7, 9, 12, 12, 15, 17]);
+    for (const dot of dots) {
+      const centerX = dot.bounds.x + dot.bounds.width / 2;
+      const firstBoundary = wires[dot.fret - 1]!.x;
+      const secondBoundary = wires[dot.fret]!.x;
+      expect(centerX).toBeGreaterThan(firstBoundary);
+      expect(centerX).toBeLessThan(secondBoundary);
+      expect(dot.bounds.width).toBeLessThan(Math.abs(secondBoundary - firstBoundary) * 0.3);
+    }
+    const pair = dots.slice(4, 6).map(dot => dot.bounds.y + dot.bounds.height / 2);
+    const stringRows = await svg.locator("[data-string-id]").evaluateAll(elements =>
+      elements.map(element => element.getBoundingClientRect().y));
+    expect(Math.abs(pair[0]! - (stringRows[1]! + stringRows[2]!) / 2)).toBeLessThan(0.75);
+    expect(Math.abs(pair[1]! - (stringRows[3]! + stringRows[4]!) / 2)).toBeLessThan(0.75);
+    expect(Math.abs(dots[4]!.bounds.x - dots[5]!.bounds.x)).toBeLessThan(0.5);
+    await page.screenshot({ path: `.local/neck-review/landmarks-${viewport.width}.png` });
+  }
 });

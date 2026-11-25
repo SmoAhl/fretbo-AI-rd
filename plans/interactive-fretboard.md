@@ -16,7 +16,8 @@ A guitarist will be able to inspect the sound at any location on a six-string ne
 - [x] 2026-11-24T09:51Z — Developer approved the bottom-centered placement. Added six silver strings using physical positions 1–6.
 - [x] Developer approved the six strings and their thickness progression.
 - [x] Developer approved the ivory nut at x=20–52. Added six tuning labels derived from the configured registered pitches.
-- [ ] Milestone 1 — IN PROGRESS. Review fret spacing, wire visibility and the portrait phone view. Tuning labels are accepted for now.
+- [x] Developer accepted fret wires and tuning labels. UI v1 phone review uses landscape orientation.
+- [ ] Milestone 1 — IN PROGRESS. Landmark dots await developer review.
 - [ ] Milestone 2 — NOT STARTED. Implement free selection and inspection; complete the interaction review with the developer.
 
 ## Surprises & Discoveries
@@ -44,6 +45,8 @@ Deferred follow-up - Label octave number toggle belongs to the later label-prefe
 2026-11-23, project owner: Use one keyboard tab stop and retain each selection's physical identity. This makes 108 locations navigable and allows independent selections on the same string or at the same sounding pitch.
 
 ## Outcomes & Retrospective
+
+2026-11-25 — Added warm landmark dots at frets 3, 5, 7, 9, 12, 15 and 17, centered from the shared fret boundaries. Single dots sit at the midpoint of strings 3 and 4. At fret 12, the pair sits on strings 2 and 5 per developer direction. Dots use r=7 SVG units, leaving visible clearance from the middle strings. The open-string and landmark circles now have distinct data attributes so tests and future code can select each purpose explicitly. Inspected desktop 1280 × 800 and landscape phone 844 × 390 screenshots. `npm run test:e2e -- e2e/home.spec.ts` passed all 4 tests in 20.2 seconds, `npm run typecheck` passed, and `git diff --check` passed. Screenshots are .local/neck-review/landmarks-final-1280.png and landmarks-final-844.png. Visual review is pending.
 
 2026-11-25 — Rotated tuning text with the portrait fretboard and inspected the 390 × 844 screenshot. All 3 home browser tests passed in 20.3 seconds, including text orientation; typecheck passed. UI v1 landscape phone use is documented in the roadmap.
 
