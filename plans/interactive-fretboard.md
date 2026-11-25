@@ -16,7 +16,7 @@ A guitarist will be able to inspect the sound at any location on a six-string ne
 - [x] 2026-11-24T09:51Z — Developer approved the bottom-centered placement. Added six silver strings using physical positions 1–6.
 - [x] Developer approved the six strings and their thickness progression.
 - [x] Developer approved the ivory nut at x=20–52. Added six tuning labels derived from the configured registered pitches.
-- [ ] Milestone 1 — IN PROGRESS. Review the labels, string spacing and board width at desktop and phone sizes.
+- [ ] Milestone 1 — IN PROGRESS. Review fret spacing, wire visibility and the portrait phone view. Tuning labels are accepted for now.
 - [ ] Milestone 2 — NOT STARTED. Implement free selection and inspection; complete the interaction review with the developer.
 
 ## Surprises & Discoveries
@@ -26,6 +26,12 @@ The first browser runs stopped during the production build. Turbopack reported a
 
 ## Decision Log
 
+
+2026-11-25, project owner — UI v1 treats phone use as landscape, as recorded in the UI roadmap. For the current portrait review prototype, tuning text rotates with the fretboard. Adapting the phone workbench and its acceptance checks to landscape remains work for a subsequent authorized slice.
+
+2026-11-24 - Use FINAL_FRET_WIDTH_RATIO = 0.84 for 17 linearly narrowing spaces. Boundaries run from the nut edge at x=52 to the wood end at x=1180. Phone orientation follows the developer request, with the nut above the fretted neck. A bottom-aligned 72dvh vertical scroll area retains readable labels at 0.75 scale. The complete final space is accessible by scrolling.
+
+Deferred follow-up - Label octave number toggle belongs to the later label-preference step and requires that step's implementation authorization.
 
 2026-11-24, project owner: Align the nut with the wood's left edge at x=20 and widen it from 8 to 32 SVG units. The fretted area begins at x=52. Future circular open-string tuning labels belong to the left of the nut.
 
@@ -39,6 +45,14 @@ The first browser runs stopped during the production build. Turbopack reported a
 
 ## Outcomes & Retrospective
 
+2026-11-25 — Rotated tuning text with the portrait fretboard and inspected the 390 × 844 screenshot. All 3 home browser tests passed in 20.3 seconds, including text orientation; typecheck passed. UI v1 landscape phone use is documented in the roadmap.
+
+2026-11-25 — Final review checks passed. The focused Vitest test passed (1 test), Playwright passed all 3 home tests in 19.7 seconds, and typecheck passed. Desktop checks cover all wire extents; phone checks cover upright label alignment and the complete final fret after vertical scrolling. Inspected retained traces for stroke-bounds assertion failures and corrected measurements to use line center geometry. Removed stray JSX text from the intermediate edit. Final screenshots are .local/neck-review/final-1280.png, final-390.png and final-phone-end.png. The phone scroll area ends 4 CSS px above the viewport bottom. Visual approval remains pending.
+
+
+2026-11-24 - Corrected the missing nut-side boundary, final wire placement and phone orientation. The earlier scroll failure was caused by the test scrolling to the end before asserting an initial scroll position of zero. Separate desktop and portrait assertions now verify the correct axes and access to the entire final space. Chromium passed 3 tests in 17.3 seconds; typecheck and the focused Vitest case passed. Developer visual approval is pending.
+
+Rendered fret widths for 1, 12 and 17 were 53.85 / 47.92 / 45.23 CSS px at 1280 - 800 and 54.09 / 48.14 / 45.44 CSS px at 390 - 844 (measured vertically). A temporary browser-only SVG width giving a 1071 CSS px fretted span produced 68.47 / 60.94 / 57.52 px, matching the requested approximate references. Screenshots are stored locally in .local/neck-review/frets-1280.png, frets-390.png and frets-phone-end.png.
 
 2026-11-24 — Inspected the complete tuning column at normal zoom. At 1280 × 800 the font, circle diameter and row spacing measured 13.44, 22.40 and 23.89 CSS px. At 390 × 844 they measured 13.27, 22.12 and 23.59 CSS px. A 920 px minimum SVG width retains phone legibility. The board scrolls locally from the labels to the far edge. Desktop wood placement is preserved by widening the viewBox equally on both sides and increasing the desktop SVG width proportionally. The initial 936 px minimum caused a 4.16 px desktop gutter mismatch in the Playwright trace. After correction both Chromium tests passed in 17.4 seconds and typecheck passed.
 

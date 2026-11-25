@@ -4,6 +4,8 @@ The first workbench lets a guitarist explore physical locations, individual note
 
 ## Instrument and interaction
 
+UI v1 assumes phones are used in landscape orientation. Design and acceptance review of the phone workbench use a horizontal viewport. The current portrait fretboard is an intermediate review prototype; its transition to the landscape phone workbench is tracked in the [ExecPlan](../../plans/interactive-fretboard.md).
+
 Start with an empty, dark rosewood-inspired neck, metallic strings and fret wires, standard six-string tuning, high E at the top and the nut on the left. The open column (0) plus frets 1–17 give 108 locations. Show each string's tuning at the nut even when its open location is highlighted. Offer numbers above the fret spaces, landmark dots, or fret annotations off.
 
 Fret spaces narrow progressively. Use a configurable presentation taper, preferably gentler than physical guitar proportions. Choose it by reviewing the narrowest fret with the widest supported label, including accidental and octave. Keep marker and text size consistent. Derive each marker's center and the full cell's hit area from the same wire and string geometry. Allow horizontal scrolling when readable labels, clearance or touch targets require more width than the screen provides.

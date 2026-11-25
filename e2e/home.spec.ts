@@ -31,13 +31,25 @@ async function checkNeck(page: Page, width: number, height: number) {
   expect(await nut.evaluate((el, x) =>
     el.ownerDocument.elementFromPoint(x, el.getBoundingClientRect().top + 2) === el, middleX)).toBe(true);
   const lines = svg.locator("line");
-  await expect(lines).toHaveCount(6);
+  await expect(lines).toHaveCount(24);
+  const fretWires = svg.locator("[data-fret-wire]");
+  await expect(fretWires).toHaveCount(18);
+  const wireBounds = await fretWires.evaluateAll(elements =>
+    elements.map(element => element.getBoundingClientRect().toJSON()));
+  expect(Math.abs(wireBounds[0].x - bone.right)).toBeLessThan(0.5);
+  expect(Math.abs(wireBounds[17].x - shape.right)).toBeLessThan(0.5);
+  for (const wire of await fretWires.all()) {
+    await expect(wire).toHaveCSS("stroke-width", "1.5px");
+    const bounds = await wire.evaluate(el => el.getBoundingClientRect().toJSON());
+    expect(Math.abs(bounds!.y - shape.top)).toBeLessThan(0.5);
+    expect(Math.abs(bounds!.height - shape.height)).toBeLessThan(0.5);
+  }
   const labels = svg.locator("text");
   await expect(labels).toHaveText(["E4", "B3", "G3", "D3", "A2", "E2"]);
   await expect(svg.locator("circle")).toHaveCount(6);
   let previousBottom = 0;
   for (const [index, y] of [40, 72, 104, 136, 168, 200].entries()) {
-    const line = lines.nth(index);
+    const line = svg.locator(`[data-string-id="${index + 1}"]`);
     await expect(line).toHaveCSS("stroke", "rgb(192, 192, 192)");
     await expect(line).toHaveCSS("stroke-width", `${1 + index * 0.5}px`);
     await expect(line).toHaveCSS("vector-effect", "non-scaling-stroke");
@@ -87,17 +99,51 @@ test("the rosewood neck stays centered near the bottom as the viewport changes",
   expect(Math.abs(taller.width - desktop.width)).toBeLessThan(0.5);
   expect(Math.abs(taller.bottomGap - desktop.bottomGap)).toBeLessThan(0.5);
 
-  const phone = await checkNeck(page, 390, 844);
+});
+
+test("portrait phone board starts at the nut and scrolls to the complete final fret", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/");
   const svg = page.getByRole("img", { name: "Fretboard neck" });
-  const scrollArea = svg.locator("..");
-  const farEdge = () => svg.locator('rect[fill="#4A2C25"]').evaluate(el => el.getBoundingClientRect().right);
-  const viewportRight = await scrollArea.evaluate(el => el.getBoundingClientRect().right);
-  expect(await scrollArea.evaluate(el => el.scrollLeft)).toBe(0);
-  expect(await farEdge()).toBeGreaterThan(viewportRight);
-  await scrollArea.evaluate(el => { el.scrollLeft = el.scrollWidth; });
-  expect(await farEdge()).toBeLessThanOrEqual(viewportRight);
-  const heading = page.getByRole("heading", { name: "FretboAIrd", level: 1 });
-  await expect(heading).toBeInViewport({ ratio: 1 });
-  expect(await heading.evaluate(el => el.getBoundingClientRect().bottom)).toBeLessThan(phone.top);
-  expect(await page.locator("html").evaluate(el => el.scrollWidth)).toBeLessThanOrEqual(390);
+  const area = page.getByRole("region", { name: "Fretboard scroll area" });
+  const box = await area.boundingBox();
+  expect(box).not.toBeNull();
+  expect(Math.abs(box!.y + box!.height - 840)).toBeLessThan(1);
+  expect(await area.evaluate(el => el.scrollTop)).toBe(0);
+  await expect(svg.locator("text")).toHaveText(["E4", "B3", "G3", "D3", "A2", "E2"]);
+  for (const label of await svg.locator("text").all()) {
+    const direction = await label.evaluate(el => {
+      const matrix = (el as unknown as { getScreenCTM(): { a: number; b: number } }).getScreenCTM();
+      return { x: matrix.a, y: matrix.b };
+    });
+    expect(Math.abs(direction.x)).toBeLessThan(0.001);
+    expect(direction.y).toBeGreaterThan(0);
+  }
+  for (const label of await svg.locator("circle").all()) await expect(label).toBeInViewport({ ratio: 1 });
+  const nut = await svg.locator('rect[fill="#E8DCC2"]').boundingBox();
+  const wood = await svg.locator('rect[fill="#4A2C25"]').boundingBox();
+  expect(Math.abs(nut!.y - wood!.y)).toBeLessThan(0.5);
+  expect(nut!.width).toBeCloseTo(wood!.width);
+  let previousLeft = 390;
+  for (let index = 0; index < 6; index += 1) {
+    const circle = await svg.locator("circle").nth(index).boundingBox();
+    const text = await svg.locator("text").nth(index).boundingBox();
+    const string = svg.locator("[data-string-id]").nth(index);
+    const line = await string.evaluate(el => el.getBoundingClientRect().toJSON());
+    await expect(string).toHaveCSS("stroke-width", `${1 + index * 0.5}px`);
+    expect(circle!.x + circle!.width).toBeLessThan(previousLeft);
+    expect(circle!.y + circle!.height).toBeLessThan(nut!.y);
+    expect(Math.abs(circle!.x + circle!.width / 2 - line!.x)).toBeLessThan(0.5);
+    expect(Math.abs(text!.x + text!.width / 2 - line!.x)).toBeLessThan(0.5);
+    expect(Math.abs(text!.y + text!.height / 2 - circle!.y - circle!.height / 2)).toBeLessThan(1);
+    previousLeft = circle!.x;
+  }
+  await area.evaluate(el => { el.scrollTop = el.scrollHeight; });
+  for (const fret of [16, 17]) {
+    const wire = await svg.locator(`[data-fret-wire="${fret}"]`).boundingBox();
+    expect(wire!.y).toBeGreaterThan(box!.y);
+    expect(wire!.y).toBeLessThan(box!.y + box!.height);
+    expect(wire!.width).toBeGreaterThan(100);
+  }
+  expect(await page.locator("html").evaluate(el => el.scrollWidth)).toBe(390);
 });

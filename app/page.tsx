@@ -2,6 +2,17 @@ import type { FretboardString } from "../domain/fretboard/fretboard.js";
 
 import { formatRegisteredNote } from "@/domain/music-theory/pitch-pitch-classes-and-spelling/note-text";
 import { noteFromRegisteredPitch } from "@/domain/music-theory/pitch-pitch-classes-and-spelling/spelling-selection";
+import { calculateFretWireBoundaries, FINAL_FRET_WIDTH_RATIO, FRET_COUNT } from "./fret-wire-layout";
+
+const fretStart = 52;
+const fretSpan = 1180 - fretStart;
+const firstFretSpaceWidth = (2 * fretSpan) / (FRET_COUNT * (1 + FINAL_FRET_WIDTH_RATIO));
+const fretBoundaries = calculateFretWireBoundaries(
+  fretStart,
+  firstFretSpaceWidth,
+  FRET_COUNT,
+  FINAL_FRET_WIDTH_RATIO,
+);
 
 const strings: readonly FretboardString[] = [
   { id: 1, position: 1, openPitch: 52 }, // E4
@@ -12,34 +23,46 @@ const strings: readonly FretboardString[] = [
   { id: 6, position: 6, openPitch: 28 }, // E2
 ];
 
+function Fretboard({ portrait = false }: { portrait?: boolean }) {
+  return (
+    <svg viewBox={portrait ? "0 0 240 1248" : "-24 0 1248 240"} role="img" aria-label="Fretboard neck"
+      className={portrait ? "mx-auto block h-[936px] w-[180px]" : "block h-auto w-full"}>
+      <g transform={portrait ? "translate(240 24) rotate(90)" : undefined}>
+        <rect x="20" y="20" width="1160" height="200" fill="#4A2C25" />
+        <rect x="20" y="20" width="32" height="200" fill="#E8DCC2" />
+        {fretBoundaries.map((x, index) => (
+          <line key={index} data-fret-wire={index}
+            x1={x} x2={x} y1="20" y2="220" stroke="#B8B6B2" strokeWidth="1.5" vectorEffect="non-scaling-stroke" />
+        ))}
+        {strings.map(({ id, position, openPitch }) => {
+          const y = 40 + (position - 1) * 32;
+          const strokeWidth = 1 + (position - 1) * 0.5;
+          return (
+            <g key={id}>
+              <circle cx="-2" cy={y} r="15" fill="#41362E" />
+              <text x="-2" y={y} textAnchor="middle" dominantBaseline="central" fontSize="18" fill="white">
+                {formatRegisteredNote(noteFromRegisteredPitch(openPitch, "sharps"))}
+              </text>
+              <line data-string-id={id} x1="20" x2="1180" y1={y} y2={y}
+                stroke="silver" strokeWidth={strokeWidth} vectorEffect="non-scaling-stroke" />
+            </g>
+          );
+        })}
+      </g>
+    </svg>
+  );
+}
+
 export default function Home() {
   return (
     <main className="flex min-h-dvh flex-col items-center pt-16 pb-1">
       <h1 className="w-full max-w-2xl px-6 text-3xl font-semibold">FretboAIrd</h1>
-      <div className="mt-auto w-[94%] overflow-x-auto md:w-[72.8%]">
-        <svg
-          viewBox="-24 0 1248 240"
-          role="img"
-          aria-label="Fretboard neck"
-          className="block h-auto w-full min-w-[920px]"
-        >
-          <rect x="20" y="20" width="1160" height="200" fill="#4A2C25" />
-          <rect x="20" y="20" width="32" height="200" fill="#E8DCC2" />
-          {strings.map(({ id, position, openPitch }) => {
-            const y = 40 + (position - 1) * 32;
-            const strokeWidth = 1 + (position - 1) * 0.5;
-            return (
-              <g key={id}>
-                <circle cx="-2" cy={y} r="15" fill="#41362E" />
-                <text x="-2" y={y} textAnchor="middle" dominantBaseline="central" fontSize="18" fill="white">
-                  {formatRegisteredNote(noteFromRegisteredPitch(openPitch, "sharps"))}
-                </text>
-                <line x1="20" x2="1180" y1={y} y2={y}
-                  stroke="silver" strokeWidth={strokeWidth} vectorEffect="non-scaling-stroke" />
-              </g>
-            );
-          })}
-        </svg>
+      <div className="mt-auto hidden w-[72.8%] md:block">
+        <Fretboard />
+      </div>
+      <div aria-label="Fretboard scroll area" role="region" tabIndex={0}
+        className="mt-auto h-[72dvh] w-[94%] overflow-y-auto md:hidden">
+        <Fretboard portrait />
       </div>
     </main>
   );
