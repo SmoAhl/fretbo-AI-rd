@@ -201,3 +201,65 @@ test("fretboard landmarks sit in their spaces at desktop and landscape phone siz
     await page.screenshot({ path: `.local/neck-review/landmarks-${viewport.width}.png` });
   }
 });
+
+test("the sparse note review fixture is opt-in and centers labels in their cells", async ({ page }) => {
+  const viewports = [{ width: 1280, height: 800 }, { width: 844, height: 390 }];
+  for (const viewport of viewports) {
+    await page.setViewportSize(viewport);
+    await page.goto("/");
+    const svg = page.getByRole("img", { name: "Fretboard neck" });
+    await expect(svg.locator("[data-note-label]")).toHaveCount(0);
+    await page.screenshot({ path: `.local/neck-review/notes-empty-${viewport.width}.png`, fullPage: true });
+
+    await page.goto("/?review=sparse");
+    const noteLabels = svg.locator("[data-note-label]");
+    await expect(noteLabels).toHaveCount(11);
+    await expect(svg.locator("[data-open-string-label]")).toHaveCount(0);
+    await expect(noteLabels.locator("text")).toHaveText([
+      "E4", "E2", "F4", "F2", "G4", "G2", "E5", "E3", "A5", "A3", "E♭4",
+    ]);
+    const wires = await svg.locator("[data-fret-wire]").evaluateAll(elements =>
+      elements.map(element => element.getBoundingClientRect().toJSON()));
+    const nutLeft = await svg.locator('rect[fill="#E8DCC2"]').evaluate(element =>
+      element.getBoundingClientRect().left);
+    const frame = await svg.evaluate(element => element.getBoundingClientRect().toJSON());
+    const stringRows = await svg.locator("line[data-string-id]").evaluateAll(elements =>
+      Object.fromEntries(elements.map(element => [
+        Number(element.getAttribute("data-string-id")),
+        element.getBoundingClientRect().y + element.getBoundingClientRect().height / 2,
+      ])));
+    const labels = await noteLabels.evaluateAll(elements => elements.map(element => ({
+      stringId: Number(element.getAttribute("data-note-string-id")),
+      fret: Number(element.getAttribute("data-note-fret")),
+      circle: element.querySelector("circle")!.getBoundingClientRect().toJSON(),
+      text: element.querySelector("text")!.getBoundingClientRect().toJSON(),
+    })));
+    expect(labels.map(({ stringId, fret }) => [Number(stringId), fret])).toEqual([
+      [1, 0], [6, 0], [1, 1], [6, 1], [1, 3], [6, 3],
+      [1, 12], [6, 12], [1, 17], [6, 17], [2, 5],
+    ]);
+    let minimumNutOrWireClearance = Number.POSITIVE_INFINITY;
+    let labelDiameter = 0;
+    let textHeight = 0;
+    const clearanceByFret = new Map<number, number>();
+    for (const label of labels) {
+      const centerX = label.circle.x + label.circle.width / 2;
+      const centerY = label.circle.y + label.circle.height / 2;
+      const left = label.fret === 0 ? frame.x : wires[label.fret - 1]!.x + wires[label.fret - 1]!.width / 2;
+      const right = label.fret === 0 ? nutLeft : wires[label.fret]!.x + wires[label.fret]!.width / 2;
+      expect(Math.abs(centerX - (left + right) / 2)).toBeLessThan(0.75);
+      expect(Math.abs(centerY - stringRows[label.stringId]!)).toBeLessThan(0.75);
+      const edgeClearance = Math.min(centerX - left, right - centerX) - label.circle.width / 2 - 0.75;
+      minimumNutOrWireClearance = Math.min(minimumNutOrWireClearance, edgeClearance);
+      clearanceByFret.set(label.fret, Math.min(clearanceByFret.get(label.fret) ?? Number.POSITIVE_INFINITY, edgeClearance));
+      labelDiameter = label.circle.width;
+      textHeight = label.text.height;
+      expect(edgeClearance).toBeGreaterThan(0);
+      expect(label.text.width).toBeGreaterThan(0);
+      expect(label.text.height).toBeGreaterThan(7);
+    }
+    for (const fret of [1, 12, 17]) expect(clearanceByFret.get(fret)).toBeGreaterThan(0);
+    console.log(`Sparse notes ${viewport.width}x${viewport.height}: circle ${labelDiameter.toFixed(2)}px, text box ${textHeight.toFixed(2)}px; minimum nut/wire clearance ${minimumNutOrWireClearance.toFixed(2)}px; frets 1/12/17 ${[1, 12, 17].map(fret => clearanceByFret.get(fret)!.toFixed(2)).join("/")}px.`);
+    await page.screenshot({ path: `.local/neck-review/notes-sparse-${viewport.width}.png`, fullPage: true });
+  }
+});

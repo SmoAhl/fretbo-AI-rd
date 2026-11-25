@@ -3,6 +3,8 @@ import type { FretboardString } from "../domain/fretboard/fretboard.js";
 import { formatRegisteredNote } from "@/domain/music-theory/pitch-pitch-classes-and-spelling/note-text";
 import { noteFromRegisteredPitch } from "@/domain/music-theory/pitch-pitch-classes-and-spelling/spelling-selection";
 import { calculateFretWireBoundaries, FINAL_FRET_WIDTH_RATIO, FRET_COUNT } from "./fret-wire-layout";
+import { positionNoteLabels } from "./note-label-layout";
+import { sparseNoteFixture } from "./sparse-note-fixture";
 
 const fretStart = 52;
 const fretSpan = 1180 - fretStart;
@@ -32,8 +34,11 @@ const strings: readonly FretboardString[] = [
   { id: 5, position: 5, openPitch: 33 }, // A2
   { id: 6, position: 6, openPitch: 28 }, // E2
 ];
+const stringRows = new Map(strings.map(({ id, position }) => [id, 40 + (position - 1) * 32]));
+const openStringCenter = (-24 + 20) / 2;
+const sparseNotePositions = positionNoteLabels(sparseNoteFixture, stringRows, fretBoundaries, openStringCenter);
 
-function Fretboard({ portrait = false }: { portrait?: boolean }) {
+function Fretboard({ portrait = false, showSparseNotes = false }: { portrait?: boolean; showSparseNotes?: boolean }) {
   return (
     <svg viewBox={portrait ? "0 0 240 1248" : "-24 0 1248 240"} role="img" aria-label="Fretboard neck"
       className={portrait ? "mx-auto block h-[936px] w-[180px]" : "block h-auto w-full"}>
@@ -53,30 +58,46 @@ function Fretboard({ portrait = false }: { portrait?: boolean }) {
           const strokeWidth = 1 + (position - 1) * 0.5;
           return (
             <g key={id}>
-              <circle data-open-string-label cx="-2" cy={y} r="15" fill="#41362E" />
-              <text x="-2" y={y} textAnchor="middle" dominantBaseline="central" fontSize="18" fill="white">
-                {formatRegisteredNote(noteFromRegisteredPitch(openPitch, "sharps"))}
-              </text>
+              {!showSparseNotes && (
+                <>
+                  <circle data-open-string-label cx={openStringCenter} cy={y} r="15" fill="#41362E" />
+                  <text x={openStringCenter} y={y} textAnchor="middle" dominantBaseline="central" fontSize="18" fill="white">
+                    {formatRegisteredNote(noteFromRegisteredPitch(openPitch, "sharps"))}
+                  </text>
+                </>
+              )}
               <line data-string-id={id} x1="20" x2="1180" y1={y} y2={y}
                 stroke="silver" strokeWidth={strokeWidth} vectorEffect="non-scaling-stroke" />
             </g>
           );
         })}
+        {showSparseNotes && sparseNotePositions.map(({ stringId, fret, text, x, y }) => (
+          <g key={`${stringId}-${fret}`} data-note-label data-note-string-id={stringId} data-note-fret={fret}>
+            <circle cx={x} cy={y} r="15" fill="#D5C4A1" stroke="#33231F" strokeWidth="1" />
+            <text x={x} y={y} textAnchor="middle" dominantBaseline="central"
+              fontSize="16" fontWeight="600" fill="#30231F">{text}</text>
+          </g>
+        ))}
       </g>
     </svg>
   );
 }
 
-export default function Home() {
+export default async function Home({
+  searchParams,
+}: {
+  searchParams: Promise<{ review?: string }>;
+}) {
+  const showSparseNotes = (await searchParams).review === "sparse";
   return (
     <main className="flex min-h-dvh flex-col items-center pt-16 pb-1">
       <h1 className="w-full max-w-2xl px-6 text-3xl font-semibold">FretboAIrd</h1>
       <div className="mt-auto hidden w-[72.8%] md:block">
-        <Fretboard />
+        <Fretboard showSparseNotes={showSparseNotes} />
       </div>
       <div aria-label="Fretboard scroll area" role="region" tabIndex={0}
         className="mt-auto h-[72dvh] w-[94%] overflow-y-auto md:hidden">
-        <Fretboard portrait />
+        <Fretboard portrait showSparseNotes={showSparseNotes} />
       </div>
     </main>
   );

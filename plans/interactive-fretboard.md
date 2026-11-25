@@ -17,7 +17,7 @@ A guitarist will be able to inspect the sound at any location on a six-string ne
 - [x] Developer approved the six strings and their thickness progression.
 - [x] Developer approved the ivory nut at x=20–52. Added six tuning labels derived from the configured registered pitches.
 - [x] Developer accepted fret wires and tuning labels. UI v1 phone review uses landscape orientation.
-- [ ] Milestone 1 — IN PROGRESS. Landmark dots await developer review.
+- [ ] Milestone 1 — IN PROGRESS. Sparse note-label fixture awaits developer review.
 - [ ] Milestone 2 — NOT STARTED. Implement free selection and inspection; complete the interaction review with the developer.
 
 ## Surprises & Discoveries
@@ -45,6 +45,8 @@ Deferred follow-up - Label octave number toggle belongs to the later label-prefe
 2026-11-23, project owner: Use one keyboard tab stop and retain each selection's physical identity. This makes 108 locations navigable and allows independent selections on the same string or at the same sounding pitch.
 
 ## Outcomes & Retrospective
+
+2026-11-25 — Added an opt-in sparse note-label review fixture at `/?review=sparse`; the normal `/` remains free of note markers. Eleven static labels cover open strings and frets 1, 3, 5, 12 and 17 on the outer strings, including E♭4. Locations use physical string rows and shared fret boundaries; open notes use the center of the dedicated open-string column. The fixture hides the regular tuning labels while active so its two open-string examples do not overlap them. At 1280 × 800, circles measured 22.40 CSS px and text boxes 16.00 px; minimum boundary clearance was 4.48 px overall, with frets 1/12/17 at 14.97/12.01/10.67 px. At landscape 844 × 390, circles measured 14.77 px and text boxes 10.00 px; minimum boundary clearance was 2.70 px overall, with frets 1/12/17 at 9.62/7.67/6.78 px. Inspected empty and sparse screenshots at both sizes. `npm test -- tests/note-label-layout.test.ts` passed (1 test), `npm run test:e2e -- e2e/home.spec.ts` passed (5 tests), `npm run typecheck` passed and `git diff --check` passed. The first sandbox browser launch could not find Chromium; rerunning the same E2E command outside the managed sandbox used the installed browser and passed. Screenshots: `.local/neck-review/notes-empty-1280.png`, `notes-sparse-1280.png`, `notes-empty-844.png` and `notes-sparse-844.png`. Visual approval is pending.
 
 2026-11-25 — Added warm landmark dots at frets 3, 5, 7, 9, 12, 15 and 17, centered from the shared fret boundaries. Single dots sit at the midpoint of strings 3 and 4. At fret 12, the pair sits on strings 2 and 5 per developer direction. Dots use r=7 SVG units, leaving visible clearance from the middle strings. The open-string and landmark circles now have distinct data attributes so tests and future code can select each purpose explicitly. Inspected desktop 1280 × 800 and landscape phone 844 × 390 screenshots. `npm run test:e2e -- e2e/home.spec.ts` passed all 4 tests in 20.2 seconds, `npm run typecheck` passed, and `git diff --check` passed. Screenshots are .local/neck-review/landmarks-final-1280.png and landmarks-final-844.png. Visual review is pending.
 
