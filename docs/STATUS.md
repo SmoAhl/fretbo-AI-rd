@@ -25,7 +25,7 @@ There is no other implemented musical domain hidden behind the UI bootstrap. The
 
 | Broader area | Existing boundary | Missing behavior |
 | --- | --- | --- |
-| Complete interactive workbench | Framework/page/style bootstrap and independently callable domain. | Product controls, interactive React/SVG fretboard, application operations/state, composition workflows and domain-to-UI wiring. |
+| Complete interactive workbench | Static SVG fretboard with domain-derived tuning and opt-in note-label fixtures. See the [UI roadmap](ui/README.md). | Product controls, interactive selections and inspection, application state and composition workflows. |
 | General music interpretation | Explicit inputs, exact formula/collection construction and exact catalog identification. | Key/context inference, harmonic function, Roman numerals, missing-root/approximate identification, preference-ranked names. |
 | Full notation/spelling | Supported note/interval/degree/scale/chord grammar and explicit policies. | General alteration language, arbitrary custom chord symbols, key text, theoretical signatures, registered key-aware output, contextual spelling candidates/fallbacks and engraving. |
 | General scale traversal | Fixed supported collections and explicit positive-octave directional runs. | Arbitrary pitch bounds, custom scales, chromatic spelling/degrees/runs, combined-leg API and global turning-note/output policy. |

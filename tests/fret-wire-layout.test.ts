@@ -1,9 +1,9 @@
 import { describe, expect, test } from "vitest";
-import { calculateFretWireBoundaries, FINAL_FRET_WIDTH_RATIO, FRET_COUNT } from "../app/fret-wire-layout.js";
+import { calculateFretWireBoundaries, FINAL_FRET_WIDTH_RATIO } from "../app/fret-wire-layout.js";
 
 describe("calculateFretWireBoundaries", () => {
   test("spaces narrow evenly to the configured final ratio", () => {
-    const boundaries = calculateFretWireBoundaries(52, 68.5, FRET_COUNT, FINAL_FRET_WIDTH_RATIO);
+    const boundaries = calculateFretWireBoundaries(52, 68.5, 17, FINAL_FRET_WIDTH_RATIO);
     const widths = boundaries.slice(1).map((boundary, index) => boundary - boundaries[index]!);
 
     expect(widths).toHaveLength(17);

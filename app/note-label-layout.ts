@@ -1,13 +1,14 @@
-export type NoteLabelLocation = {
-  stringId: number;
-  fret: number;
-  text: string;
-};
+import type { FretboardString } from "../domain/fretboard/fretboard.js";
+import type { NoteLabel } from "./note-label-data.js";
 
-export type NoteLabelPosition = NoteLabelLocation & { x: number; y: number };
+export type NoteLabelPosition = NoteLabel & { x: number; y: number };
+
+export function getStringRows(strings: readonly FretboardString[]): Map<number, number> {
+  return new Map(strings.map(({ id, position }) => [id, 40 + (position - 1) * 32]));
+}
 
 export function positionNoteLabels(
-  locations: readonly NoteLabelLocation[],
+  locations: readonly NoteLabel[],
   stringRows: ReadonlyMap<number, number>,
   fretBoundaries: readonly number[],
   openStringCenter: number,

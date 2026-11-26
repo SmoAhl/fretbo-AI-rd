@@ -15,8 +15,8 @@ This document owns system boundaries, data flow and open architectural questions
 | Music Theory | Musical identity, pitch/register/spelling, intervals, collections, formulas, descriptions, supplied voicings and analysis. No instrument or finger assignments. |
 | Fretboard | Explicit string IDs, physical positions, registered tuning, available frets and pitch-location mapping. Location alternatives do not establish a simultaneous chord. |
 | Playability | Reusable geometry and finger contacts, concrete validation, bounded template search, musical matching and reviewed-pattern support. General solving and ergonomic ranking are not implemented. |
-| Application (Next.js) | Coordinates operations and state, with server functionality when needed. Currently a page/layout/style bootstrap; execution placement and state ownership remain open. |
-| UI and renderer (React) | Present results and capture interaction. Custom SVG fretboard rendering is an accepted direction, not an implemented renderer. |
+| Application (Next.js) | Supplies the static workbench's board configuration and review locations, and coordinates the domain calls that produce displayed labels. Interactive state and its execution placement remain open. |
+| UI and renderer (React) | Present results and capture interaction. The static SVG fretboard draws strings, wires and labels. See the [UI roadmap](ui/README.md) for milestone scope. |
 | Later AI integration | Interprets intent and orchestrates the same capabilities as direct application interaction. It does not own musical rules. |
 | Later audio and evaluation | Make results audible and assess complete outcomes without replacing domain validation. |
 

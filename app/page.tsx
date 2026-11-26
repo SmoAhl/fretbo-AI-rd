@@ -1,18 +1,25 @@
-import type { FretboardString } from "../domain/fretboard/fretboard.js";
-
-import { formatRegisteredNote } from "@/domain/music-theory/pitch-pitch-classes-and-spelling/note-text";
-import { noteFromRegisteredPitch } from "@/domain/music-theory/pitch-pitch-classes-and-spelling/spelling-selection";
-import { calculateFretWireBoundaries, FINAL_FRET_WIDTH_RATIO, FRET_COUNT } from "./fret-wire-layout";
-import { positionNoteLabels } from "./note-label-layout";
+import { createFretboard } from "../domain/fretboard/fretboard.js";
+import { calculateFretWireBoundaries, FINAL_FRET_WIDTH_RATIO } from "./fret-wire-layout";
+import { denseNoteLabels, noteLabelAtLocation } from "./note-label-data";
+import { getStringRows, positionNoteLabels, type NoteLabelPosition } from "./note-label-layout";
 import { sparseNoteFixture } from "./sparse-note-fixture";
+
+const board = createFretboard([
+  { id: 1, position: 1, openPitch: 52 }, // E4
+  { id: 2, position: 2, openPitch: 47 }, // B3
+  { id: 3, position: 3, openPitch: 43 }, // G3
+  { id: 4, position: 4, openPitch: 38 }, // D3
+  { id: 5, position: 5, openPitch: 33 }, // A2
+  { id: 6, position: 6, openPitch: 28 }, // E2
+], 17);
 
 const fretStart = 52;
 const fretSpan = 1180 - fretStart;
-const firstFretSpaceWidth = (2 * fretSpan) / (FRET_COUNT * (1 + FINAL_FRET_WIDTH_RATIO));
+const firstFretSpaceWidth = (2 * fretSpan) / (board.fretCount * (1 + FINAL_FRET_WIDTH_RATIO));
 const fretBoundaries = calculateFretWireBoundaries(
   fretStart,
   firstFretSpaceWidth,
-  FRET_COUNT,
+  board.fretCount,
   FINAL_FRET_WIDTH_RATIO,
 );
 const landmarkFrets = [3, 5, 7, 9, 12, 15, 17] as const;
@@ -26,19 +33,12 @@ const landmarkPositions = landmarkFrets.reduce<{ fret: number; x: number; y: num
   return positions;
 }, []);
 
-const strings: readonly FretboardString[] = [
-  { id: 1, position: 1, openPitch: 52 }, // E4
-  { id: 2, position: 2, openPitch: 47 }, // B3
-  { id: 3, position: 3, openPitch: 43 }, // G3
-  { id: 4, position: 4, openPitch: 38 }, // D3
-  { id: 5, position: 5, openPitch: 33 }, // A2
-  { id: 6, position: 6, openPitch: 28 }, // E2
-];
-const stringRows = new Map(strings.map(({ id, position }) => [id, 40 + (position - 1) * 32]));
+const strings = [...board.strings].sort((a, b) => a.position - b.position);
+const stringRows = getStringRows(strings);
 const openStringCenter = (-24 + 20) / 2;
-const sparseNotePositions = positionNoteLabels(sparseNoteFixture, stringRows, fretBoundaries, openStringCenter);
+const tuningLabels = new Map(strings.map(({ id }) => [id, noteLabelAtLocation(board, { stringId: id, fret: 0 }).text]));
 
-function Fretboard({ portrait = false, showSparseNotes = false }: { portrait?: boolean; showSparseNotes?: boolean }) {
+function Fretboard({ portrait = false, reviewNotes }: { portrait?: boolean; reviewNotes: NoteLabelPosition[] | undefined }) {
   return (
     <svg viewBox={portrait ? "0 0 240 1248" : "-24 0 1248 240"} role="img" aria-label="Fretboard neck"
       className={portrait ? "mx-auto block h-[936px] w-[180px]" : "block h-auto w-full"}>
@@ -53,16 +53,16 @@ function Fretboard({ portrait = false, showSparseNotes = false }: { portrait?: b
           <circle key={`${fret}-${index}`} data-landmark-fret={fret}
             cx={x} cy={y} r="7" fill="#D5C4A1" />
         ))}
-        {strings.map(({ id, position, openPitch }) => {
-          const y = 40 + (position - 1) * 32;
+        {strings.map(({ id, position }) => {
+          const y = stringRows.get(id)!;
           const strokeWidth = 1 + (position - 1) * 0.5;
           return (
             <g key={id}>
-              {!showSparseNotes && (
+              {reviewNotes === undefined && (
                 <>
                   <circle data-open-string-label cx={openStringCenter} cy={y} r="15" fill="#41362E" />
                   <text x={openStringCenter} y={y} textAnchor="middle" dominantBaseline="central" fontSize="18" fill="white">
-                    {formatRegisteredNote(noteFromRegisteredPitch(openPitch, "sharps"))}
+                    {tuningLabels.get(id)}
                   </text>
                 </>
               )}
@@ -71,11 +71,11 @@ function Fretboard({ portrait = false, showSparseNotes = false }: { portrait?: b
             </g>
           );
         })}
-        {showSparseNotes && sparseNotePositions.map(({ stringId, fret, text, x, y }) => (
+        {reviewNotes?.map(({ stringId, fret, text, x, y }) => (
           <g key={`${stringId}-${fret}`} data-note-label data-note-string-id={stringId} data-note-fret={fret}>
             <circle cx={x} cy={y} r="15" fill="#D5C4A1" stroke="#33231F" strokeWidth="1" />
             <text x={x} y={y} textAnchor="middle" dominantBaseline="central"
-              fontSize="16" fontWeight="600" fill="#30231F">{text}</text>
+              fontSize="15" fontWeight="600" fill="#30231F">{text}</text>
           </g>
         ))}
       </g>
@@ -86,18 +86,27 @@ function Fretboard({ portrait = false, showSparseNotes = false }: { portrait?: b
 export default async function Home({
   searchParams,
 }: {
-  searchParams: Promise<{ review?: string }>;
+  searchParams: Promise<{ review?: string | string[] }>;
 }) {
-  const showSparseNotes = (await searchParams).review === "sparse";
+  const { review } = await searchParams;
+  const dense = review === "dense";
+  const labels = dense ? denseNoteLabels(board)
+    : review === "sparse" ? sparseNoteFixture.map(location => noteLabelAtLocation(board, location))
+    : undefined;
+  const reviewNotes = labels && positionNoteLabels(labels, stringRows, fretBoundaries, openStringCenter);
+
   return (
     <main className="flex min-h-dvh flex-col items-center pt-16 pb-1">
       <h1 className="w-full max-w-2xl px-6 text-3xl font-semibold">FretboAIrd</h1>
-      <div className="mt-auto hidden w-[72.8%] md:block">
-        <Fretboard showSparseNotes={showSparseNotes} />
+      <div role={dense ? "region" : undefined} aria-label={dense ? "Fretboard scroll area" : undefined}
+        className={dense ? "mt-auto hidden w-[94%] overflow-x-auto md:block lg:w-[72.8%]" : "mt-auto hidden w-[72.8%] md:block"}>
+        <div className={dense ? "min-w-[920px]" : undefined}>
+          <Fretboard reviewNotes={reviewNotes} />
+        </div>
       </div>
       <div aria-label="Fretboard scroll area" role="region" tabIndex={0}
         className="mt-auto h-[72dvh] w-[94%] overflow-y-auto md:hidden">
-        <Fretboard portrait showSparseNotes={showSparseNotes} />
+        <Fretboard portrait reviewNotes={reviewNotes} />
       </div>
     </main>
   );
