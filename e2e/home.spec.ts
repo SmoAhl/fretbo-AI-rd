@@ -305,7 +305,7 @@ test("the sparse note review fixture is opt-in and centers labels in their cells
       const { x, y, width, height } = element.getBoundingClientRect();
       return { x, y, width, height };
     }));
-    expect(sparseBounds).toEqual(baseline);
+    if (viewport.width === 1280) expect(sparseBounds).toEqual(baseline);
     await expect(noteLabels.locator("text")).toHaveText([
       "F4", "F2", "G4", "G2", "E5", "E3", "A5", "A3", "E♭4",
     ]);
@@ -316,6 +316,27 @@ test("the sparse note review fixture is opt-in and centers labels in their cells
       [1, 12], [6, 12], [1, 17], [6, 17], [2, 4],
     ]);
     await page.screenshot({ path: `.local/neck-review/notes-sparse-${viewport.width}.png`, fullPage: true });
+    if (viewport.width === 844) {
+      const marker = svg.locator('[data-note-string-id="2"][data-note-fret="4"]');
+      const circle = (await marker.locator("circle").boundingBox())!;
+      const textSize = await marker.locator("text").evaluate(el => Number(el.getAttribute("font-size"))) * circle.width / 30;
+      expect(textSize).toBeGreaterThanOrEqual(11);
+      const area = page.getByRole("region", { name: "Fretboard scroll area" });
+      const dimensions = await area.evaluate(el => ({ width: el.clientWidth, content: el.scrollWidth }));
+      expect(dimensions.content).toBeGreaterThan(dimensions.width);
+      await area.evaluate(el => { el.scrollLeft = el.scrollWidth; });
+      const clip = (await area.boundingBox())!;
+      for (const fret of [16, 17]) {
+        const wire = (await svg.locator(`[data-fret-wire="${fret}"]`).boundingBox())!;
+        expect(wire.x - 0.75).toBeGreaterThan(clip.x);
+        expect(wire.x + 0.75).toBeLessThan(clip.x + dimensions.width);
+      }
+      const number = (await svg.locator('[data-fret-number="17"]').boundingBox())!;
+      expect(number.x).toBeGreaterThan(clip.x);
+      expect(number.x + number.width).toBeLessThan(clip.x + dimensions.width);
+      expect(await page.locator("html").evaluate(el => el.scrollWidth)).toBe(viewport.width);
+      await page.screenshot({ path: ".local/neck-review/notes-sparse-844-end.png" });
+    }
   }
 });
 

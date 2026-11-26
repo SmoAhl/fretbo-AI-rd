@@ -93,6 +93,7 @@ export default async function Home({
 }) {
   const { review } = await searchParams;
   const dense = review === "dense";
+  const reviewView = dense || review === "sparse";
   const labels = dense ? denseNoteLabels(board)
     : review === "sparse" ? sparseNoteFixture.map(location => noteLabelAtLocation(board, location))
     : undefined;
@@ -101,9 +102,9 @@ export default async function Home({
   return (
     <main className="flex min-h-dvh flex-col items-center pt-16 pb-1">
       <h1 className="w-full max-w-2xl px-6 text-3xl font-semibold">FretboAIrd</h1>
-      <div role={dense ? "region" : undefined} aria-label={dense ? "Fretboard scroll area" : undefined}
-        className={dense ? "mt-auto hidden w-[94%] overflow-x-auto pt-3 md:block lg:w-[72.8%]" : "mt-auto hidden w-[72.8%] pt-3 md:block"}>
-        <div className={dense ? "min-w-[920px]" : undefined}>
+      <div role={reviewView ? "region" : undefined} aria-label={reviewView ? "Fretboard scroll area" : undefined}
+        className={reviewView ? "mt-auto hidden w-[94%] overflow-x-auto pt-3 md:block lg:w-[72.8%]" : "mt-auto hidden w-[72.8%] pt-3 md:block"}>
+        <div className={reviewView ? "min-w-[920px]" : undefined}>
           <Fretboard reviewNotes={reviewNotes} />
         </div>
       </div>
