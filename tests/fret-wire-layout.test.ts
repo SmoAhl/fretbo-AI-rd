@@ -15,4 +15,9 @@ describe("calculateFretWireBoundaries", () => {
     expect(boundaries.at(-1)! - 52).toBeCloseTo(17 * 68.5 * (1 + 0.84) / 2);
     expect(widths.at(-1)! / widths[0]!).toBeCloseTo(FINAL_FRET_WIDTH_RATIO);
   });
+
+  test("handles a board with zero or one fretted space", () => {
+    expect(calculateFretWireBoundaries(52, 68, 0)).toEqual([52]);
+    expect(calculateFretWireBoundaries(52, 68, 1)).toEqual([52, 120]);
+  });
 });

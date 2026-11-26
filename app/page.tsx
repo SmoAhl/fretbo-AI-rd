@@ -1,7 +1,7 @@
 import { createFretboard } from "../domain/fretboard/fretboard.js";
 import { calculateFretWireBoundaries, FINAL_FRET_WIDTH_RATIO } from "./fret-wire-layout";
 import { denseNoteLabels, noteLabelAtLocation } from "./note-label-data";
-import { getStringRows, positionNoteLabels, type NoteLabelPosition } from "./note-label-layout";
+import { createCellGeometry, getStringRows, positionNoteLabels, type NoteLabelPosition } from "./note-label-layout";
 import { sparseNoteFixture } from "./sparse-note-fixture";
 
 const board = createFretboard([
@@ -34,8 +34,9 @@ const landmarkPositions = landmarkFrets.reduce<{ fret: number; x: number; y: num
 }, []);
 
 const strings = [...board.strings].sort((a, b) => a.position - b.position);
-const stringRows = getStringRows(strings);
+const stringRows = getStringRows(strings, 40, 200);
 const openStringCenter = (-24 + 20) / 2;
+const cells = createCellGeometry(stringRows, fretBoundaries, { left: -24, right: 20 }, { top: 20, bottom: 220 });
 const tuningLabels = new Map(strings.map(({ id }) => [id, noteLabelAtLocation(board, { stringId: id, fret: 0 }).text]));
 
 function Fretboard({ portrait = false, reviewNotes }: { portrait?: boolean; reviewNotes: NoteLabelPosition[] | undefined }) {
@@ -95,7 +96,7 @@ export default async function Home({
   const labels = dense ? denseNoteLabels(board)
     : review === "sparse" ? sparseNoteFixture.map(location => noteLabelAtLocation(board, location))
     : undefined;
-  const reviewNotes = labels && positionNoteLabels(labels, stringRows, fretBoundaries, openStringCenter);
+  const reviewNotes = labels && positionNoteLabels(labels, cells);
 
   return (
     <main className="flex min-h-dvh flex-col items-center pt-16 pb-1">

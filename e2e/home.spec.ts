@@ -374,6 +374,13 @@ for (const viewport of reviewViewports) {
       expect(wire!.y).toBeGreaterThan(clip!.y);
       expect(wire!.y + wire!.height).toBeLessThan(clip!.y + clip!.height);
     }
+    const wire16 = await svg.locator('[data-fret-wire="16"]').boundingBox();
+    const wire17 = await svg.locator('[data-fret-wire="17"]').boundingBox();
+    const outer = await svg.locator('[data-string-id="1"]').boundingBox();
+    const next = await svg.locator('[data-string-id="2"]').boundingBox();
+    const wood = await svg.locator('rect[fill="#4A2C25"]').boundingBox();
+    const marker = await svg.locator('[data-note-string-id="1"][data-note-fret="17"] circle').boundingBox();
+    console.log(`Cell string 1 fret 17 ${viewport.width}x${viewport.height}: bounds [${(wire16!.x + wire16!.width / 2).toFixed(2)}, ${wood!.y.toFixed(2)}]–[${(wire17!.x + wire17!.width / 2).toFixed(2)}, ${((outer!.y + next!.y) / 2).toFixed(2)}], marker center [${(marker!.x + marker!.width / 2).toFixed(2)}, ${(marker!.y + marker!.height / 2).toFixed(2)}] CSS px.`);
     await expect(svg.locator('[data-note-fret="17"]').last()).toBeInViewport({ ratio: 1 });
     expect(await page.locator("html").evaluate(el => el.scrollWidth)).toBe(viewport.width);
     if (viewport.width === 844) await page.screenshot({ path: ".local/neck-review/dense-844-end.png" });

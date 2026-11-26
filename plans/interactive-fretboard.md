@@ -31,6 +31,8 @@ The first browser runs stopped during the production build. Turbopack reported a
 ## Decision Log
 
 
+2026-11-26, project owner — Extend each open-string cell across the nut to its fret-1 boundary. Preserve the tuning label's existing center. This geometry supplies the future selection target.
+
 2026-11-26, project owner — Show every fret number by default alongside the existing landmark dots. The later review places 0 above the nut. Annotation controls remain future work.
 
 2026-11-26, implementation — The application passes its standard six-string tuning and 17 frets to `createFretboard` once. Tuning labels, sparse location requests and the dense pattern all share Fretboard pitch lookup and Music Theory spelling and formatting. The SVG uses physical string position for rows and addresses markers by string ID and fret. The dense route uses a 920 px minimum landscape board width so full-density labels stay readable with board-local scrolling.
@@ -53,6 +55,12 @@ Deferred follow-up - Label octave number toggle belongs to the later label-prefe
 
 ## Outcomes & Retrospective
 
+
+2026-11-26 — Generalized presentation row spacing to use the supplied string count, physical positions and first/last row coordinates. Cell bounds use the supplied rows, board edges and wire boundaries. A single string is centered between the supplied row limits; zero and one fretted spaces are supported by the wire calculation. Focused tests cover a seven-string board with nonsequential IDs, a one-string zero-fret board and one fretted space. `npm test -- tests/note-label-layout.test.ts tests/fret-wire-layout.test.ts` passed 5 tests; `npm run test:e2e -- e2e/home.spec.ts` passed 7 tests in 24.4 seconds; `npm run typecheck` and `git diff --check` passed. The current page still configures a fixed six-string, 17-fret board and fixed drawing dimensions. User-adjustable instruments, adapting the remaining SVG and landmarks to them, and defining their readable spacing are future work requiring authorization.
+
+2026-11-26 — Extended the fret-0 cell through the nut from x=-24 to x=52. The open tuning label remains centered at x=-2 and the fret-1 cell starts at x=52. Focused Vitest geometry tests passed 3 tests, `npm run typecheck` and `git diff --check` passed. Pointer activation remains Milestone 2 work.
+
+2026-11-26 — Added shared cell bounds and marker centers addressed by string ID and fret. Row boundaries use adjacent string midpoints and the wood edges. Markers stay on their string rows to preserve the approved drawing, so the outer-row marker is not at the vertical midpoint of its asymmetric cell. Fret 0 uses the tuning-label column. In the dense browser view, string 1 fret 17 had CSS-pixel bounds (1027.80, 631.74)–(1073.03, 658.00), marker (1050.41, 646.68) at 1280 × 800. At 844 × 390 after scrolling to the end, bounds were (741.21, 223.82)–(785.87, 249.73), marker (763.54, 238.57). The full last fret was visible. `npm test -- tests/note-label-layout.test.ts tests/fret-wire-layout.test.ts` passed 3 tests, `npm run test:e2e -- e2e/home.spec.ts` passed 7 tests in 27.4 seconds, `npm run typecheck` and `git diff --check` passed. Milestone 1 awaits developer visual approval.
 
 2026-11-26 — Moved 0 above the nut and raised the number row, using 18 SVG unit bold text and added space inside the desktop scroll container. `npm run test:e2e -- e2e/home.spec.ts` passed 7 tests in 22.9 seconds with installed Chromium outside the sandbox. `npm run typecheck` and `git diff --check` passed. The sandbox could not launch Chromium and its preview was stopped before the successful run. Updated dense screenshots at `.local/neck-review/dense-1280-start.png`, `dense-844-start.png` and `dense-844-end.png` await visual review.
 

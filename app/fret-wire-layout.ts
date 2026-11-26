@@ -7,7 +7,7 @@ export function calculateFretWireBoundaries(
   finalWidthRatio = FINAL_FRET_WIDTH_RATIO,
 ): number[] {
   const lastSpaceWidth = firstSpaceWidth * finalWidthRatio;
-  const widthStep = (lastSpaceWidth - firstSpaceWidth) / (fretCount - 1);
+  const widthStep = fretCount > 1 ? (lastSpaceWidth - firstSpaceWidth) / (fretCount - 1) : 0;
   const boundaries = [start];
   let position = start;
 
