@@ -18,7 +18,7 @@ A guitarist will be able to inspect the sound at any location on a six-string ne
 - [x] Developer approved the ivory nut at x=20–52. Added six tuning labels derived from the configured registered pitches.
 - [x] Developer accepted fret wires and tuning labels. UI v1 phone review uses landscape orientation.
 - [x] 2026-11-26T08:30Z — Implemented the shared domain label path and the dense review route on `codex/interactive-fretboard`.
-- [ ] Milestone 1 — IN PROGRESS. Developer review of the static SVG checkpoint is pending.
+- [x] 2026-11-26T10:43Z — Milestone 1 complete. The developer approved the empty, sparse and dense static board at desktop and phone landscape sizes on `19b53f0`.
 - [ ] Milestone 2 — NOT STARTED. Implement free selection and inspection; complete the interaction review with the developer.
 
 ## Surprises & Discoveries
@@ -55,6 +55,8 @@ Deferred follow-up - Label octave number toggle belongs to the later label-prefe
 
 ## Outcomes & Retrospective
 
+
+2026-11-26 — Milestone 1 closed after visual review at 1280 × 800 and 844 × 390. Each view shows one tuning label per string. The sparse fixture highlights two open strings and nine fretted notes. The dense fixture highlights all 108 locations. The developer accepted label readability and marker placement at frets 1, 12 and 17. On the phone, the sparse and dense boards scroll horizontally within the page so the number 17 and both bounding wires can be seen together. The final geometry check passed all five focused Vitest tests. The implementation run recorded below passed all seven Chromium tests and typecheck.
 
 2026-11-26 — The sparse review view now uses the same 920 px minimum board width and local horizontal scrolling as the dense view at landscape phone width. At 844 × 390 the note-label font renders at about 11.1 CSS px. Browser checks verify the size, the whole final fret and number 17 after scrolling, and no page-wide overflow. Desktop sparse positioning is preserved. `npm run test:e2e -- e2e/home.spec.ts` passed 7 tests in 27.8 seconds; `npm run typecheck` and `git diff --check` passed. Captures are `.local/neck-review/notes-sparse-1280.png`, `notes-sparse-844.png` and `notes-sparse-844-end.png`. The first simultaneous typecheck and browser build interfered through Next's generated types; typecheck was rerun separately after correcting a test typing issue. Milestone 1 awaits visual approval.
 
@@ -149,6 +151,14 @@ Fixtures are deterministic and free selection is session-local. Reload for the e
 ## Artifacts and Notes
 
 
+Final visual review captures are in the local `.local/neck-review/` directory:
+
+| View | Desktop, 1280 × 800 | Phone landscape, 844 × 390 | Phone scrolled to fret 17 |
+| --- | --- | --- | --- |
+| Empty | `notes-empty-1280.png` | `notes-empty-844.png` | Full board visible initially |
+| Sparse | `notes-sparse-1280.png` | `notes-sparse-844.png` | `notes-sparse-844-end.png` |
+| Dense | `dense-1280-start.png` | `dense-844-start.png` | `dense-844-end.png` |
+
 Before the placement adjustment, the SVG measured 624 × 124.80 CSS pixels at 1280 × 800 and 342 × 68.39 at 390 × 844. The original phone screenshot is preserved at `.local/neck-review/initial-390x844.png`.
 
 For the placement review, the local production preview returned HTTP 200. Full-page screenshots are in `.local/neck-review/layout-<width>x<height>.png`. At 1920 × 920 the visible rectangle measured 1299.18 px wide with a 26.40 px bottom gap. At 1280 × 800 it measured 866.07 px with an 18.93 px gap. At 390 × 844 it measured 354.34 px with a 10.11 px gap.
@@ -162,18 +172,17 @@ Revision note: 2026-11-23 — Recorded the approved foundation and selection pla
 
 Revision note: 2026-11-24 — Recorded the first visible slice and its browser checks for developer review.
 
+Revision note: 2026-11-26 — Recorded developer sign-off on the static board and limited the remaining handoff to Milestone 2.
+
 ## Proposed implementation prompt
 
 
 ```text
-When explicitly authorized, implement milestones 1–2 following
+When explicitly authorized, implement the requested slice of Milestone 2 following
 plans/interactive-fretboard.md, its acceptance criteria and AGENTS.md.
-Use a feature branch. Deliver the 17-fret landscape SVG, then free
-selection, inspection and accessible keyboard, mouse and touch operation.
-Preserve domain ownership, a configurable gentle taper, readable markers
-and usable targets through fret 17. Review the static fixtures and taper
-with the developer before interaction work. Review the location-to-pitch
-walkthrough and actual browser results before any later explorer work.
+Build on the approved static board and its cells addressed by string ID and fret.
+Use the existing domain lookup for selected notes. Verify the authorized
+interaction in the browser and stop at the developer review checkpoint.
 Complete relevant checks, affected documentation and completion reporting.
 Leave all subsequent roadmap milestones for separate authorization.
 ```

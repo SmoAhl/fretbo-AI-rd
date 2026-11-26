@@ -4,7 +4,7 @@ The first workbench lets a guitarist explore physical locations, individual note
 
 ## Instrument and interaction
 
-UI v1 assumes phones are used in landscape orientation. Design and acceptance review of the phone workbench use a horizontal viewport. The current portrait fretboard is an intermediate review prototype; its transition to the landscape phone workbench is tracked in the [ExecPlan](../../plans/interactive-fretboard.md).
+UI v1 assumes phones are used in landscape orientation. The approved static board uses horizontal scrolling within the sparse and dense views to keep note labels readable at 844 × 390.
 
 Start with an empty, dark rosewood-inspired neck, metallic strings and fret wires, standard six-string tuning, high E at the top and the nut on the left. The open column (0) plus frets 1–17 give 108 locations. Show each string's tuning at the nut even when its open location is highlighted. Show every fret number by default above its space, with 0 above the nut. Landmark dots are also visible. Annotation controls remain a later step.
 
@@ -30,7 +30,7 @@ A Next.js page shell hosts one client-side React workbench with controls, a cust
 
 | Milestone | Implementation | What to demonstrate and verify |
 | --- | --- | --- |
-| 1. Landscape SVG foundation | IN PROGRESS | Show empty, sparse and dense fixtures on desktop and a narrow screen. Check open strings and frets 1, 12 and 17, both outer strings, accidental-plus-octave labels and cell boundaries. Verify physical order with nonsequential IDs. Walk through one cell from wire positions to marker center and hit area. Report the taper tradeoff. |
+| 1. Landscape SVG foundation | COMPLETE | Developer approved the empty, sparse and dense boards at 1280 × 800 and 844 × 390 on 2026-11-26. The review covered open strings, label placement at frets 1, 12 and 17, and the full final fret after scrolling. See the [checkpoint evidence](../../plans/interactive-fretboard.md#outcomes--retrospective). |
 | 2. Free selection and inspection | NOT STARTED | Toggle open high E and B-string fret 5 as independent E4 locations, several frets on one string, and Clear selection. Verify mouse and touch at 1, 12 and 17. Navigate to 17 by keyboard, bring the entire focused cell into view, toggle with Enter/Space and Tab out. Trace one event to domain lookup and inspector. |
 | 3. Notes explorer | NOT STARTED | Compare one pitch class with domain search. Count 108 distinct locations in Show All Notes and inspect real spellings and octaves at full density. High E at fret 17 is A5. Verify musical query changes clear selections and label changes preserve them. |
 | 4. Full-neck scale explorer | NOT STARTED | Exercise all nine collections. Compare B in D Dorian with B♭ in D Aeolian, the minor-pentatonic ♭3 label, and an out-of-scale selection. Check D natural minor against the [47-location fixture](../../tests/fretboard-music-theory.test.ts) through fret 12 inclusive, then verify mapping through fret 17. Trace one degree to its locations. |
