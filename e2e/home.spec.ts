@@ -204,6 +204,26 @@ test("fretboard landmarks sit in their spaces at desktop and landscape phone siz
 
 const reviewViewports = [{ width: 1280, height: 800 }, { width: 844, height: 390 }];
 
+async function checkOpenLabels(svg: Locator, activeIds: number[]) {
+  const labels = svg.locator('[data-open-string-label]');
+  await expect(labels).toHaveCount(6);
+  await expect(svg.locator('[data-note-fret="0"]')).toHaveCount(0);
+  for (const [index, text] of ["E4", "B3", "G3", "D3", "A2", "E2"].entries()) {
+    const id = index + 1;
+    const circle = svg.locator(`[data-open-string-id="${id}"]`);
+    await expect(circle).toHaveCount(1);
+    await expect(circle).toHaveAttribute("data-active", String(activeIds.includes(id)));
+    await expect(circle).toHaveCSS("fill", activeIds.includes(id) ? "rgb(213, 196, 161)" : "rgb(65, 54, 46)");
+    const label = circle.locator('xpath=following-sibling::*[1]');
+    await expect(label).toHaveText(text);
+    await expect(label).toHaveCSS("fill", activeIds.includes(id) ? "rgb(48, 35, 31)" : "rgb(255, 255, 255)");
+    const disk = await circle.boundingBox();
+    const ink = await label.boundingBox();
+    expect(ink!.x).toBeGreaterThan(disk!.x);
+    expect(ink!.x + ink!.width).toBeLessThan(disk!.x + disk!.width);
+  }
+}
+
 async function checkReviewMarkers(svg: Locator) {
   const wires = await svg.locator("[data-fret-wire]").evaluateAll(elements =>
     elements.map(element => element.getBoundingClientRect().left));
@@ -251,19 +271,29 @@ test("the sparse note review fixture is opt-in and centers labels in their cells
     const svg = page.getByRole("img", { name: "Fretboard neck" });
     await expect(svg.locator("[data-note-label]")).toHaveCount(0);
     await expect(svg.locator("[data-open-string-label]")).toHaveCount(6);
+    await checkOpenLabels(svg, []);
+    const baseline = await svg.locator('[data-open-string-label]').evaluateAll(elements => elements.map(element => {
+      const { x, y, width, height } = element.getBoundingClientRect();
+      return { x, y, width, height };
+    }));
     await page.screenshot({ path: `.local/neck-review/notes-empty-${viewport.width}.png`, fullPage: true });
 
     await page.goto("/?review=sparse");
     const noteLabels = svg.locator("[data-note-label]");
-    await expect(noteLabels).toHaveCount(11);
-    await expect(svg.locator("[data-open-string-label]")).toHaveCount(0);
+    await expect(noteLabels).toHaveCount(9);
+    await checkOpenLabels(svg, [1, 6]);
+    const sparseBounds = await svg.locator('[data-open-string-label]').evaluateAll(elements => elements.map(element => {
+      const { x, y, width, height } = element.getBoundingClientRect();
+      return { x, y, width, height };
+    }));
+    expect(sparseBounds).toEqual(baseline);
     await expect(noteLabels.locator("text")).toHaveText([
-      "E4", "E2", "F4", "F2", "G4", "G2", "E5", "E3", "A5", "A3", "E♭4",
+      "F4", "F2", "G4", "G2", "E5", "E3", "A5", "A3", "E♭4",
     ]);
     await expect(noteLabels.and(svg.locator('[data-note-string-id="2"][data-note-fret="4"]'))).toHaveText("E♭4");
     const { labels } = await checkReviewMarkers(svg);
     expect(labels.map(({ stringId, fret }) => [stringId, fret])).toEqual([
-      [1, 0], [6, 0], [1, 1], [6, 1], [1, 3], [6, 3],
+      [1, 1], [6, 1], [1, 3], [6, 3],
       [1, 12], [6, 12], [1, 17], [6, 17], [2, 4],
     ]);
     await page.screenshot({ path: `.local/neck-review/notes-sparse-${viewport.width}.png`, fullPage: true });
@@ -276,16 +306,15 @@ for (const viewport of reviewViewports) {
     await page.goto("/?review=dense");
     const svg = page.getByRole("img", { name: "Fretboard neck" });
     const markers = svg.locator("[data-note-label]");
-    await expect(markers).toHaveCount(108);
-    await expect(svg.locator("[data-open-string-label]")).toHaveCount(0);
-    await expect(markers.and(svg.locator('[data-note-fret="0"]'))).toHaveText(["E4", "B3", "G3", "D3", "A2", "E2"]);
+    await expect(markers).toHaveCount(102);
+    await checkOpenLabels(svg, [1, 2, 3, 4, 5, 6]);
     for (const [stringId, fret, text] of [[2, 4, "D♯4"], [2, 5, "E4"], [1, 17, "A5"]] as const) {
       await expect(svg.locator(`[data-note-string-id="${stringId}"][data-note-fret="${fret}"]`)).toHaveText(text);
     }
 
     const { labels, circles, clearanceByFret } = await checkReviewMarkers(svg);
     expect(labels.map(({ stringId, fret }) => [stringId, fret])).toEqual(
-      [1, 2, 3, 4, 5, 6].flatMap(id => Array.from({ length: 18 }, (_, fret) => [id, fret])),
+      [1, 2, 3, 4, 5, 6].flatMap(id => Array.from({ length: 17 }, (_, index) => [id, index + 1])),
     );
     for (const { circle, text } of labels) {
       expect(text.left).toBeGreaterThan(circle.left);

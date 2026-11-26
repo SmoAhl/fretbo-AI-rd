@@ -56,22 +56,19 @@ function Fretboard({ portrait = false, reviewNotes }: { portrait?: boolean; revi
         {strings.map(({ id, position }) => {
           const y = stringRows.get(id)!;
           const strokeWidth = 1 + (position - 1) * 0.5;
+          const active = reviewNotes?.some(note => note.stringId === id && note.fret === 0) ?? false;
           return (
             <g key={id}>
-              {reviewNotes === undefined && (
-                <>
-                  <circle data-open-string-label cx={openStringCenter} cy={y} r="15" fill="#41362E" />
-                  <text x={openStringCenter} y={y} textAnchor="middle" dominantBaseline="central" fontSize="18" fill="white">
+                  <circle data-open-string-label data-open-string-id={id} data-active={active} cx={openStringCenter} cy={y} r="15" fill={active ? "#D5C4A1" : "#41362E"} />
+                  <text x={openStringCenter} y={y} textAnchor="middle" dominantBaseline="central" fontSize="18" fill={active ? "#30231F" : "white"}>
                     {tuningLabels.get(id)}
                   </text>
-                </>
-              )}
               <line data-string-id={id} x1="20" x2="1180" y1={y} y2={y}
                 stroke="silver" strokeWidth={strokeWidth} vectorEffect="non-scaling-stroke" />
             </g>
           );
         })}
-        {reviewNotes?.map(({ stringId, fret, text, x, y }) => (
+        {reviewNotes?.filter(note => note.fret > 0).map(({ stringId, fret, text, x, y }) => (
           <g key={`${stringId}-${fret}`} data-note-label data-note-string-id={stringId} data-note-fret={fret}>
             <circle cx={x} cy={y} r="15" fill="#D5C4A1" stroke="#33231F" strokeWidth="1" />
             <text x={x} y={y} textAnchor="middle" dominantBaseline="central"
