@@ -65,7 +65,7 @@ async function checkNeck(page: Page, width: number, height: number) {
     expect(Math.abs(twelfthPair[0]!.y + twelfthPair[0]!.height / 2 - (frame.top + 88 * scale))).toBeLessThan(0.75);
     expect(Math.abs(twelfthPair[1]!.y + twelfthPair[1]!.height / 2 - (frame.top + 152 * scale))).toBeLessThan(0.75);
   }
-  const labels = svg.locator("text");
+  const labels = svg.locator("[data-open-string-label] + text");
   await expect(labels).toHaveText(["E4", "B3", "G3", "D3", "A2", "E2"]);
   await expect(svg.locator("[data-open-string-label]")).toHaveCount(6);
   let previousBottom = 0;
@@ -131,8 +131,8 @@ test("portrait phone board starts at the nut and scrolls to the complete final f
   expect(box).not.toBeNull();
   expect(Math.abs(box!.y + box!.height - 840)).toBeLessThan(1);
   expect(await area.evaluate(el => el.scrollTop)).toBe(0);
-  await expect(svg.locator("text")).toHaveText(["E4", "B3", "G3", "D3", "A2", "E2"]);
-  for (const label of await svg.locator("text").all()) {
+  await expect(svg.locator("[data-open-string-label] + text")).toHaveText(["E4", "B3", "G3", "D3", "A2", "E2"]);
+  for (const label of await svg.locator("[data-open-string-label] + text").all()) {
     const direction = await label.evaluate(el => {
       const matrix = (el as unknown as { getScreenCTM(): { a: number; b: number } }).getScreenCTM();
       return { x: matrix.a, y: matrix.b };
@@ -148,7 +148,7 @@ test("portrait phone board starts at the nut and scrolls to the complete final f
   let previousLeft = 390;
   for (let index = 0; index < 6; index += 1) {
     const circle = await svg.locator("[data-open-string-label]").nth(index).boundingBox();
-    const text = await svg.locator("text").nth(index).boundingBox();
+    const text = await svg.locator("[data-open-string-label] + text").nth(index).boundingBox();
     const string = svg.locator("[data-string-id]").nth(index);
     const line = await string.evaluate(el => el.getBoundingClientRect().toJSON());
     await expect(string).toHaveCSS("stroke-width", `${1 + index * 0.5}px`);
@@ -203,6 +203,23 @@ test("fretboard landmarks sit in their spaces at desktop and landscape phone siz
 });
 
 const reviewViewports = [{ width: 1280, height: 800 }, { width: 844, height: 390 }];
+
+async function checkFretNumbers(svg: Locator) {
+  const numbers = svg.locator('[data-fret-number]');
+  await expect(numbers).toHaveText(Array.from({ length: 18 }, (_, fret) => String(fret)));
+  for (const fret of [0, 1, 12, 17]) {
+    const text = await numbers.nth(fret).boundingBox();
+    const nut = await svg.locator('rect[fill="#E8DCC2"]').boundingBox();
+    const left = fret === 0
+      ? nut!.x + nut!.width / 2
+      : (await svg.locator(`[data-fret-wire="${fret - 1}"]`).boundingBox())!.x;
+    const right = fret === 0 ? left : (await svg.locator(`[data-fret-wire="${fret}"]`).boundingBox())!.x;
+    expect(Math.abs(text!.x + text!.width / 2 - (left + right) / 2)).toBeLessThan(1.5);
+    await expect(numbers.nth(fret)).toHaveCSS("font-weight", "700");
+    const wood = await svg.locator('rect[fill="#4A2C25"]').boundingBox();
+    expect(text!.y + text!.height).toBeLessThanOrEqual(wood!.y + 1);
+  }
+}
 
 async function checkOpenLabels(svg: Locator, activeIds: number[]) {
   const labels = svg.locator('[data-open-string-label]');
@@ -269,6 +286,7 @@ test("the sparse note review fixture is opt-in and centers labels in their cells
     await page.setViewportSize(viewport);
     await page.goto("/");
     const svg = page.getByRole("img", { name: "Fretboard neck" });
+    await checkFretNumbers(svg);
     await expect(svg.locator("[data-note-label]")).toHaveCount(0);
     await expect(svg.locator("[data-open-string-label]")).toHaveCount(6);
     await checkOpenLabels(svg, []);
@@ -279,6 +297,7 @@ test("the sparse note review fixture is opt-in and centers labels in their cells
     await page.screenshot({ path: `.local/neck-review/notes-empty-${viewport.width}.png`, fullPage: true });
 
     await page.goto("/?review=sparse");
+    await checkFretNumbers(svg);
     const noteLabels = svg.locator("[data-note-label]");
     await expect(noteLabels).toHaveCount(9);
     await checkOpenLabels(svg, [1, 6]);
@@ -305,6 +324,7 @@ for (const viewport of reviewViewports) {
     await page.setViewportSize(viewport);
     await page.goto("/?review=dense");
     const svg = page.getByRole("img", { name: "Fretboard neck" });
+    await checkFretNumbers(svg);
     const markers = svg.locator("[data-note-label]");
     await expect(markers).toHaveCount(102);
     await checkOpenLabels(svg, [1, 2, 3, 4, 5, 6]);
@@ -343,6 +363,10 @@ for (const viewport of reviewViewports) {
       expect((await geometry()).scrollLeft).toBe(initial.content - initial.width);
     }
     const clip = await area.boundingBox();
+    const number17 = await svg.locator('[data-fret-number="17"]').boundingBox();
+    expect(number17!.x).toBeGreaterThan(clip!.x);
+    expect(number17!.x + number17!.width).toBeLessThan(clip!.x + initial.width);
+    expect(number17!.y).toBeGreaterThanOrEqual(clip!.y);
     for (const fret of [16, 17]) {
       const wire = await svg.locator(`[data-fret-wire="${fret}"]`).boundingBox();
       expect(wire!.x - 0.75).toBeGreaterThan(clip!.x);

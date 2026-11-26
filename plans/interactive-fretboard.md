@@ -31,6 +31,8 @@ The first browser runs stopped during the production build. Turbopack reported a
 ## Decision Log
 
 
+2026-11-26, project owner — Show every fret number by default alongside the existing landmark dots. The later review places 0 above the nut. Annotation controls remain future work.
+
 2026-11-26, implementation — The application passes its standard six-string tuning and 17 frets to `createFretboard` once. Tuning labels, sparse location requests and the dense pattern all share Fretboard pitch lookup and Music Theory spelling and formatting. The SVG uses physical string position for rows and addresses markers by string ID and fret. The dense route uses a 920 px minimum landscape board width so full-density labels stay readable with board-local scrolling.
 
 2026-11-25, project owner — UI v1 treats phone use as landscape, as recorded in the UI roadmap. For the current portrait review prototype, tuning text rotates with the fretboard. Adapting the phone workbench and its acceptance checks to landscape remains work for a subsequent authorized slice.
@@ -51,6 +53,10 @@ Deferred follow-up - Label octave number toggle belongs to the later label-prefe
 
 ## Outcomes & Retrospective
 
+
+2026-11-26 — Moved 0 above the nut and raised the number row, using 18 SVG unit bold text and added space inside the desktop scroll container. `npm run test:e2e -- e2e/home.spec.ts` passed 7 tests in 22.9 seconds with installed Chromium outside the sandbox. `npm run typecheck` and `git diff --check` passed. The sandbox could not launch Chromium and its preview was stopped before the successful run. Updated dense screenshots at `.local/neck-review/dense-1280-start.png`, `dense-844-start.png` and `dense-844-end.png` await visual review.
+
+2026-11-26 — Added fret numbers 0–17 in all three static views, centered from the open column and existing wire boundaries. The row scrolls with the board. The first browser runs found text-bound alignment differences and clipping above the scroll area; the row was positioned and sized to fit. `npm run test:e2e -- e2e/home.spec.ts` passed 7 tests in 32.8 seconds using installed Chromium outside the sandbox. `npm run typecheck` and `git diff --check` passed. Dense review captures are `.local/neck-review/dense-1280-start.png`, `dense-844-start.png` and `dense-844-end.png`. Milestone 1 awaits visual approval.
 
 2026-11-26 — Open locations now share one persistent domain-derived tuning label per string. Sparse activates the two outer labels and dense activates all six; fretted labels start at fret 1. Active labels use the marker background with dark text, while inactive labels retain their dark background and white text. `npm run test:e2e -- e2e/home.spec.ts` passed 7 tests in 25.5 seconds using installed Chromium outside the sandbox. `npm run typecheck` and `git diff --check` passed. The first sandbox browser run could not launch Chromium and left its Next preview on port 3100; it was stopped before the successful run. Screenshots at `.local/neck-review/notes-sparse-1280.png`, `notes-sparse-844.png`, `dense-1280-start.png` and `dense-844-start.png` show the nut area. Milestone 1 remains pending developer review.
 

@@ -41,8 +41,13 @@ const tuningLabels = new Map(strings.map(({ id }) => [id, noteLabelAtLocation(bo
 function Fretboard({ portrait = false, reviewNotes }: { portrait?: boolean; reviewNotes: NoteLabelPosition[] | undefined }) {
   return (
     <svg viewBox={portrait ? "0 0 240 1248" : "-24 0 1248 240"} role="img" aria-label="Fretboard neck"
-      className={portrait ? "mx-auto block h-[936px] w-[180px]" : "block h-auto w-full"}>
+      className={portrait ? "mx-auto block h-[936px] w-[180px] overflow-visible" : "block h-auto w-full overflow-visible"}>
       <g transform={portrait ? "translate(240 24) rotate(90)" : undefined}>
+        {Array.from({ length: board.fretCount + 1 }, (_, fret) => {
+          const x = fret === 0 ? (20 + fretStart) / 2 : (fretBoundaries[fret - 1]! + fretBoundaries[fret]!) / 2;
+          return <text key={fret} data-fret-number={fret} x={x} y="2" textAnchor="middle"
+            dominantBaseline="central" fontSize="18" fontWeight="700" fill="#30231F">{fret}</text>;
+        })}
         <rect x="20" y="20" width="1160" height="200" fill="#4A2C25" />
         <rect x="20" y="20" width="32" height="200" fill="#E8DCC2" />
         {fretBoundaries.map((x, index) => (
@@ -96,7 +101,7 @@ export default async function Home({
     <main className="flex min-h-dvh flex-col items-center pt-16 pb-1">
       <h1 className="w-full max-w-2xl px-6 text-3xl font-semibold">FretboAIrd</h1>
       <div role={dense ? "region" : undefined} aria-label={dense ? "Fretboard scroll area" : undefined}
-        className={dense ? "mt-auto hidden w-[94%] overflow-x-auto md:block lg:w-[72.8%]" : "mt-auto hidden w-[72.8%] md:block"}>
+        className={dense ? "mt-auto hidden w-[94%] overflow-x-auto pt-3 md:block lg:w-[72.8%]" : "mt-auto hidden w-[72.8%] pt-3 md:block"}>
         <div className={dense ? "min-w-[920px]" : undefined}>
           <Fretboard reviewNotes={reviewNotes} />
         </div>
